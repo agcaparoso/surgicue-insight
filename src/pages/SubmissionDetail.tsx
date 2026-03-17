@@ -408,7 +408,7 @@ const phaseIcons: Record<string, React.ElementType> = {
 };
 
 // Score bar component
-const ScoreBar = ({ score, maxScore = 5, label, icon: Icon }: { score: number; maxScore?: number; label: string; icon: React.ComponentType<{ size?: number; className?: string }> }) => {
+const ScoreBar = ({ score, maxScore = 5, label, icon: Icon }: { score: number; maxScore?: number; label: string; icon: React.ElementType }) => {
   const pct = (score / maxScore) * 100;
   const color = score >= 4 ? 'bg-success' : score >= 3 ? 'bg-warning' : 'bg-destructive';
   const textColor = score >= 4 ? 'text-success' : score >= 3 ? 'text-warning' : 'text-destructive';
