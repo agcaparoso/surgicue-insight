@@ -116,8 +116,8 @@ const EducatorLanding = () => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-6 py-12 relative overflow-visible" style={gradientBg}>
       {/* Ambient glow */}
-      <div className="absolute top-[-10%] left-[-5%] w-[500px] h-[500px] rounded-full opacity-30 blur-[120px] pointer-events-none" style={{ background: 'hsl(210 50% 70%)' }} />
-      <div className="absolute bottom-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full opacity-25 blur-[120px] pointer-events-none" style={{ background: 'hsl(45 70% 70%)' }} />
+      <div className="absolute top-[-10%] left-[-5%] w-[500px] h-[500px] rounded-full opacity-40 blur-[100px] pointer-events-none" style={{ background: 'hsl(210 55% 72%)' }} />
+      <div className="absolute bottom-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full opacity-35 blur-[100px] pointer-events-none" style={{ background: 'hsl(42 65% 72%)' }} />
       <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-secondary to-warning" />
 
       {/* Hero */}
