@@ -48,7 +48,7 @@ const EducatorLanding = () => {
   };
 
   const gradientBg = {
-    background: 'linear-gradient(160deg, hsl(210 40% 94%) 0%, hsl(200 35% 96%) 25%, hsl(180 25% 96%) 50%, hsl(60 30% 95%) 75%, hsl(45 50% 92%) 100%)',
+    background: 'linear-gradient(160deg, hsl(210 45% 90%) 0%, hsl(200 35% 93%) 30%, hsl(170 20% 94%) 50%, hsl(50 40% 92%) 75%, hsl(42 55% 88%) 100%)',
   };
 
   const titleStyle = {
