@@ -902,7 +902,7 @@ const FeedbackSection = () => {
   return (
     <div className="space-y-5">
       {/* Overall Assessment Card */}
-      <div className="rounded-xl border border-border/50 bg-card/70 backdrop-blur-sm shadow-card overflow-hidden">
+      <div className="rounded-xl border border-border/40 bg-card shadow-card overflow-hidden">
         <div className="h-[3px] bg-gradient-to-r from-primary via-secondary to-warning" />
         <div className="p-5">
           <div className="flex items-center gap-2.5 mb-4">
