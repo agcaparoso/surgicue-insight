@@ -471,7 +471,7 @@ const SubmissionDetail = () => {
           </div>
 
           {/* Student Info Header Card */}
-          <div className="rounded-2xl border border-border/60 bg-card/70 backdrop-blur-md shadow-card overflow-hidden mb-8">
+          <div className="rounded-2xl border border-border/40 bg-card backdrop-blur-md shadow-card overflow-hidden mb-8">
             <div className="h-[3px] bg-gradient-to-r from-primary via-secondary to-warning" />
             <div className="p-6">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
