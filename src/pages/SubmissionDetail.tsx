@@ -206,96 +206,13 @@ const AIInsightsSidebar = () => {
 
   return (
     <aside className="w-80 shrink-0 space-y-5">
-      {/* Sidebar Header */}
-       <div className="rounded-xl border border-border bg-card shadow-card overflow-hidden">
-        <div className="h-[3px] bg-gradient-to-r from-primary via-secondary to-warning" />
-        <div className="p-5">
-          <div className="flex items-center gap-2.5 mb-1">
-            <Brain size={18} className="text-secondary" />
-            <h2 className="font-display font-bold text-sm text-foreground">AI-Assisted Surgical Report</h2>
-          </div>
-        </div>
-      </div>
-
-      {/* Case Overview */}
-      <div className="rounded-xl border border-border bg-card shadow-soft overflow-hidden">
-        <div className="gradient-border-left">
-          <div className="px-5 py-4">
-            <div className="flex items-center gap-2 mb-3">
-              <FileText size={14} className="text-secondary" />
-              <h3 className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Case Overview</h3>
-            </div>
-            <p className="text-xs text-foreground leading-relaxed">
-              Standard laparoscopic cholecystectomy performed by Dr. Sarah Chen. AI analysis detected 7 procedural phases over 23 minutes. Overall competency rated at <strong className="text-secondary">Intermediate (Level 3)</strong> with 2 phases flagged for review.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Milestone Analysis */}
-      <div className="rounded-xl border border-border bg-card shadow-soft overflow-hidden">
-        <div className="gradient-border-left">
-          <div className="px-5 py-4">
-            <div className="flex items-center gap-2 mb-3">
-              <ListChecks size={14} className="text-secondary" />
-              <h3 className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Milestone Analysis</h3>
-            </div>
-            <ul className="space-y-2">
-              {[
-                { text: 'Critical View of Safety achieved — moderate confidence (78%)', color: 'bg-warning' },
-                { text: 'Clip application precise — expert-level execution (96%)', color: 'bg-success' },
-                { text: 'Dissection plane deviated near liver bed in P4', color: 'bg-destructive' },
-                { text: 'Hemostasis confirmed at gallbladder fossa', color: 'bg-success' },
-                { text: 'No instrument collisions or unnecessary movements detected', color: 'bg-success' },
-                { text: 'Procedure completed within expected time range', color: 'bg-success' },
-              ].map((item, i) => (
-                <li key={i} className="flex items-start gap-2.5 text-xs text-foreground leading-relaxed">
-                  <div className={`w-1.5 h-1.5 rounded-full ${item.color} mt-1.5 shrink-0`} />
-                  {item.text}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      {/* AI Captured Notes */}
-      <div className="rounded-xl border border-border bg-card shadow-soft overflow-hidden">
-        <div className="gradient-border-left">
-          <div className="px-5 py-4">
-            <div className="flex items-center gap-2 mb-3">
-              <StickyNote size={14} className="text-secondary" />
-              <h3 className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">AI Captured Notes</h3>
-            </div>
-            <ul className="space-y-2">
-              {[
-                'Trocar triangulation consistent with 4-port technique',
-                'Calot\'s dissection took 07:15 — within acceptable range',
-                'Hook cautery used for primary dissection',
-                'Periodic coagulation applied for minor bleeders',
-                'Grasper counter-traction adequate throughout',
-                'Retrieval bag insertion clean, no spillage',
-              ].map((note, i) => (
-                <li key={i} className="flex items-start gap-2.5 text-xs text-muted-foreground leading-relaxed">
-                  <span className="text-secondary font-bold shrink-0">•</span>
-                  {note}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      {/* Gradient divider */}
-      <div className="gradient-line" />
-
-      {/* AI-Assisted Surgical Report */}
+      {/* AI-Assisted Surgical Report — unified header + generate */}
       <div className="rounded-xl border border-border bg-card shadow-card overflow-hidden">
         <div className="h-[3px] bg-gradient-to-r from-primary via-secondary to-warning" />
         <div className="p-5">
-          <div className="flex items-center gap-2 mb-4">
-            <FileText size={14} className="text-secondary" />
-            <h3 className="font-display font-bold text-sm text-foreground">AI-Assisted Surgical Report</h3>
+          <div className="flex items-center gap-2.5 mb-3">
+            <Brain size={18} className="text-secondary" />
+            <h2 className="font-display font-bold text-sm text-foreground">AI-Assisted Surgical Report</h2>
           </div>
 
           {reportState === 'idle' && (
@@ -370,6 +287,75 @@ const AIInsightsSidebar = () => {
               </button>
             </div>
           )}
+        </div>
+      </div>
+
+      {/* Case Overview */}
+      <div className="rounded-xl border border-border bg-card shadow-soft overflow-hidden">
+        <div className="gradient-border-left">
+          <div className="px-5 py-4">
+            <div className="flex items-center gap-2 mb-3">
+              <FileText size={14} className="text-secondary" />
+              <h3 className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Case Overview</h3>
+            </div>
+            <p className="text-xs text-foreground leading-relaxed">
+              Standard laparoscopic cholecystectomy performed by Dr. Sarah Chen. AI analysis detected 7 procedural phases over 23 minutes. Overall competency rated at <strong className="text-secondary">Intermediate (Level 3)</strong> with 2 phases flagged for review.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Milestone Analysis */}
+      <div className="rounded-xl border border-border bg-card shadow-soft overflow-hidden">
+        <div className="gradient-border-left">
+          <div className="px-5 py-4">
+            <div className="flex items-center gap-2 mb-3">
+              <ListChecks size={14} className="text-secondary" />
+              <h3 className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Milestone Analysis</h3>
+            </div>
+            <ul className="space-y-2">
+              {[
+                { text: 'Critical View of Safety achieved — moderate confidence (78%)', color: 'bg-warning' },
+                { text: 'Clip application precise — expert-level execution (96%)', color: 'bg-success' },
+                { text: 'Dissection plane deviated near liver bed in P4', color: 'bg-destructive' },
+                { text: 'Hemostasis confirmed at gallbladder fossa', color: 'bg-success' },
+                { text: 'No instrument collisions or unnecessary movements detected', color: 'bg-success' },
+                { text: 'Procedure completed within expected time range', color: 'bg-success' },
+              ].map((item, i) => (
+                <li key={i} className="flex items-start gap-2.5 text-xs text-foreground leading-relaxed">
+                  <div className={`w-1.5 h-1.5 rounded-full ${item.color} mt-1.5 shrink-0`} />
+                  {item.text}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      {/* AI Captured Notes */}
+      <div className="rounded-xl border border-border bg-card shadow-soft overflow-hidden">
+        <div className="gradient-border-left">
+          <div className="px-5 py-4">
+            <div className="flex items-center gap-2 mb-3">
+              <StickyNote size={14} className="text-secondary" />
+              <h3 className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">AI Captured Notes</h3>
+            </div>
+            <ul className="space-y-2">
+              {[
+                'Trocar triangulation consistent with 4-port technique',
+                'Calot\'s dissection took 07:15 — within acceptable range',
+                'Hook cautery used for primary dissection',
+                'Periodic coagulation applied for minor bleeders',
+                'Grasper counter-traction adequate throughout',
+                'Retrieval bag insertion clean, no spillage',
+              ].map((note, i) => (
+                <li key={i} className="flex items-start gap-2.5 text-xs text-muted-foreground leading-relaxed">
+                  <span className="text-secondary font-bold shrink-0">•</span>
+                  {note}
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
 
