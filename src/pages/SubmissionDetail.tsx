@@ -945,7 +945,7 @@ const FeedbackSection = () => {
             <p className="text-xs text-muted-foreground leading-relaxed">Expert-level clip application with precise perpendicular orientation</p>
           </div>
         </div>
-        <div className="rounded-xl border border-warning/20 bg-card/70 backdrop-blur-sm shadow-soft overflow-hidden">
+        <div className="rounded-xl border border-warning/20 bg-card shadow-soft overflow-hidden">
           <div className="h-[2px] bg-warning" />
           <div className="p-4">
             <div className="flex items-center gap-2.5 mb-3">
