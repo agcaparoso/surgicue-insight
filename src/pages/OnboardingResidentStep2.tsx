@@ -4,7 +4,6 @@ import { ChevronLeft, Check } from 'lucide-react';
 import { useUser } from '@/context/UserContext';
 import { PROCEDURES } from '@/lib/mockData';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Microscope } from 'lucide-react';
 
 const PROCEDURE_ICONS: Record<string, string> = {
   "Wound Closure & Suturing": "🔪",
