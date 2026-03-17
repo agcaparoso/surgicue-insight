@@ -471,7 +471,7 @@ const SubmissionDetail = () => {
           </div>
 
           {/* Student Info Header Card */}
-          <div className="rounded-2xl border border-border/60 bg-card/70 backdrop-blur-md shadow-card overflow-hidden mb-8">
+          <div className="rounded-2xl border border-border/40 bg-card backdrop-blur-md shadow-card overflow-hidden mb-8">
             <div className="h-[3px] bg-gradient-to-r from-primary via-secondary to-warning" />
             <div className="p-6">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
@@ -529,7 +529,7 @@ const SubmissionDetail = () => {
             <div className="flex-1 min-w-0">
               {/* Summary Cards */}
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
-                <div className="group relative rounded-xl border border-border/50 bg-card/70 backdrop-blur-sm shadow-card overflow-hidden transition-all hover:shadow-lg hover:border-secondary/30 hover:-translate-y-0.5">
+                <div className="group relative rounded-xl border border-border/40 bg-card shadow-card overflow-hidden transition-all hover:shadow-lg hover:border-secondary/30 hover:-translate-y-0.5">
                   <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-primary via-secondary to-warning" />
                   <div className="p-5">
                     <div className="flex items-center gap-2.5 mb-3">
@@ -545,7 +545,7 @@ const SubmissionDetail = () => {
                     </div>
                   </div>
                 </div>
-                <div className="group relative rounded-xl border border-border/50 bg-card/70 backdrop-blur-sm shadow-card overflow-hidden transition-all hover:shadow-lg hover:border-secondary/30 hover:-translate-y-0.5">
+                <div className="group relative rounded-xl border border-border/40 bg-card shadow-card overflow-hidden transition-all hover:shadow-lg hover:border-secondary/30 hover:-translate-y-0.5">
                   <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-primary via-secondary to-warning" />
                   <div className="p-5">
                     <div className="flex items-center gap-2.5 mb-3">
@@ -562,7 +562,7 @@ const SubmissionDetail = () => {
                     </div>
                   </div>
                 </div>
-                <div className="group relative rounded-xl border border-border/50 bg-card/70 backdrop-blur-sm shadow-card overflow-hidden transition-all hover:shadow-lg hover:border-secondary/30 hover:-translate-y-0.5">
+                <div className="group relative rounded-xl border border-border/40 bg-card shadow-card overflow-hidden transition-all hover:shadow-lg hover:border-secondary/30 hover:-translate-y-0.5">
                   <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-primary via-secondary to-warning" />
                   <div className="p-5">
                     <div className="flex items-center gap-2.5 mb-3">
@@ -574,7 +574,7 @@ const SubmissionDetail = () => {
                     <span className="text-3xl font-black font-display" style={titleStyle}>{phases.length}</span>
                   </div>
                 </div>
-                <div className="group relative rounded-xl border border-border/50 bg-card/70 backdrop-blur-sm shadow-card overflow-hidden transition-all hover:shadow-lg hover:border-secondary/30 hover:-translate-y-0.5">
+                <div className="group relative rounded-xl border border-border/40 bg-card shadow-card overflow-hidden transition-all hover:shadow-lg hover:border-secondary/30 hover:-translate-y-0.5">
                   <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-primary via-secondary to-warning" />
                   <div className="p-5">
                     <div className="flex items-center gap-2.5 mb-3">
@@ -598,7 +598,7 @@ const SubmissionDetail = () => {
 
               {/* Unified Tabs: Scorecard, Timeline, Key Frames, Feedback */}
               <Tabs defaultValue="scorecard" className="w-full">
-                <TabsList className="w-full grid grid-cols-4 mb-8 bg-card/70 backdrop-blur-sm rounded-xl p-1.5 h-auto border border-border/50 shadow-soft">
+                <TabsList className="w-full grid grid-cols-4 mb-8 bg-card rounded-xl p-1.5 h-auto border border-border/40 shadow-soft">
                   <TabsTrigger value="scorecard" className="text-xs font-bold py-3 rounded-lg data-[state=active]:bg-primary/5 data-[state=active]:text-primary data-[state=active]:shadow-soft data-[state=active]:gradient-underline gap-1.5 transition-all">
                     <Layers size={14} /> Scorecard
                   </TabsTrigger>
@@ -622,7 +622,7 @@ const SubmissionDetail = () => {
                       const PhaseIcon = phaseIcons[phase.id] || Layers;
 
                       return (
-                        <div key={phase.id} className={`rounded-xl border border-border/50 bg-card/70 backdrop-blur-sm shadow-card overflow-hidden border-l-[4px] ${statusBorderColor}`}>
+                        <div key={phase.id} className={`rounded-xl border border-border/40 bg-card shadow-card overflow-hidden border-l-[4px] ${statusBorderColor}`}>
                           <div className={`px-5 py-4 ${statusBg}`}>
                             <div className="flex items-center gap-3 flex-wrap">
                               <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, hsl(211 60% 28% / 0.1), hsl(45 80% 55% / 0.15))' }}>
@@ -718,7 +718,7 @@ const SubmissionDetail = () => {
                 <TabsContent value="timeline">
                   <div className="space-y-6">
                     {/* Timeline Graph */}
-                    <div className="rounded-xl border border-border/50 bg-card/70 backdrop-blur-sm shadow-card overflow-hidden p-5">
+                    <div className="rounded-xl border border-border/40 bg-card shadow-card overflow-hidden p-6">
                       <div className="flex items-center justify-between mb-5">
                         <p className="text-xs text-muted-foreground flex items-center gap-2">
                           <TrendingUp size={14} className="text-secondary shrink-0" />
@@ -799,7 +799,7 @@ const SubmissionDetail = () => {
                     </div>
 
                     {/* Phase Timing Summary */}
-                    <div className="rounded-xl border border-border/50 bg-card/70 backdrop-blur-sm shadow-card overflow-hidden">
+                    <div className="rounded-xl border border-border/40 bg-card shadow-card overflow-hidden">
                       <div className="px-5 py-3 bg-accent/30 border-b border-border/50">
                         <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Phase Timing Summary</p>
                       </div>
@@ -835,7 +835,7 @@ const SubmissionDetail = () => {
                 <TabsContent value="keyframes">
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-5">
                     {keyFrames.map((frame) => (
-                      <div key={frame.id} className="rounded-xl overflow-hidden border border-border/50 bg-card/70 backdrop-blur-sm shadow-card hover:shadow-lg hover:border-secondary/30 transition-all group">
+                      <div key={frame.id} className="rounded-xl overflow-hidden border border-border/40 bg-card shadow-card hover:shadow-lg hover:border-secondary/30 transition-all group">
                         <div className="aspect-video bg-accent/60 flex items-center justify-center relative">
                           <Eye size={24} className="text-muted-foreground/30 group-hover:text-secondary/50 transition-colors" />
                           <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-primary via-secondary to-warning opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -902,7 +902,7 @@ const FeedbackSection = () => {
   return (
     <div className="space-y-5">
       {/* Overall Assessment Card */}
-      <div className="rounded-xl border border-border/50 bg-card/70 backdrop-blur-sm shadow-card overflow-hidden">
+      <div className="rounded-xl border border-border/40 bg-card shadow-card overflow-hidden">
         <div className="h-[3px] bg-gradient-to-r from-primary via-secondary to-warning" />
         <div className="p-5">
           <div className="flex items-center gap-2.5 mb-4">
@@ -932,7 +932,7 @@ const FeedbackSection = () => {
 
       {/* Strength + Improvement Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div className="rounded-xl border border-success/20 bg-card/70 backdrop-blur-sm shadow-soft overflow-hidden">
+        <div className="rounded-xl border border-success/20 bg-card shadow-soft overflow-hidden">
           <div className="h-[2px] bg-success" />
           <div className="p-4">
             <div className="flex items-center gap-2.5 mb-3">
@@ -945,7 +945,7 @@ const FeedbackSection = () => {
             <p className="text-xs text-muted-foreground leading-relaxed">Expert-level clip application with precise perpendicular orientation</p>
           </div>
         </div>
-        <div className="rounded-xl border border-warning/20 bg-card/70 backdrop-blur-sm shadow-soft overflow-hidden">
+        <div className="rounded-xl border border-warning/20 bg-card shadow-soft overflow-hidden">
           <div className="h-[2px] bg-warning" />
           <div className="p-4">
             <div className="flex items-center gap-2.5 mb-3">
@@ -961,7 +961,7 @@ const FeedbackSection = () => {
       </div>
 
       {/* Recommendation Card */}
-      <div className="rounded-xl border border-secondary/20 bg-card/70 backdrop-blur-sm shadow-soft overflow-hidden">
+      <div className="rounded-xl border border-secondary/20 bg-card shadow-soft overflow-hidden">
         <div className="gradient-border-left">
           <div className="p-4">
             <div className="flex items-center gap-2.5 mb-3">
@@ -978,7 +978,7 @@ const FeedbackSection = () => {
       </div>
 
       {/* Recommended Next Actions */}
-      <div className="rounded-xl border border-border/50 bg-card/70 backdrop-blur-sm shadow-soft overflow-hidden">
+      <div className="rounded-xl border border-border/40 bg-card shadow-soft overflow-hidden">
         <div className="h-[2px] bg-gradient-to-r from-primary via-secondary to-warning" />
         <div className="p-4">
           <div className="flex items-center gap-2.5 mb-4">
@@ -1013,7 +1013,7 @@ const FeedbackSection = () => {
       </button>
 
       {showFull && (
-        <SiqCard className="space-y-4 text-sm text-foreground leading-relaxed animate-accordion-down bg-card/70 backdrop-blur-sm">
+        <SiqCard className="space-y-4 text-sm text-foreground leading-relaxed animate-accordion-down">
           <p>
             The strongest performance was observed during <strong>Clipping & Cutting</strong> (4.5/5.0), where technique, instrument control,
             and pacing were consistent with competent practice.
