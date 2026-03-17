@@ -695,8 +695,8 @@ const SubmissionDetail = () => {
               <div className="grid grid-cols-2 md:grid-cols-3 gap-5">
                 {keyFrames.map((frame) => (
                   <div key={frame.id} className="rounded-xl overflow-hidden border border-border/40 bg-card shadow-card hover:shadow-lg hover:border-secondary/30 transition-all group">
-                    <div className="aspect-video bg-accent/60 flex items-center justify-center relative">
-                      <Eye size={24} className="text-muted-foreground/30 group-hover:text-secondary/50 transition-colors" />
+                    <div className="aspect-video bg-accent/60 relative overflow-hidden">
+                      <img src={frame.image} alt={frame.label} className="w-full h-full object-cover" />
                       <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-primary via-secondary to-warning opacity-0 group-hover:opacity-100 transition-opacity" />
                     </div>
                     <div className="p-3.5 space-y-2">
