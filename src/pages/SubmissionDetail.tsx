@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeft, Clock, Activity, Layers, Target, Eye, MessageSquare, Image, User, TrendingUp, Shield, Zap, FileText, Loader2, Brain, ListChecks, StickyNote, CheckCircle2, AlertTriangle, XCircle, Award, Crosshair, CalendarDays, Stethoscope, Trophy, Timer, GitBranch, Scissors, Focus, Hand, Sparkles, Package, Droplets, ArrowDownToLine, ThumbsUp, ThumbsDown, ArrowLeft } from 'lucide-react';
 import { SiqCard, StatusBadge } from '@/components/SiqComponents';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { TooltipProvider } from '@/components/ui/tooltip';
 
 // --- Data ---
