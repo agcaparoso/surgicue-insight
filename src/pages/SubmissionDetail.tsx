@@ -596,119 +596,12 @@ const SubmissionDetail = () => {
 
               <div className="gradient-line mb-8" />
 
-              {/* Scorecard Section Header */}
-              <div className="section-header mb-6">
-                <span>🩺</span>
-                Phase-by-Phase Scorecard
-              </div>
-
-              {/* Fully Expanded Phase Cards */}
-              <div className="space-y-6 mb-10">
-                {phases.map((phase) => {
-                  const statusBorderColor = phase.status === 'Passed' ? 'border-l-success' : phase.status === 'Flagged' ? 'border-l-warning' : 'border-l-destructive';
-                  const statusBg = phase.status === 'Passed' ? 'bg-success/5' : phase.status === 'Flagged' ? 'bg-warning/5' : 'bg-destructive/5';
-                  const PhaseIcon = phaseIcons[phase.id] || Layers;
-
-                  return (
-                    <div key={phase.id} className={`rounded-xl border border-border/50 bg-card/70 backdrop-blur-sm shadow-card overflow-hidden border-l-[4px] ${statusBorderColor}`}>
-                      {/* Phase Header */}
-                      <div className={`px-5 py-4 ${statusBg}`}>
-                        <div className="flex items-center gap-3 flex-wrap">
-                          <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, hsl(211 60% 28% / 0.1), hsl(45 80% 55% / 0.15))' }}>
-                            <PhaseIcon size={18} className="text-secondary" />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-2 flex-wrap">
-                              <span className="font-display font-bold text-secondary text-sm">{phase.id}:</span>
-                              <span className="font-display font-bold text-base text-foreground">{phase.name}</span>
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-3">
-                            <span className={`text-2xl font-black font-display ${scoreColor(phase.score)}`}>{phase.score}<span className="text-sm font-medium text-muted-foreground">/{phase.maxScore}</span></span>
-                            <StatusBadge status={phase.status} />
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="p-5 space-y-5">
-                        {/* Metrics - Stacked Vertically */}
-                        <div>
-                          <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-3">Performance Metrics</p>
-                          <div className="space-y-3">
-                            <ScoreBar score={phase.score} maxScore={phase.maxScore} label="Overall Phase Score" icon={Sparkles} />
-                            <ScoreBar score={phase.rubrics[0].score} maxScore={phase.rubrics[0].maxScore} label={phase.rubrics[0].label} icon={Hand} />
-                            <ScoreBar score={phase.rubrics[1].score} maxScore={phase.rubrics[1].maxScore} label={phase.rubrics[1].label} icon={Eye} />
-                            <ScoreBar score={phase.rubrics[2].score} maxScore={phase.rubrics[2].maxScore} label={phase.rubrics[2].label} icon={Crosshair} />
-                          </div>
-                        </div>
-
-                        {/* Duration */}
-                        <div className="flex items-center gap-4 px-4 py-3 rounded-lg bg-accent/30 text-xs">
-                          <div className="flex items-center gap-1.5">
-                            <Clock size={13} className="text-secondary" />
-                            <span className="text-muted-foreground">Start:</span>
-                            <span className="font-bold text-foreground font-display">{phase.startTime}</span>
-                          </div>
-                          <div className="w-px h-4 bg-border" />
-                          <div className="flex items-center gap-1.5">
-                            <span className="text-muted-foreground">End:</span>
-                            <span className="font-bold text-foreground font-display">{phase.endTime}</span>
-                          </div>
-                          <div className="w-px h-4 bg-border" />
-                          <div className="flex items-center gap-1.5">
-                            <Timer size={13} className="text-secondary" />
-                            <span className="text-muted-foreground">Total:</span>
-                            <span className="font-bold text-foreground font-display">{phase.duration}</span>
-                          </div>
-                          {phase.idealDuration && (
-                            <>
-                              <div className="w-px h-4 bg-border" />
-                              <div className="flex items-center gap-1.5">
-                                <span className="text-muted-foreground">Ideal:</span>
-                                <span className="font-medium text-foreground">{phase.idealDuration}</span>
-                              </div>
-                            </>
-                          )}
-                        </div>
-
-                        {/* AI Summary & Rubric Notes */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <div className="rounded-lg border border-secondary/20 bg-secondary/5 p-4">
-                            <p className="text-[10px] font-bold text-secondary uppercase tracking-wider mb-2 flex items-center gap-1.5">
-                              <Brain size={12} /> AI Observation
-                            </p>
-                            <p className="text-xs text-foreground leading-relaxed">{phase.observation}</p>
-                          </div>
-                          <div className="rounded-lg border border-primary/20 bg-primary/5 p-4">
-                            <p className="text-[10px] font-bold text-primary uppercase tracking-wider mb-2 flex items-center gap-1.5">
-                              <Crosshair size={12} /> Rubric Assessment
-                            </p>
-                            <p className="text-xs text-muted-foreground leading-relaxed">{phase.rubricAssessment}</p>
-                          </div>
-                        </div>
-
-                        {phase.additionalNotes && (
-                          <div className="rounded-lg border border-warning/20 bg-warning/5 p-4">
-                            <p className="text-[10px] font-bold text-warning uppercase tracking-wider mb-2">Additional Notes</p>
-                            <p className="text-xs text-foreground leading-relaxed">{phase.additionalNotes}</p>
-                          </div>
-                        )}
-
-                        <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
-                          <Eye size={11} className="text-secondary" />
-                          <span>{phase.framesAnalyzed} frames analyzed</span>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-
-              <div className="gradient-line mb-8" />
-
-              {/* Additional Tabs (Timeline, Frames, Feedback) */}
-              <Tabs defaultValue="timeline" className="w-full">
-                <TabsList className="w-full grid grid-cols-3 mb-8 bg-card/70 backdrop-blur-sm rounded-xl p-1.5 h-auto border border-border/50 shadow-soft">
+              {/* Unified Tabs: Scorecard, Timeline, Key Frames, Feedback */}
+              <Tabs defaultValue="scorecard" className="w-full">
+                <TabsList className="w-full grid grid-cols-4 mb-8 bg-card/70 backdrop-blur-sm rounded-xl p-1.5 h-auto border border-border/50 shadow-soft">
+                  <TabsTrigger value="scorecard" className="text-xs font-bold py-3 rounded-lg data-[state=active]:bg-primary/5 data-[state=active]:text-primary data-[state=active]:shadow-soft data-[state=active]:gradient-underline gap-1.5 transition-all">
+                    <Layers size={14} /> Scorecard
+                  </TabsTrigger>
                   <TabsTrigger value="timeline" className="text-xs font-bold py-3 rounded-lg data-[state=active]:bg-primary/5 data-[state=active]:text-primary data-[state=active]:shadow-soft data-[state=active]:gradient-underline gap-1.5 transition-all">
                     <Clock size={14} /> Timeline
                   </TabsTrigger>
@@ -719,6 +612,107 @@ const SubmissionDetail = () => {
                     <MessageSquare size={14} /> Feedback
                   </TabsTrigger>
                 </TabsList>
+
+                {/* === SCORECARD TAB === */}
+                <TabsContent value="scorecard">
+                  <div className="space-y-6">
+                    {phases.map((phase) => {
+                      const statusBorderColor = phase.status === 'Passed' ? 'border-l-success' : phase.status === 'Flagged' ? 'border-l-warning' : 'border-l-destructive';
+                      const statusBg = phase.status === 'Passed' ? 'bg-success/5' : phase.status === 'Flagged' ? 'bg-warning/5' : 'bg-destructive/5';
+                      const PhaseIcon = phaseIcons[phase.id] || Layers;
+
+                      return (
+                        <div key={phase.id} className={`rounded-xl border border-border/50 bg-card/70 backdrop-blur-sm shadow-card overflow-hidden border-l-[4px] ${statusBorderColor}`}>
+                          <div className={`px-5 py-4 ${statusBg}`}>
+                            <div className="flex items-center gap-3 flex-wrap">
+                              <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, hsl(211 60% 28% / 0.1), hsl(45 80% 55% / 0.15))' }}>
+                                <PhaseIcon size={18} className="text-secondary" />
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center gap-2 flex-wrap">
+                                  <span className="font-display font-bold text-secondary text-sm">{phase.id}:</span>
+                                  <span className="font-display font-bold text-base text-foreground">{phase.name}</span>
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-3">
+                                <span className={`text-2xl font-black font-display ${scoreColor(phase.score)}`}>{phase.score}<span className="text-sm font-medium text-muted-foreground">/{phase.maxScore}</span></span>
+                                <StatusBadge status={phase.status} />
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="p-5 space-y-5">
+                            <div>
+                              <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-3">Performance Metrics</p>
+                              <div className="space-y-3">
+                                <ScoreBar score={phase.score} maxScore={phase.maxScore} label="Overall Phase Score" icon={Sparkles} />
+                                <ScoreBar score={phase.rubrics[0].score} maxScore={phase.rubrics[0].maxScore} label={phase.rubrics[0].label} icon={Hand} />
+                                <ScoreBar score={phase.rubrics[1].score} maxScore={phase.rubrics[1].maxScore} label={phase.rubrics[1].label} icon={Eye} />
+                                <ScoreBar score={phase.rubrics[2].score} maxScore={phase.rubrics[2].maxScore} label={phase.rubrics[2].label} icon={Crosshair} />
+                              </div>
+                            </div>
+
+                            <div className="flex items-center gap-4 px-4 py-3 rounded-lg bg-accent/30 text-xs flex-wrap">
+                              <div className="flex items-center gap-1.5">
+                                <Clock size={13} className="text-secondary" />
+                                <span className="text-muted-foreground">Start:</span>
+                                <span className="font-bold text-foreground font-display">{phase.startTime}</span>
+                              </div>
+                              <div className="w-px h-4 bg-border" />
+                              <div className="flex items-center gap-1.5">
+                                <span className="text-muted-foreground">End:</span>
+                                <span className="font-bold text-foreground font-display">{phase.endTime}</span>
+                              </div>
+                              <div className="w-px h-4 bg-border" />
+                              <div className="flex items-center gap-1.5">
+                                <Timer size={13} className="text-secondary" />
+                                <span className="text-muted-foreground">Total:</span>
+                                <span className="font-bold text-foreground font-display">{phase.duration}</span>
+                              </div>
+                              {phase.idealDuration && (
+                                <>
+                                  <div className="w-px h-4 bg-border" />
+                                  <div className="flex items-center gap-1.5">
+                                    <span className="text-muted-foreground">Ideal:</span>
+                                    <span className="font-medium text-foreground">{phase.idealDuration}</span>
+                                  </div>
+                                </>
+                              )}
+                              <div className="w-px h-4 bg-border" />
+                              <div className="flex items-center gap-1.5">
+                                <Eye size={13} className="text-secondary" />
+                                <span className="text-muted-foreground">Frames:</span>
+                                <span className="font-bold text-foreground">{phase.framesAnalyzed}</span>
+                              </div>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              <div className="rounded-lg border border-secondary/20 bg-secondary/5 p-4">
+                                <p className="text-[10px] font-bold text-secondary uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                                  <Brain size={12} /> AI Observation
+                                </p>
+                                <p className="text-xs text-foreground leading-relaxed">{phase.observation}</p>
+                              </div>
+                              <div className="rounded-lg border border-primary/20 bg-primary/5 p-4">
+                                <p className="text-[10px] font-bold text-primary uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                                  <Crosshair size={12} /> Rubric Assessment
+                                </p>
+                                <p className="text-xs text-muted-foreground leading-relaxed">{phase.rubricAssessment}</p>
+                              </div>
+                            </div>
+
+                            {phase.additionalNotes && (
+                              <div className="rounded-lg border border-warning/20 bg-warning/5 p-4">
+                                <p className="text-[10px] font-bold text-warning uppercase tracking-wider mb-2">Additional Notes</p>
+                                <p className="text-xs text-foreground leading-relaxed">{phase.additionalNotes}</p>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </TabsContent>
 
                 {/* === TIMELINE TAB === */}
                 <TabsContent value="timeline">
