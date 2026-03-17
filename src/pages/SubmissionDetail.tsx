@@ -712,12 +712,6 @@ const SubmissionDetail = () => {
               {/* Gradient section divider */}
               <div className="gradient-line mt-10 mb-8" />
 
-              {/* AI-Assisted Surgical Report */}
-              <AIReport />
-
-              {/* Gradient section divider */}
-              <div className="gradient-line mt-8 mb-8" />
-
               {/* Action Buttons */}
               <div className="grid grid-cols-2 gap-5 pb-8">
                 <button onClick={() => navigate('/new-submission')} className="py-3.5 border-2 border-primary text-primary rounded-xl font-bold text-sm hover:bg-primary/5 active:scale-[0.98] transition-all">
