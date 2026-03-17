@@ -653,39 +653,34 @@ const SubmissionDetail = () => {
                               </div>
                             </div>
 
-                            <div className="flex items-center gap-4 px-4 py-3 rounded-lg bg-accent/30 text-xs flex-wrap">
-                              <div className="flex items-center gap-1.5">
-                                <Clock size={13} className="text-secondary" />
-                                <span className="text-muted-foreground">Start:</span>
-                                <span className="font-bold text-foreground font-display">{phase.startTime}</span>
-                              </div>
-                              <div className="w-px h-4 bg-border" />
-                              <div className="flex items-center gap-1.5">
-                                <span className="text-muted-foreground">End:</span>
-                                <span className="font-bold text-foreground font-display">{phase.endTime}</span>
-                              </div>
-                              <div className="w-px h-4 bg-border" />
-                              <div className="flex items-center gap-1.5">
-                                <Timer size={13} className="text-secondary" />
-                                <span className="text-muted-foreground">Total:</span>
-                                <span className="font-bold text-foreground font-display">{phase.duration}</span>
-                              </div>
-                              {phase.idealDuration && (
-                                <>
-                                  <div className="w-px h-4 bg-border" />
+                            {(() => {
+                              const actualSec = durationToSec(phase.duration);
+                              const ideal = phase.idealDuration ? parseIdealRange(phase.idealDuration) : null;
+                              const metIdeal = ideal ? actualSec >= ideal.min && actualSec <= ideal.max : true;
+                              return (
+                                <div className="flex items-center gap-4 px-4 py-3 rounded-lg bg-accent/30 text-xs flex-wrap">
                                   <div className="flex items-center gap-1.5">
-                                    <span className="text-muted-foreground">Ideal:</span>
-                                    <span className="font-medium text-foreground">{phase.idealDuration}</span>
+                                    <Timer size={13} className="text-secondary" />
+                                    <span className="text-muted-foreground">Total Duration:</span>
+                                    <span className="font-bold text-foreground font-display">{phase.duration}</span>
                                   </div>
-                                </>
-                              )}
-                              <div className="w-px h-4 bg-border" />
-                              <div className="flex items-center gap-1.5">
-                                <Eye size={13} className="text-secondary" />
-                                <span className="text-muted-foreground">Frames:</span>
-                                <span className="font-bold text-foreground">{phase.framesAnalyzed}</span>
-                              </div>
-                            </div>
+                                  {phase.idealDuration && (
+                                    <>
+                                      <div className="w-px h-4 bg-border" />
+                                      <div className="flex items-center gap-1.5">
+                                        <span className="text-muted-foreground">Ideal:</span>
+                                        <span className="font-medium text-foreground">{phase.idealDuration}</span>
+                                      </div>
+                                      <div className="w-px h-4 bg-border" />
+                                      <div className={`flex items-center gap-1.5 px-2 py-0.5 rounded-full border ${metIdeal ? 'bg-success/10 border-success/20 text-success' : 'bg-warning/10 border-warning/20 text-warning'}`}>
+                                        {metIdeal ? <CheckCircle2 size={12} /> : <AlertTriangle size={12} />}
+                                        <span className="font-bold text-[10px] uppercase tracking-wider">{metIdeal ? 'Met Ideal' : 'Over/Under Ideal'}</span>
+                                      </div>
+                                    </>
+                                  )}
+                                </div>
+                              );
+                            })()}
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                               <div className="rounded-lg border border-secondary/20 bg-secondary/5 p-4">
