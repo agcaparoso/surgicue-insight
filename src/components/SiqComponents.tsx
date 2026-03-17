@@ -5,7 +5,7 @@ import { CheckCircle2, AlertTriangle, XCircle } from 'lucide-react';
 export const SiqCard = ({ children, className = "", onClick }: { children: ReactNode; className?: string; onClick?: () => void }) => (
   <div
     onClick={onClick}
-    className={`bg-card rounded-xl p-5 shadow-card border border-border/50 transition-all ${onClick ? 'cursor-pointer hover:shadow-lg hover:border-secondary/30' : ''} ${className}`}
+    className={`bg-card rounded-xl p-6 shadow-card border border-border/40 transition-all ${onClick ? 'cursor-pointer hover:shadow-lg hover:border-secondary/30' : ''} ${className}`}
   >
     {children}
   </div>
