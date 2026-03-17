@@ -432,6 +432,7 @@ const ScoreBar = ({ score, maxScore = 5, label, icon: Icon }: { score: number; m
 
 const SubmissionDetail = () => {
   const navigate = useNavigate();
+  const [hoveredPhase, setHoveredPhase] = useState<string | null>(null);
 
   const overallScore = 3.7;
   const maxTimelineSec = Math.max(...phases.map(p => {
@@ -721,53 +722,119 @@ const SubmissionDetail = () => {
 
                 {/* === TIMELINE TAB === */}
                 <TabsContent value="timeline">
-                  <SiqCard className="bg-card/70 backdrop-blur-sm">
-                    <p className="text-xs text-muted-foreground mb-6 flex items-center gap-2">
-                      <TrendingUp size={14} className="text-secondary shrink-0" />
-                      This chart compares actual phase duration against the expected optimal range.
-                    </p>
-                    <div className="flex items-center gap-5 mb-5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-                      <div className="flex items-center gap-2">
-                        <div className="w-4 h-3 rounded-sm bar-gradient" />
-                        Actual Duration
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <div className="w-4 h-3 rounded-sm bg-accent border border-border/50" />
-                        Ideal Range
-                      </div>
-                    </div>
-                    <div className="space-y-4">
-                      {phases.map((p) => {
-                        const actualSec = durationToSec(p.duration);
-                        const ideal = p.idealDuration ? parseIdealRange(p.idealDuration) : { min: 0, max: 0 };
-                        const barMax = maxTimelineSec * 1.15;
-                        const actualPct = (actualSec / barMax) * 100;
-                        const idealMinPct = (ideal.min / barMax) * 100;
-                        const idealWidthPct = ((ideal.max - ideal.min) / barMax) * 100;
-                        return (
-                          <div key={p.id} className="group">
-                            <div className="flex items-center gap-3 mb-1.5">
-                              <StatusIcon status={p.status} />
-                              <span className="text-xs font-bold text-secondary w-6 shrink-0">{p.id}</span>
-                              <span className="text-xs font-medium text-foreground flex-1 truncate">{p.name}</span>
-                              <span className="text-xs font-display font-bold text-foreground shrink-0">{p.duration}</span>
-                            </div>
-                            <div className="relative h-7 bg-accent/40 rounded-lg overflow-hidden ml-[60px]">
-                              <div className="absolute top-0 bottom-0 bg-success/10 border-l border-r border-success/20" style={{ left: `${idealMinPct}%`, width: `${idealWidthPct}%` }} />
-                              <div className={`absolute top-1 bottom-1 rounded-md transition-all ${p.status === 'Flagged' ? 'bar-gradient-warn' : 'bar-gradient'}`} style={{ width: `${actualPct}%`, left: 0 }} />
-                            </div>
-                            <div className="ml-[60px] flex items-center gap-3 mt-1 text-[10px] text-muted-foreground opacity-60 group-hover:opacity-100 transition-opacity">
-                              <span>{p.startTime} → {p.endTime}</span>
-                              <span>·</span>
-                              <span>Ideal: {p.idealDuration}</span>
-                              <span>·</span>
-                              <span>{p.framesAnalyzed} frames analyzed</span>
-                            </div>
+                  <div className="space-y-6">
+                    {/* Timeline Graph */}
+                    <div className="rounded-xl border border-border/50 bg-card/70 backdrop-blur-sm shadow-card overflow-hidden p-5">
+                      <div className="flex items-center justify-between mb-5">
+                        <p className="text-xs text-muted-foreground flex items-center gap-2">
+                          <TrendingUp size={14} className="text-secondary shrink-0" />
+                          Actual phase duration vs. expected optimal range
+                        </p>
+                        <div className="flex items-center gap-5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                          <div className="flex items-center gap-2">
+                            <div className="w-4 h-3 rounded-sm bar-gradient" />
+                            Actual
                           </div>
-                        );
-                      })}
+                          <div className="flex items-center gap-2">
+                            <div className="w-4 h-3 rounded-sm bg-success/15 border border-success/30" />
+                            Ideal Range
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="space-y-3">
+                        {phases.map((p) => {
+                          const actualSec = durationToSec(p.duration);
+                          const ideal = p.idealDuration ? parseIdealRange(p.idealDuration) : { min: 0, max: 0 };
+                          const barMax = maxTimelineSec * 1.15;
+                          const actualPct = (actualSec / barMax) * 100;
+                          const idealMinPct = (ideal.min / barMax) * 100;
+                          const idealWidthPct = ((ideal.max - ideal.min) / barMax) * 100;
+                          const isHovered = hoveredPhase === p.id;
+
+                          return (
+                            <div
+                              key={p.id}
+                              className={`relative rounded-lg px-3 py-2.5 transition-all cursor-pointer ${isHovered ? 'bg-secondary/8 ring-1 ring-secondary/20' : 'hover:bg-accent/20'}`}
+                              onMouseEnter={() => setHoveredPhase(p.id)}
+                              onMouseLeave={() => setHoveredPhase(null)}
+                            >
+                              {/* Phase label row */}
+                              <div className="flex items-center gap-2.5 mb-2">
+                                <StatusIcon status={p.status} />
+                                <span className="text-[11px] font-bold text-secondary font-display w-7 shrink-0">{p.id}</span>
+                                <span className="text-[11px] font-semibold text-foreground flex-1">{p.name}</span>
+                                <span className="text-[11px] font-display font-bold text-foreground shrink-0">{p.duration}</span>
+                              </div>
+
+                              {/* Bar */}
+                              <div className="relative h-8 bg-accent/30 rounded-lg overflow-hidden ml-[52px]">
+                                {/* Ideal range */}
+                                <div
+                                  className="absolute top-0 bottom-0 bg-success/12 border-l-2 border-r-2 border-success/25 rounded-sm"
+                                  style={{ left: `${idealMinPct}%`, width: `${idealWidthPct}%` }}
+                                />
+                                {/* Actual bar */}
+                                <div
+                                  className={`absolute top-1 bottom-1 rounded-md transition-all shadow-sm ${isHovered ? 'opacity-100' : 'opacity-85'} ${p.status === 'Flagged' ? 'bar-gradient-warn' : 'bar-gradient'}`}
+                                  style={{ width: `${actualPct}%`, left: 0 }}
+                                />
+                                {/* Duration label inside bar */}
+                                {actualPct > 15 && (
+                                  <span className="absolute top-1/2 -translate-y-1/2 left-2 text-[9px] font-bold text-white/90 z-10">{p.duration}</span>
+                                )}
+                              </div>
+
+                              {/* Tooltip on hover */}
+                              {isHovered && (
+                                <div className="absolute right-3 top-0 z-20 bg-card border border-border rounded-lg shadow-lg p-3 min-w-[200px] animate-accordion-down">
+                                  <p className="text-xs font-bold text-foreground font-display mb-2">{p.id}: {p.name}</p>
+                                  <div className="space-y-1 text-[11px] text-muted-foreground">
+                                    <div className="flex justify-between"><span>Start</span><span className="font-bold text-foreground">{p.startTime}</span></div>
+                                    <div className="flex justify-between"><span>End</span><span className="font-bold text-foreground">{p.endTime}</span></div>
+                                    <div className="flex justify-between"><span>Duration</span><span className="font-bold text-foreground">{p.duration}</span></div>
+                                    <div className="flex justify-between"><span>Ideal</span><span className="font-medium text-foreground">{p.idealDuration}</span></div>
+                                    <div className="flex justify-between"><span>Frames Analyzed</span><span className="font-bold text-foreground">{p.framesAnalyzed}</span></div>
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
                     </div>
-                  </SiqCard>
+
+                    {/* Phase Timing Summary */}
+                    <div className="rounded-xl border border-border/50 bg-card/70 backdrop-blur-sm shadow-card overflow-hidden">
+                      <div className="px-5 py-3 bg-accent/30 border-b border-border/50">
+                        <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Phase Timing Summary</p>
+                      </div>
+                      <div className="divide-y divide-border/30">
+                        {phases.map((p) => {
+                          const isHovered = hoveredPhase === p.id;
+                          const statusLabel = p.status === 'Passed' ? 'On Target' : p.status === 'Flagged' ? 'Review' : 'Critical';
+                          const statusColor = p.status === 'Passed' ? 'text-success bg-success/10 border-success/20' : p.status === 'Flagged' ? 'text-warning bg-warning/10 border-warning/20' : 'text-destructive bg-destructive/10 border-destructive/20';
+
+                          return (
+                            <div
+                              key={p.id}
+                              className={`flex items-center gap-4 px-5 py-3 transition-all cursor-pointer ${isHovered ? 'bg-secondary/8 ring-1 ring-inset ring-secondary/20' : 'hover:bg-accent/20'}`}
+                              onMouseEnter={() => setHoveredPhase(p.id)}
+                              onMouseLeave={() => setHoveredPhase(null)}
+                            >
+                              <StatusIcon status={p.status} />
+                              <span className="text-[11px] font-bold text-secondary font-display w-7 shrink-0">{p.id}</span>
+                              <span className="text-xs font-semibold text-foreground flex-1">{p.name}</span>
+                              <span className="text-xs font-display font-bold text-foreground w-14 text-right">{p.duration}</span>
+                              <span className={`text-[9px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border ${statusColor}`}>
+                                {statusLabel}
+                              </span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
                 </TabsContent>
 
                 {/* === KEY FRAMES TAB === */}
