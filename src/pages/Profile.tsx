@@ -71,7 +71,7 @@ const Profile = () => {
         ))}
 
         <button
-          onClick={() => navigate('/welcome')}
+          onClick={() => navigate('/')}
           className="w-full flex items-center justify-between p-4 bg-card rounded-xl border border-border/50 hover:border-destructive/30 transition-all"
         >
           <div className="flex items-center gap-3">
