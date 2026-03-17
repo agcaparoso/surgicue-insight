@@ -2,11 +2,7 @@ import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 export interface UserData {
   name: string;
-  role: 'resident' | 'educator' | '';
-  program: string;
-  year: string;
-  specialty: string;
-  attending: string;
+  role: 'educator';
   institution: string;
   department: string;
   numTrainees: string;
@@ -16,11 +12,7 @@ export interface UserData {
 
 const defaultUser: UserData = {
   name: '',
-  role: '',
-  program: '',
-  year: '',
-  specialty: '',
-  attending: '',
+  role: 'educator',
   institution: '',
   department: '',
   numTrainees: '',
