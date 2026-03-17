@@ -15,6 +15,7 @@ export default {
     extend: {
       fontFamily: {
         sans: ['"DM Sans"', 'system-ui', 'sans-serif'],
+        display: ['"Sora"', '"DM Sans"', 'system-ui', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -77,6 +78,7 @@ export default {
       },
       boxShadow: {
         soft: "var(--shadow-soft)",
+        card: "var(--shadow-card)",
       },
       keyframes: {
         "accordion-down": {
