@@ -658,7 +658,7 @@ const SubmissionDetail = () => {
                   </p>
                   <div className="flex items-center gap-5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
                     <div className="flex items-center gap-2"><div className="w-4 h-3 rounded-sm bar-gradient" /> Actual</div>
-                    <div className="flex items-center gap-2"><div className="w-4 h-3 rounded-sm bg-success/15 border border-success/30" /> Ideal Range</div>
+                    <div className="flex items-center gap-2"><div className="w-4 h-3 rounded-sm bg-success/30 border border-success/50" /> Ideal Range</div>
                   </div>
                 </div>
                 <div className="space-y-3">
