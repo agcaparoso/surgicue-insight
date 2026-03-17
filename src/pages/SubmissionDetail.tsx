@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronDown, ChevronRight, Clock, Activity, Layers, Target, Eye, MessageSquare, Image } from 'lucide-react';
-import PageLayout from '@/components/PageLayout';
-import { SiqCard, StatusBadge, SegmentedBar } from '@/components/SiqComponents';
+import { ChevronDown, ChevronRight, Clock, Activity, Layers, Target, Eye, MessageSquare, Image, Search, User } from 'lucide-react';
+import { SiqCard, StatusBadge } from '@/components/SiqComponents';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 
 // --- Data ---
@@ -150,230 +149,243 @@ const SubmissionDetail = () => {
   const overallScore = 3.7;
 
   return (
-    <PageLayout title="Feedback Report" activeTab="submissions">
-      {/* 1. Header Filters */}
-      <div className="flex flex-wrap items-center gap-3 mb-6">
-        <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-card border border-border/50 text-sm">
-          <Activity size={14} className="text-secondary" />
-          <span className="font-medium text-foreground">{selectedStudent}</span>
+    <div className="min-h-screen bg-background">
+      {/* Top Bar */}
+      <header className="sticky top-0 z-50 h-14 bg-card/90 backdrop-blur-xl border-b border-border flex items-center justify-between px-6">
+        <h1 className="text-sm font-bold font-display text-primary tracking-tight">SurgicalIQ</h1>
+        <button onClick={() => navigate('/profile')} className="w-8 h-8 bg-accent rounded-full flex items-center justify-center border border-border">
+          <User size={14} className="text-primary" />
+        </button>
+      </header>
+
+      <div className="max-w-6xl mx-auto px-6 py-6">
+        {/* 1. Filter Bar */}
+        <div className="flex flex-wrap items-center gap-3 mb-6">
+          <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-card border border-border text-sm">
+            <Activity size={14} className="text-secondary" />
+            <span className="font-medium text-foreground">{selectedStudent}</span>
+          </div>
+          <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-card border border-border text-sm">
+            <Clock size={14} className="text-secondary" />
+            <span className="text-muted-foreground">{selectedDate}</span>
+          </div>
+          <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-card border border-border text-sm">
+            <Target size={14} className="text-secondary" />
+            <span className="text-muted-foreground">Laparoscopic Cholecystectomy</span>
+          </div>
+          <button className="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-bold hover:opacity-90 transition-opacity">
+            <Search size={14} />
+            Search Records
+          </button>
         </div>
-        <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-card border border-border/50 text-sm">
-          <Clock size={14} className="text-secondary" />
-          <span className="text-muted-foreground">{selectedDate}</span>
+
+        {/* 2. Summary Cards */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          <SiqCard className="py-5 px-5">
+            <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-1">Overall Score</div>
+            <div className="text-3xl font-black font-display text-foreground">{overallScore} <span className="text-sm font-normal text-muted-foreground">/ 5</span></div>
+          </SiqCard>
+          <SiqCard className="py-5 px-5">
+            <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-1">Competency</div>
+            <div className="text-lg font-bold font-display text-foreground">Intermediate</div>
+          </SiqCard>
+          <SiqCard className="py-5 px-5">
+            <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-1">Phases Detected</div>
+            <div className="text-3xl font-black font-display text-foreground">{phases.length}</div>
+          </SiqCard>
+          <SiqCard className="py-5 px-5">
+            <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-1">Total Duration</div>
+            <div className="text-3xl font-black font-display text-foreground">23:00</div>
+          </SiqCard>
         </div>
-        <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-card border border-border/50 text-sm">
-          <Target size={14} className="text-secondary" />
-          <span className="text-muted-foreground">Laparoscopic Cholecystectomy</span>
-        </div>
-      </div>
 
-      {/* 2. Summary Cards — Single aligned row */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-        <SiqCard className="py-4 px-4">
-          <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-1">Overall Score</div>
-          <div className="text-2xl font-black font-display text-foreground">{overallScore} <span className="text-sm font-normal text-muted-foreground">/ 5</span></div>
-        </SiqCard>
-        <SiqCard className="py-4 px-4">
-          <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-1">Competency</div>
-          <div className="text-sm font-bold font-display text-foreground leading-tight">Intermediate</div>
-        </SiqCard>
-        <SiqCard className="py-4 px-4">
-          <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-1">Phases Detected</div>
-          <div className="text-2xl font-black font-display text-foreground">{phases.length}</div>
-        </SiqCard>
-        <SiqCard className="py-4 px-4">
-          <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-1">Duration</div>
-          <div className="text-2xl font-black font-display text-foreground">23:00</div>
-        </SiqCard>
-      </div>
+        {/* 3. Tabs */}
+        <Tabs defaultValue="scorecard" className="w-full">
+          <TabsList className="w-full grid grid-cols-4 mb-6 bg-accent/60 rounded-xl p-1 h-auto">
+            <TabsTrigger value="scorecard" className="text-xs font-bold py-2.5 rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-soft data-[state=active]:text-primary gap-1.5">
+              <Layers size={14} /> Scorecard
+            </TabsTrigger>
+            <TabsTrigger value="timeline" className="text-xs font-bold py-2.5 rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-soft data-[state=active]:text-primary gap-1.5">
+              <Clock size={14} /> Timeline
+            </TabsTrigger>
+            <TabsTrigger value="keyframes" className="text-xs font-bold py-2.5 rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-soft data-[state=active]:text-primary gap-1.5">
+              <Image size={14} /> Frames
+            </TabsTrigger>
+            <TabsTrigger value="feedback" className="text-xs font-bold py-2.5 rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-soft data-[state=active]:text-primary gap-1.5">
+              <MessageSquare size={14} /> Feedback
+            </TabsTrigger>
+          </TabsList>
 
-      {/* 3. Tab Bar */}
-      <Tabs defaultValue="scorecard" className="w-full">
-        <TabsList className="w-full grid grid-cols-4 mb-6 bg-accent/60 rounded-xl p-1 h-auto">
-          <TabsTrigger value="scorecard" className="text-xs font-bold py-2.5 rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-soft data-[state=active]:text-primary gap-1.5">
-            <Layers size={14} /> Scorecard
-          </TabsTrigger>
-          <TabsTrigger value="timeline" className="text-xs font-bold py-2.5 rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-soft data-[state=active]:text-primary gap-1.5">
-            <Clock size={14} /> Timeline
-          </TabsTrigger>
-          <TabsTrigger value="keyframes" className="text-xs font-bold py-2.5 rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-soft data-[state=active]:text-primary gap-1.5">
-            <Image size={14} /> Frames
-          </TabsTrigger>
-          <TabsTrigger value="feedback" className="text-xs font-bold py-2.5 rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-soft data-[state=active]:text-primary gap-1.5">
-            <MessageSquare size={14} /> Feedback
-          </TabsTrigger>
-        </TabsList>
+          {/* === SCORECARD TAB === */}
+          <TabsContent value="scorecard">
+            <div className="space-y-4">
+              {phases.map((phase) => {
+                const isExpanded = expandedPhases.includes(phase.id);
+                return (
+                  <div key={phase.id} className="rounded-xl overflow-hidden border border-border shadow-card bg-card">
+                    {/* Always-visible phase summary */}
+                    <div className="px-5 py-4">
+                      {/* Row 1: Phase ID, Name, Score, Status */}
+                      <div className="flex items-center gap-3 mb-3">
+                        <span className="font-display font-bold text-secondary text-xs shrink-0 w-7">{phase.id}</span>
+                        <span className="font-semibold text-sm text-foreground flex-1 truncate">{phase.name}</span>
+                        <span className={`font-display font-black text-xl ${scoreColor(phase.score)}`}>
+                          {phase.score}
+                        </span>
+                        <StatusBadge status={phase.status} />
+                      </div>
 
-        {/* === SCORECARD TAB === */}
-        <TabsContent value="scorecard">
-          <div className="space-y-3">
-            {phases.map((phase) => {
-              const isExpanded = expandedPhases.includes(phase.id);
-              return (
-                <div key={phase.id} className="rounded-xl overflow-hidden border border-border/50 shadow-card bg-card">
-                  {/* Always-visible phase summary */}
-                  <div className="px-4 py-3.5">
-                    {/* Row 1: Phase ID, Name, Score, Status */}
-                    <div className="flex items-center gap-3 mb-2.5">
-                      <span className="font-display font-bold text-secondary text-xs shrink-0 w-7">{phase.id}</span>
-                      <span className="font-semibold text-sm text-foreground flex-1 truncate">{phase.name}</span>
-                      <span className={`font-display font-black text-lg ${scoreColor(phase.score)}`}>
-                        {phase.score}
-                      </span>
-                      <StatusBadge status={phase.status} />
-                    </div>
+                      {/* Row 2: Inline rubric metrics */}
+                      <div className="grid grid-cols-3 gap-x-6 gap-y-1 mb-3 pl-10">
+                        {phase.rubrics.map((r, i) => (
+                          <MetricPill key={i} label={r.label} score={r.score} max={r.maxScore} />
+                        ))}
+                      </div>
 
-                    {/* Row 2: Inline rubric metrics */}
-                    <div className="grid grid-cols-3 gap-x-4 gap-y-1 mb-2.5 pl-10">
-                      {phase.rubrics.map((r, i) => (
-                        <MetricPill key={i} label={r.label} score={r.score} max={r.maxScore} />
-                      ))}
-                    </div>
-
-                    {/* Row 3: Timing + Condensed insight */}
-                    <div className="flex items-start gap-3 pl-10">
-                      <div className="flex items-center gap-2 text-[11px] text-muted-foreground shrink-0">
+                      {/* Row 3: Timing */}
+                      <div className="flex items-center gap-2 pl-10 text-[11px] text-muted-foreground mb-2">
                         <Clock size={12} />
                         <span>{phase.startTime} → {phase.endTime}</span>
                         <span className="font-medium text-foreground">({phase.duration})</span>
                       </div>
+
+                      {/* Condensed insight */}
+                      <p className="text-xs text-muted-foreground pl-10 line-clamp-2 leading-relaxed">
+                        {phase.observation}
+                      </p>
                     </div>
-                    <p className="text-xs text-muted-foreground mt-2 pl-10 line-clamp-2 leading-relaxed">
-                      {phase.observation}
-                    </p>
-                  </div>
 
-                  {/* Expand toggle */}
-                  <button
-                    onClick={() => togglePhase(phase.id)}
-                    className={`w-full flex items-center gap-2 px-4 py-2 text-xs font-semibold transition-colors border-t border-border/30 ${isExpanded ? 'bg-primary text-primary-foreground' : 'bg-accent/40 text-muted-foreground hover:bg-accent/70'}`}
-                  >
-                    {isExpanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
-                    <span>Full rubric notes & AI observations</span>
-                  </button>
+                    {/* Expand toggle */}
+                    <button
+                      onClick={() => togglePhase(phase.id)}
+                      className={`w-full flex items-center gap-2 px-5 py-2.5 text-xs font-semibold transition-colors border-t border-border/30 ${isExpanded ? 'bg-primary text-primary-foreground' : 'bg-accent/40 text-muted-foreground hover:bg-accent/70'}`}
+                    >
+                      {isExpanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
+                      <span>Full rubric notes & AI observations</span>
+                    </button>
 
-                  {/* Expanded detail */}
-                  {isExpanded && (
-                    <div className="px-4 py-4 bg-accent/20 border-t border-border/30 space-y-3">
-                      <div className="border-l-2 border-l-secondary pl-3">
-                        <p className="text-xs font-bold text-primary uppercase tracking-wider mb-1">AI Observation</p>
-                        <p className="text-sm text-foreground leading-relaxed">{phase.observation}</p>
-                      </div>
-                      {phase.additionalNotes && (
-                        <div className="border-l-2 border-l-warning pl-3">
-                          <p className="text-xs font-bold text-warning uppercase tracking-wider mb-1">Additional Notes</p>
-                          <p className="text-sm text-foreground leading-relaxed">{phase.additionalNotes}</p>
+                    {/* Expanded detail */}
+                    {isExpanded && (
+                      <div className="px-5 py-4 bg-accent/20 border-t border-border/30 space-y-3">
+                        <div className="border-l-2 border-l-secondary pl-3">
+                          <p className="text-xs font-bold text-primary uppercase tracking-wider mb-1">AI Observation</p>
+                          <p className="text-sm text-foreground leading-relaxed">{phase.observation}</p>
                         </div>
-                      )}
-                      <div className="border-l-2 border-l-primary pl-3">
-                        <p className="text-xs font-bold text-primary uppercase tracking-wider mb-1">Rubric Assessment</p>
-                        <p className="text-sm text-muted-foreground leading-relaxed">{phase.rubricAssessment}</p>
+                        {phase.additionalNotes && (
+                          <div className="border-l-2 border-l-warning pl-3">
+                            <p className="text-xs font-bold text-warning uppercase tracking-wider mb-1">Additional Notes</p>
+                            <p className="text-sm text-foreground leading-relaxed">{phase.additionalNotes}</p>
+                          </div>
+                        )}
+                        <div className="border-l-2 border-l-primary pl-3">
+                          <p className="text-xs font-bold text-primary uppercase tracking-wider mb-1">Rubric Assessment</p>
+                          <p className="text-sm text-muted-foreground leading-relaxed">{phase.rubricAssessment}</p>
+                        </div>
                       </div>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </TabsContent>
-
-        {/* === TIMELINE TAB === */}
-        <TabsContent value="timeline">
-          <SiqCard className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground border-b border-border">
-                  <th className="text-left py-2.5 pr-3">Phase</th>
-                  <th className="text-left py-2.5 pr-3">Name</th>
-                  <th className="text-left py-2.5 pr-3">Duration</th>
-                  <th className="text-left py-2.5">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {timingData.map((t) => (
-                  <tr key={t.phase} className="border-b border-border/30 last:border-0">
-                    <td className="py-2.5 pr-3 font-bold text-secondary text-xs">{t.phase}</td>
-                    <td className="py-2.5 pr-3 text-foreground">{t.name}</td>
-                    <td className="py-2.5 pr-3 font-medium font-display text-foreground">{t.duration}</td>
-                    <td className="py-2.5 text-success font-medium text-xs">✓ {t.status}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-
-            {/* Minimal horizontal bar visualization */}
-            <div className="mt-5 pt-4 border-t border-border/30">
-              <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-3">Phase Duration</p>
-              <div className="space-y-2">
-                {phases.map((p) => {
-                  const [min, sec] = p.duration.split(':').map(Number);
-                  const totalSec = min * 60 + sec;
-                  const maxSec = 7 * 60 + 15; // longest phase
-                  const pct = (totalSec / maxSec) * 100;
-                  return (
-                    <div key={p.id} className="flex items-center gap-2">
-                      <span className="text-[10px] text-muted-foreground w-6 shrink-0 font-bold">{p.id}</span>
-                      <div className="flex-1 h-4 bg-accent rounded-full overflow-hidden">
-                        <div
-                          className={`h-full rounded-full ${p.status === 'Flagged' ? 'bg-warning/70' : 'bg-secondary/60'}`}
-                          style={{ width: `${pct}%` }}
-                        />
-                      </div>
-                      <span className="text-[10px] text-muted-foreground w-10 text-right">{p.duration}</span>
-                    </div>
-                  );
-                })}
-              </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
-          </SiqCard>
-        </TabsContent>
+          </TabsContent>
 
-        {/* === KEY FRAMES TAB === */}
-        <TabsContent value="keyframes">
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-            {keyFrames.map((frame) => (
-              <SiqCard key={frame.id} className="p-0 overflow-hidden">
-                <div className="aspect-video bg-accent flex items-center justify-center">
-                  <Eye size={24} className="text-muted-foreground/40" />
+          {/* === TIMELINE TAB === */}
+          <TabsContent value="timeline">
+            <SiqCard className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground border-b border-border">
+                    <th className="text-left py-2.5 pr-3">Phase</th>
+                    <th className="text-left py-2.5 pr-3">Name</th>
+                    <th className="text-left py-2.5 pr-3">Duration</th>
+                    <th className="text-left py-2.5">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {timingData.map((t) => (
+                    <tr key={t.phase} className="border-b border-border/30 last:border-0">
+                      <td className="py-2.5 pr-3 font-bold text-secondary text-xs">{t.phase}</td>
+                      <td className="py-2.5 pr-3 text-foreground">{t.name}</td>
+                      <td className="py-2.5 pr-3 font-medium font-display text-foreground">{t.duration}</td>
+                      <td className="py-2.5 text-success font-medium text-xs">✓ {t.status}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+
+              {/* Minimal horizontal bar visualization */}
+              <div className="mt-5 pt-4 border-t border-border/30">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-3">Phase Duration</p>
+                <div className="space-y-2">
+                  {phases.map((p) => {
+                    const [min, sec] = p.duration.split(':').map(Number);
+                    const totalSec = min * 60 + sec;
+                    const maxSec = 7 * 60 + 15;
+                    const pct = (totalSec / maxSec) * 100;
+                    return (
+                      <div key={p.id} className="flex items-center gap-2">
+                        <span className="text-[10px] text-muted-foreground w-6 shrink-0 font-bold">{p.id}</span>
+                        <div className="flex-1 h-4 bg-accent rounded-full overflow-hidden">
+                          <div
+                            className={`h-full rounded-full ${p.status === 'Flagged' ? 'bg-warning/70' : 'bg-secondary/60'}`}
+                            style={{ width: `${pct}%` }}
+                          />
+                        </div>
+                        <span className="text-[10px] text-muted-foreground w-10 text-right">{p.duration}</span>
+                      </div>
+                    );
+                  })}
                 </div>
-                <div className="p-3 flex items-center justify-between">
-                  <span className="text-xs font-medium text-foreground">{frame.label}</span>
-                  <span className={`text-xs font-bold font-display ${frame.confidence >= 80 ? 'text-success' : frame.confidence >= 60 ? 'text-warning' : 'text-destructive'}`}>
-                    {frame.confidence}%
-                  </span>
-                </div>
-              </SiqCard>
-            ))}
-          </div>
-        </TabsContent>
+              </div>
+            </SiqCard>
+          </TabsContent>
 
-        {/* === FEEDBACK TAB === */}
-        <TabsContent value="feedback">
-          <FeedbackSection />
-        </TabsContent>
-      </Tabs>
+          {/* === KEY FRAMES TAB === */}
+          <TabsContent value="keyframes">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              {keyFrames.map((frame) => (
+                <SiqCard key={frame.id} className="p-0 overflow-hidden">
+                  <div className="aspect-video bg-accent flex items-center justify-center">
+                    <Eye size={24} className="text-muted-foreground/40" />
+                  </div>
+                  <div className="p-3 flex items-center justify-between">
+                    <span className="text-xs font-medium text-foreground">{frame.label}</span>
+                    <span className={`text-xs font-bold font-display ${frame.confidence >= 80 ? 'text-success' : frame.confidence >= 60 ? 'text-warning' : 'text-destructive'}`}>
+                      {frame.confidence}%
+                    </span>
+                  </div>
+                </SiqCard>
+              ))}
+            </div>
+          </TabsContent>
 
-      {/* Action Buttons */}
-      <div className="grid grid-cols-2 gap-4 mt-8">
-        <button onClick={() => navigate('/new-submission')} className="py-3.5 border-2 border-primary text-primary rounded-xl font-bold text-sm hover:bg-primary/5 active:scale-[0.98] transition-all">
-          Submit Another
-        </button>
-        <button className="py-3.5 bg-primary text-primary-foreground rounded-xl font-bold text-sm hover:opacity-90 active:scale-[0.98] transition-all">
-          Share Report
-        </button>
+          {/* === FEEDBACK TAB === */}
+          <TabsContent value="feedback">
+            <FeedbackSection />
+          </TabsContent>
+        </Tabs>
+
+        {/* Action Buttons */}
+        <div className="grid grid-cols-2 gap-4 mt-8 pb-8">
+          <button onClick={() => navigate('/new-submission')} className="py-3.5 border-2 border-primary text-primary rounded-xl font-bold text-sm hover:bg-primary/5 active:scale-[0.98] transition-all">
+            Submit Another
+          </button>
+          <button className="py-3.5 bg-primary text-primary-foreground rounded-xl font-bold text-sm hover:opacity-90 active:scale-[0.98] transition-all">
+            Share Report
+          </button>
+        </div>
       </div>
-    </PageLayout>
+    </div>
   );
 };
 
-// --- Feedback Section (condensed first, expandable) ---
+// --- Feedback Section ---
 
 const FeedbackSection = () => {
   const [showFull, setShowFull] = useState(false);
 
   return (
     <div className="space-y-4">
-      {/* Condensed summary */}
       <SiqCard>
         <p className="text-sm text-foreground leading-relaxed mb-3">
           <strong>Overall:</strong> Intermediate — Ready for Supervised Practice (3.7/5.0). Strong performance across 5 of 7 phases with 2 requiring improvement.
@@ -396,7 +408,6 @@ const FeedbackSection = () => {
         </div>
       </SiqCard>
 
-      {/* Expand full feedback */}
       <button
         onClick={() => setShowFull(!showFull)}
         className="w-full flex items-center justify-center gap-2 py-2.5 text-xs font-bold text-secondary hover:bg-accent/50 rounded-lg transition-colors"
