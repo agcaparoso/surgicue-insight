@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronDown, ChevronRight, Clock, Activity, Layers, Target, Eye, MessageSquare, Image, Search, User, TrendingUp, Shield, Zap, FileText, Loader2, Brain, ListChecks, StickyNote } from 'lucide-react';
+import { ChevronDown, ChevronRight, Clock, Activity, Layers, Target, Eye, MessageSquare, Image, Search, User, TrendingUp, Shield, Zap, FileText, Loader2, Brain, ListChecks, StickyNote, CheckCircle2, AlertTriangle, XCircle, Award, ArrowUpRight, Crosshair } from 'lucide-react';
 import { SiqCard, StatusBadge } from '@/components/SiqComponents';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
@@ -21,6 +21,7 @@ interface Phase {
   observation: string;
   rubricAssessment: string;
   additionalNotes?: string;
+  idealDuration?: string;
 }
 
 const phases: Phase[] = [
@@ -32,6 +33,7 @@ const phases: Phase[] = [
       { label: 'Instrument Control', score: 4.0, maxScore: 5 },
     ],
     startTime: '00:00', endTime: '03:05', duration: '03:05', framesAnalyzed: 3,
+    idealDuration: '02:30–04:00',
     observation: 'Trocar placement appears systematic. Port positioning is appropriate for standard four-port technique.',
     rubricAssessment: 'Port placement was systematic and safe. Trocar triangulation appropriate for standard four-port technique. Pneumoperitoneum achieved efficiently.',
   },
@@ -43,6 +45,7 @@ const phases: Phase[] = [
       { label: 'Instrument Control', score: 3.0, maxScore: 5 },
     ],
     startTime: '03:05', endTime: '10:20', duration: '07:15', framesAnalyzed: 8,
+    idealDuration: '05:00–08:00',
     observation: "Calot's dissection duration of 07:15 is within acceptable range. Field clarity was periodically suboptimal.",
     rubricAssessment: 'Verify Critical View of Safety was fully achieved before clipping. Developing technique. Continued supervised practice recommended.',
   },
@@ -54,6 +57,7 @@ const phases: Phase[] = [
       { label: 'Instrument Control', score: 4.4, maxScore: 5 },
     ],
     startTime: '10:20', endTime: '12:00', duration: '01:40', framesAnalyzed: 4,
+    idealDuration: '01:00–02:30',
     observation: 'Clip application visible on cystic duct. Clip orientation appears perpendicular. At least two clips on patient-side confirmed.',
     rubricAssessment: 'Clip application was precise and methodical. Excellent execution at expert level.',
   },
@@ -65,6 +69,7 @@ const phases: Phase[] = [
       { label: 'Instrument Control', score: 3.0, maxScore: 5 },
     ],
     startTime: '12:00', endTime: '18:00', duration: '06:00', framesAnalyzed: 10,
+    idealDuration: '04:00–06:00',
     observation: 'Dissection plane appears slightly close to liver in one sequence — risk of bile duct injury if disoriented.',
     rubricAssessment: 'Dissection plane occasionally strayed toward the liver bed. Tissue handling requires improvement — excess thermal application noted.',
     additionalNotes: 'Hook used for most of dissection. Periodic coagulation for small bleeders. Grasper counter-traction adequate.',
@@ -77,6 +82,7 @@ const phases: Phase[] = [
       { label: 'Instrument Control', score: 3.9, maxScore: 5 },
     ],
     startTime: '18:00', endTime: '19:30', duration: '01:30', framesAnalyzed: 3,
+    idealDuration: '01:00–02:00',
     observation: 'Gallbladder packaging in progress. Technique appears controlled, bag opening maintained well.',
     rubricAssessment: 'Gallbladder placed into retrieval bag cleanly. No spillage observed. Competent performance.',
   },
@@ -88,6 +94,7 @@ const phases: Phase[] = [
       { label: 'Instrument Control', score: 3.9, maxScore: 5 },
     ],
     startTime: '19:30', endTime: '21:30', duration: '02:00', framesAnalyzed: 4,
+    idealDuration: '01:30–03:00',
     observation: 'Irrigation and suction visible. Hemostasis appears adequate at gallbladder fossa.',
     rubricAssessment: 'Cleaning was thorough with adequate irrigation. Coagulation applied appropriately. Competent technique.',
   },
@@ -99,28 +106,19 @@ const phases: Phase[] = [
       { label: 'Instrument Control', score: 4.1, maxScore: 5 },
     ],
     startTime: '21:30', endTime: '23:00', duration: '01:30', framesAnalyzed: 2,
+    idealDuration: '01:00–02:00',
     observation: 'Bag extraction through umbilical port. Controlled retraction without tearing.',
     rubricAssessment: 'Extraction was smooth and controlled. Port site closure adequate. Clean completion.',
   },
 ];
 
-const timingData = [
-  { phase: 'P1', name: 'Preparation', duration: '03:05', status: 'On Target' },
-  { phase: 'P2', name: "Calot's Triangle", duration: '07:15', status: 'On Target' },
-  { phase: 'P3', name: 'Clipping & Cutting', duration: '01:40', status: 'On Target' },
-  { phase: 'P4', name: 'GB Dissection', duration: '06:00', status: 'On Target' },
-  { phase: 'P5', name: 'GB Packaging', duration: '01:30', status: 'On Target' },
-  { phase: 'P6', name: 'Clean & Coag', duration: '02:00', status: 'On Target' },
-  { phase: 'P7', name: 'GB Retraction', duration: '01:30', status: 'On Target' },
-];
-
 const keyFrames = [
-  { id: 1, label: 'Port Placement', confidence: 94 },
-  { id: 2, label: 'CVS Achieved', confidence: 78 },
-  { id: 3, label: 'Clip Application', confidence: 96 },
-  { id: 4, label: 'Dissection Plane', confidence: 62 },
-  { id: 5, label: 'Bag Insertion', confidence: 91 },
-  { id: 6, label: 'Final Hemostasis', confidence: 88 },
+  { id: 1, label: 'Port Placement', confidence: 94, caption: 'Systematic trocar positioning with standard four-port technique' },
+  { id: 2, label: 'CVS Achieved', confidence: 78, caption: 'Critical View of Safety achieved with moderate confidence' },
+  { id: 3, label: 'Clip Application', confidence: 96, caption: 'Proper clip placement observed — perpendicular orientation confirmed' },
+  { id: 4, label: 'Dissection Plane', confidence: 62, caption: 'Dissection plane slightly off — proximity to liver bed detected' },
+  { id: 5, label: 'Bag Insertion', confidence: 91, caption: 'Clean bag insertion with controlled technique, no spillage' },
+  { id: 6, label: 'Final Hemostasis', confidence: 88, caption: 'Adequate hemostasis confirmed at gallbladder fossa' },
 ];
 
 // --- Helpers ---
@@ -130,6 +128,25 @@ const scoreColor = (score: number) =>
 
 const scoreBg = (score: number) =>
   score >= 4 ? 'bg-success/10' : score >= 3 ? 'bg-warning/10' : 'bg-destructive/10';
+
+const StatusIcon = ({ status }: { status: 'Passed' | 'Flagged' | 'Failed' }) => {
+  if (status === 'Passed') return <CheckCircle2 size={16} className="text-success shrink-0" />;
+  if (status === 'Flagged') return <AlertTriangle size={16} className="text-warning shrink-0" />;
+  return <XCircle size={16} className="text-destructive shrink-0" />;
+};
+
+const RubricDots = ({ score, maxScore = 5 }: { score: number; maxScore?: number }) => {
+  const filled = Math.round(score);
+  const color = score >= 4 ? 'bg-success' : score >= 3 ? 'bg-warning' : 'bg-destructive';
+  const empty = 'bg-border';
+  return (
+    <div className="flex items-center gap-1">
+      {Array.from({ length: maxScore }).map((_, i) => (
+        <div key={i} className={`w-1.5 h-1.5 rounded-full ${i < filled ? color : empty}`} />
+      ))}
+    </div>
+  );
+};
 
 // Mini sparkline SVG
 const Sparkline = () => (
@@ -144,6 +161,18 @@ const Sparkline = () => (
     />
   </svg>
 );
+
+// Parse duration string to seconds
+const durationToSec = (d: string) => {
+  const [min, sec] = d.split(':').map(Number);
+  return min * 60 + sec;
+};
+
+// Parse ideal range to seconds
+const parseIdealRange = (range: string) => {
+  const parts = range.split('–');
+  return { min: durationToSec(parts[0]), max: durationToSec(parts[1]) };
+};
 
 // --- Component ---
 
@@ -273,17 +302,13 @@ const AIReport = () => {
 
         {reportState === 'done' && (
           <div className="space-y-5 animate-accordion-down">
-            {/* Procedure Summary */}
             <div>
               <h3 className="text-[10px] font-bold uppercase tracking-widest text-secondary mb-2">Procedure Summary</h3>
               <p className="text-xs text-foreground leading-relaxed">
                 Dr. Sarah Chen performed a standard laparoscopic cholecystectomy on March 15, 2026. The procedure was completed in 23 minutes across 7 identified phases. AI analysis indicates an overall competency score of 3.7/5.0 (Intermediate, Level 3), with strong performance in clipping and cutting phases and areas requiring improvement in gallbladder dissection technique.
               </p>
             </div>
-
             <div className="gradient-line" />
-
-            {/* Key Actions */}
             <div>
               <h3 className="text-[10px] font-bold uppercase tracking-widest text-secondary mb-2">Key Actions</h3>
               <ul className="space-y-1.5">
@@ -301,10 +326,7 @@ const AIReport = () => {
                 ))}
               </ul>
             </div>
-
             <div className="gradient-line" />
-
-            {/* Performance Highlights */}
             <div>
               <h3 className="text-[10px] font-bold uppercase tracking-widest text-success mb-2">Performance Highlights</h3>
               <ul className="space-y-1.5">
@@ -321,10 +343,7 @@ const AIReport = () => {
                 ))}
               </ul>
             </div>
-
             <div className="gradient-line" />
-
-            {/* Areas for Improvement */}
             <div>
               <h3 className="text-[10px] font-bold uppercase tracking-widest text-warning mb-2">Areas for Improvement</h3>
               <ul className="space-y-1.5">
@@ -340,10 +359,7 @@ const AIReport = () => {
                 ))}
               </ul>
             </div>
-
             <div className="gradient-line" />
-
-            {/* Recommendation */}
             <div className="p-4 rounded-lg bg-secondary/5 border border-secondary/20">
               <h3 className="text-[10px] font-bold uppercase tracking-widest text-secondary mb-2">Recommendation</h3>
               <p className="text-xs text-foreground leading-relaxed">
@@ -368,6 +384,10 @@ const SubmissionDetail = () => {
   };
 
   const overallScore = 3.7;
+  const maxTimelineSec = Math.max(...phases.map(p => {
+    const ideal = p.idealDuration ? parseIdealRange(p.idealDuration).max : 0;
+    return Math.max(durationToSec(p.duration), ideal);
+  }));
 
   return (
     <TooltipProvider>
@@ -469,100 +489,99 @@ const SubmissionDetail = () => {
 
                 {/* === SCORECARD TAB === */}
                 <TabsContent value="scorecard">
-                  {/* Table header */}
                   <div className="rounded-xl border border-border bg-card shadow-card overflow-hidden">
-                    <div className="hidden md:grid grid-cols-[2.5fr_1fr_1fr_1fr_1fr_0.8fr_2fr] gap-2 px-5 py-3 bg-accent/50 border-b border-border text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                    {/* Table header */}
+                    <div className="hidden md:grid grid-cols-[2fr_0.7fr_0.7fr_0.7fr_0.7fr_0.6fr_2.5fr] gap-3 px-5 py-3 bg-accent/50 border-b border-border text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
                       <span>Phase</span>
-                      <span>Score</span>
-                      <span>Tissue</span>
-                      <span>Clarity</span>
-                      <span>Control</span>
-                      <span>Duration</span>
-                      <span>Key Insight</span>
+                      <span className="text-center">Score</span>
+                      <span className="text-center">Tissue</span>
+                      <span className="text-center">Clarity</span>
+                      <span className="text-center">Control</span>
+                      <span className="text-center">Duration</span>
+                      <span>AI Summary</span>
                     </div>
 
                     {phases.map((phase) => {
                       const isExpanded = expandedPhases.includes(phase.id);
+                      const statusBorderColor = phase.status === 'Passed' ? 'border-l-success' : phase.status === 'Flagged' ? 'border-l-warning' : 'border-l-destructive';
+
                       return (
                         <div key={phase.id}>
                           {/* Phase row */}
                           <button
                             onClick={() => togglePhase(phase.id)}
-                            className={`w-full text-left transition-colors hover:bg-accent/30 ${isExpanded ? 'bg-accent/20' : ''}`}
+                            className={`w-full text-left transition-colors hover:bg-accent/30 border-l-[3px] ${statusBorderColor} ${isExpanded ? 'bg-accent/20' : ''}`}
                           >
-                            {/* Desktop: table row */}
-                            <div className="hidden md:grid grid-cols-[2.5fr_1fr_1fr_1fr_1fr_0.8fr_2fr] gap-2 px-5 py-3.5 items-center border-b border-border/40">
-                              <div className="flex items-center gap-3">
-                                <div className="gradient-border-left pl-2">
-                                  <span className="font-display font-bold text-secondary text-xs">{phase.id}</span>
-                                </div>
+                            {/* Desktop row */}
+                            <div className="hidden md:grid grid-cols-[2fr_0.7fr_0.7fr_0.7fr_0.7fr_0.6fr_2.5fr] gap-3 px-5 py-3.5 items-center border-b border-border/40">
+                              <div className="flex items-center gap-2.5 min-w-0">
+                                <StatusIcon status={phase.status} />
+                                <span className="font-display font-bold text-secondary text-xs shrink-0">{phase.id}</span>
                                 <span className="font-semibold text-sm text-foreground truncate">{phase.name}</span>
                                 <StatusBadge status={phase.status} />
                               </div>
-                              <span className={`font-display font-black text-lg ${scoreColor(phase.score)}`}>{phase.score}</span>
-                              <Tooltip>
-                                <TooltipTrigger asChild>
-                                  <span className={`text-xs font-bold font-display ${scoreColor(phase.rubrics[0].score)} ${scoreBg(phase.rubrics[0].score)} px-2 py-1 rounded-md text-center`}>
-                                    {phase.rubrics[0].score}
-                                  </span>
-                                </TooltipTrigger>
-                                <TooltipContent><p>Tissue Handling: {phase.rubrics[0].score}/{phase.rubrics[0].maxScore}</p></TooltipContent>
-                              </Tooltip>
-                              <Tooltip>
-                                <TooltipTrigger asChild>
-                                  <span className={`text-xs font-bold font-display ${scoreColor(phase.rubrics[1].score)} ${scoreBg(phase.rubrics[1].score)} px-2 py-1 rounded-md text-center`}>
-                                    {phase.rubrics[1].score}
-                                  </span>
-                                </TooltipTrigger>
-                                <TooltipContent><p>Field Clarity: {phase.rubrics[1].score}/{phase.rubrics[1].maxScore}</p></TooltipContent>
-                              </Tooltip>
-                              <Tooltip>
-                                <TooltipTrigger asChild>
-                                  <span className={`text-xs font-bold font-display ${scoreColor(phase.rubrics[2].score)} ${scoreBg(phase.rubrics[2].score)} px-2 py-1 rounded-md text-center`}>
-                                    {phase.rubrics[2].score}
-                                  </span>
-                                </TooltipTrigger>
-                                <TooltipContent><p>Instrument Control: {phase.rubrics[2].score}/{phase.rubrics[2].maxScore}</p></TooltipContent>
-                              </Tooltip>
-                              <span className="text-xs font-medium text-muted-foreground font-display">{phase.duration}</span>
-                              <span className="text-xs text-muted-foreground truncate leading-relaxed">{phase.observation}</span>
+
+                              <div className="flex flex-col items-center gap-1">
+                                <span className={`font-display font-black text-base ${scoreColor(phase.score)}`}>{phase.score}</span>
+                              </div>
+
+                              {phase.rubrics.map((r, i) => (
+                                <Tooltip key={i}>
+                                  <TooltipTrigger asChild>
+                                    <div className="flex flex-col items-center gap-1">
+                                      <span className={`text-xs font-bold font-display ${scoreColor(r.score)}`}>{r.score}</span>
+                                      <RubricDots score={r.score} maxScore={r.maxScore} />
+                                    </div>
+                                  </TooltipTrigger>
+                                  <TooltipContent><p>{r.label}: {r.score}/{r.maxScore}</p></TooltipContent>
+                                </Tooltip>
+                              ))}
+
+                              <span className="text-xs font-medium text-muted-foreground font-display text-center">{phase.duration}</span>
+
+                              <span className="text-[11px] text-muted-foreground truncate leading-relaxed">{phase.observation.split('.')[0]}.</span>
                             </div>
 
-                            {/* Mobile: card-style row */}
-                            <div className="md:hidden px-5 py-4 border-b border-border/40">
-                              <div className="flex items-center gap-3 mb-2">
+                            {/* Mobile row */}
+                            <div className="md:hidden px-4 py-4 border-b border-border/40">
+                              <div className="flex items-center gap-2.5 mb-3">
+                                <StatusIcon status={phase.status} />
                                 <span className="font-display font-bold text-secondary text-xs shrink-0">{phase.id}</span>
                                 <span className="font-semibold text-sm text-foreground flex-1 truncate">{phase.name}</span>
                                 <span className={`font-display font-black text-lg ${scoreColor(phase.score)}`}>{phase.score}</span>
-                                <StatusBadge status={phase.status} />
                               </div>
-                              <div className="grid grid-cols-3 gap-2 mb-2">
+                              <div className="grid grid-cols-3 gap-3 mb-3">
                                 {phase.rubrics.map((r, i) => (
-                                  <div key={i} className="flex items-center justify-between text-[11px]">
-                                    <span className="text-muted-foreground truncate">{r.label.split(' ')[0]}</span>
-                                    <span className={`font-bold font-display ${scoreColor(r.score)}`}>{r.score}</span>
+                                  <div key={i} className="flex flex-col items-center gap-1 p-2 rounded-lg bg-accent/30">
+                                    <span className="text-[9px] text-muted-foreground font-medium">{r.label.split(' ')[0]}</span>
+                                    <span className={`text-sm font-bold font-display ${scoreColor(r.score)}`}>{r.score}</span>
+                                    <RubricDots score={r.score} maxScore={r.maxScore} />
                                   </div>
                                 ))}
                               </div>
                               <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
-                                <Clock size={11} />
-                                <span>{phase.duration}</span>
+                                <Clock size={11} className="shrink-0" />
+                                <span className="shrink-0">{phase.duration}</span>
                                 <span className="mx-1">·</span>
-                                <span className="truncate flex-1">{phase.observation}</span>
+                                <span className="truncate flex-1">{phase.observation.split('.')[0]}.</span>
                               </div>
                             </div>
                           </button>
 
-                          {/* Expanded detail — slides down inline */}
+                          {/* Expanded detail */}
                           {isExpanded && (
-                            <div className="px-5 py-5 bg-accent/10 border-b border-border/40 space-y-4 animate-accordion-down">
+                            <div className={`px-5 py-5 bg-accent/10 border-b border-border/40 border-l-[3px] ${statusBorderColor} space-y-4 animate-accordion-down`}>
                               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="gradient-border-left pl-4">
-                                  <p className="text-[10px] font-bold text-secondary uppercase tracking-wider mb-1.5">AI Observation</p>
+                                  <p className="text-[10px] font-bold text-secondary uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                                    <Brain size={12} /> AI Observation
+                                  </p>
                                   <p className="text-sm text-foreground leading-relaxed">{phase.observation}</p>
                                 </div>
                                 <div className="border-l-2 border-primary/30 pl-4">
-                                  <p className="text-[10px] font-bold text-primary uppercase tracking-wider mb-1.5">Rubric Assessment</p>
+                                  <p className="text-[10px] font-bold text-primary uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                                    <Crosshair size={12} /> Rubric Assessment
+                                  </p>
                                   <p className="text-sm text-muted-foreground leading-relaxed">{phase.rubricAssessment}</p>
                                 </div>
                               </div>
@@ -572,12 +591,11 @@ const SubmissionDetail = () => {
                                   <p className="text-sm text-foreground leading-relaxed">{phase.additionalNotes}</p>
                                 </div>
                               )}
-                              {/* Timing detail */}
-                              <div className="flex items-center gap-4 text-xs text-muted-foreground pt-1 border-t border-border/30">
-                                <span><strong className="text-foreground">Start:</strong> {phase.startTime}</span>
-                                <span><strong className="text-foreground">End:</strong> {phase.endTime}</span>
-                                <span><strong className="text-foreground">Duration:</strong> {phase.duration}</span>
-                                <span><strong className="text-foreground">Frames Analyzed:</strong> {phase.framesAnalyzed}</span>
+                              <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground pt-2 border-t border-border/30">
+                                <span className="flex items-center gap-1.5"><Clock size={12} className="text-secondary" /> <strong className="text-foreground">Start:</strong> {phase.startTime}</span>
+                                <span className="flex items-center gap-1.5"><strong className="text-foreground">End:</strong> {phase.endTime}</span>
+                                <span className="flex items-center gap-1.5"><strong className="text-foreground">Duration:</strong> {phase.duration}</span>
+                                <span className="flex items-center gap-1.5"><Eye size={12} className="text-secondary" /> <strong className="text-foreground">Frames:</strong> {phase.framesAnalyzed}</span>
                               </div>
                             </div>
                           )}
@@ -589,51 +607,64 @@ const SubmissionDetail = () => {
 
                 {/* === TIMELINE TAB === */}
                 <TabsContent value="timeline">
-                  <SiqCard className="overflow-x-auto">
-                    <table className="w-full text-sm">
-                      <thead>
-                        <tr className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground border-b border-border">
-                          <th className="text-left py-3 pr-3">Phase</th>
-                          <th className="text-left py-3 pr-3">Name</th>
-                          <th className="text-left py-3 pr-3">Duration</th>
-                          <th className="text-left py-3">Status</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {timingData.map((t) => (
-                          <tr key={t.phase} className="border-b border-border/30 last:border-0 hover:bg-accent/20 transition-colors">
-                            <td className="py-3 pr-3 font-bold text-secondary text-xs">{t.phase}</td>
-                            <td className="py-3 pr-3 text-foreground">{t.name}</td>
-                            <td className="py-3 pr-3 font-medium font-display text-foreground">{t.duration}</td>
-                            <td className="py-3 text-success font-medium text-xs">✓ {t.status}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                  <SiqCard>
+                    <p className="text-xs text-muted-foreground mb-6 flex items-center gap-2">
+                      <TrendingUp size={14} className="text-secondary shrink-0" />
+                      This chart compares actual phase duration against the expected optimal range.
+                    </p>
 
-                    {/* Gradient bar visualization */}
-                    <div className="mt-6 pt-5 border-t border-border/30">
-                      <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-4">Phase Duration</p>
-                      <div className="space-y-2.5">
-                        {phases.map((p) => {
-                          const [min, sec] = p.duration.split(':').map(Number);
-                          const totalSec = min * 60 + sec;
-                          const maxSec = 7 * 60 + 15;
-                          const pct = (totalSec / maxSec) * 100;
-                          return (
-                            <div key={p.id} className="flex items-center gap-3">
-                              <span className="text-[10px] text-muted-foreground w-6 shrink-0 font-bold">{p.id}</span>
-                              <div className="flex-1 h-5 bg-accent/60 rounded-full overflow-hidden">
-                                <div
-                                  className={`h-full rounded-full transition-all ${p.status === 'Flagged' ? 'bar-gradient-warn' : 'bar-gradient'}`}
-                                  style={{ width: `${pct}%` }}
-                                />
-                              </div>
-                              <span className="text-[10px] text-muted-foreground w-10 text-right font-display font-medium">{p.duration}</span>
-                            </div>
-                          );
-                        })}
+                    {/* Legend */}
+                    <div className="flex items-center gap-5 mb-5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                      <div className="flex items-center gap-2">
+                        <div className="w-4 h-3 rounded-sm bar-gradient" />
+                        Actual Duration
                       </div>
+                      <div className="flex items-center gap-2">
+                        <div className="w-4 h-3 rounded-sm bg-accent border border-border/50" />
+                        Ideal Range
+                      </div>
+                    </div>
+
+                    <div className="space-y-4">
+                      {phases.map((p) => {
+                        const actualSec = durationToSec(p.duration);
+                        const ideal = p.idealDuration ? parseIdealRange(p.idealDuration) : { min: 0, max: 0 };
+                        const barMax = maxTimelineSec * 1.15;
+                        const actualPct = (actualSec / barMax) * 100;
+                        const idealMinPct = (ideal.min / barMax) * 100;
+                        const idealWidthPct = ((ideal.max - ideal.min) / barMax) * 100;
+
+                        return (
+                          <div key={p.id} className="group">
+                            <div className="flex items-center gap-3 mb-1.5">
+                              <StatusIcon status={p.status} />
+                              <span className="text-xs font-bold text-secondary w-6 shrink-0">{p.id}</span>
+                              <span className="text-xs font-medium text-foreground flex-1 truncate">{p.name}</span>
+                              <span className="text-xs font-display font-bold text-foreground shrink-0">{p.duration}</span>
+                            </div>
+                            <div className="relative h-7 bg-accent/40 rounded-lg overflow-hidden ml-[60px]">
+                              {/* Ideal range background */}
+                              <div
+                                className="absolute top-0 bottom-0 bg-success/10 border-l border-r border-success/20"
+                                style={{ left: `${idealMinPct}%`, width: `${idealWidthPct}%` }}
+                              />
+                              {/* Actual bar */}
+                              <div
+                                className={`absolute top-1 bottom-1 rounded-md transition-all ${p.status === 'Flagged' ? 'bar-gradient-warn' : 'bar-gradient'}`}
+                                style={{ width: `${actualPct}%`, left: 0 }}
+                              />
+                            </div>
+                            {/* Hover detail */}
+                            <div className="ml-[60px] flex items-center gap-3 mt-1 text-[10px] text-muted-foreground opacity-60 group-hover:opacity-100 transition-opacity">
+                              <span>{p.startTime} → {p.endTime}</span>
+                              <span>·</span>
+                              <span>Ideal: {p.idealDuration}</span>
+                              <span>·</span>
+                              <span>{p.framesAnalyzed} frames analyzed</span>
+                            </div>
+                          </div>
+                        );
+                      })}
                     </div>
                   </SiqCard>
                 </TabsContent>
@@ -648,16 +679,19 @@ const SubmissionDetail = () => {
                           {/* Gradient hover accent */}
                           <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-primary via-secondary to-warning opacity-0 group-hover:opacity-100 transition-opacity" />
                         </div>
-                        <div className="p-3.5 flex items-center justify-between">
-                          <span className="text-xs font-semibold text-foreground">{frame.label}</span>
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <span className={`text-xs font-bold font-display px-2 py-0.5 rounded-md ${frame.confidence >= 80 ? 'text-success bg-success/10' : frame.confidence >= 60 ? 'text-warning bg-warning/10' : 'text-destructive bg-destructive/10'}`}>
-                                {frame.confidence}%
-                              </span>
-                            </TooltipTrigger>
-                            <TooltipContent><p>AI Confidence: {frame.confidence}%</p></TooltipContent>
-                          </Tooltip>
+                        <div className="p-3.5 space-y-2">
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs font-semibold text-foreground">{frame.label}</span>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <span className={`text-xs font-bold font-display px-2 py-0.5 rounded-md ${frame.confidence >= 80 ? 'text-success bg-success/10' : frame.confidence >= 60 ? 'text-warning bg-warning/10' : 'text-destructive bg-destructive/10'}`}>
+                                  {frame.confidence}%
+                                </span>
+                              </TooltipTrigger>
+                              <TooltipContent><p>AI Confidence: {frame.confidence}%</p></TooltipContent>
+                            </Tooltip>
+                          </div>
+                          <p className="text-[11px] text-muted-foreground leading-relaxed">{frame.caption}</p>
                         </div>
                       </div>
                     ))}
@@ -710,27 +744,62 @@ const FeedbackSection = () => {
 
   return (
     <div className="space-y-5">
+      {/* Main feedback card */}
       <SiqCard className="relative overflow-hidden">
         <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-primary via-secondary to-warning" />
-        <p className="text-sm text-foreground leading-relaxed mb-4 pt-1">
+        <p className="text-sm text-foreground leading-relaxed mb-5 pt-1">
           <strong>Overall:</strong> Intermediate — Ready for Supervised Practice (3.7/5.0). Strong performance across 5 of 7 phases with 2 requiring improvement.
         </p>
-        <div className="gradient-line mb-4" />
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="flex gap-3 items-start p-3 rounded-lg bg-success/5 border border-success/15">
-            <div className="w-2 h-2 rounded-full bg-success mt-1.5 shrink-0" />
+        <div className="gradient-line mb-5" />
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
+          <div className="flex gap-3 items-start p-4 rounded-lg bg-success/5 border border-success/15">
+            <Award size={18} className="text-success shrink-0 mt-0.5" />
             <div>
-              <p className="text-xs font-bold text-foreground mb-0.5">Top Strength</p>
-              <p className="text-xs text-muted-foreground">Clipping & Cutting (4.5/5) — expert-level clip application</p>
+              <p className="text-xs font-bold text-foreground mb-1">Top Strength</p>
+              <p className="text-xs text-muted-foreground leading-relaxed">Clipping & Cutting (4.5/5) — expert-level clip application with precise perpendicular orientation</p>
             </div>
           </div>
-          <div className="flex gap-3 items-start p-3 rounded-lg bg-warning/5 border border-warning/15">
-            <div className="w-2 h-2 rounded-full bg-warning mt-1.5 shrink-0" />
+          <div className="flex gap-3 items-start p-4 rounded-lg bg-warning/5 border border-warning/15">
+            <ArrowUpRight size={18} className="text-warning shrink-0 mt-0.5" />
             <div>
-              <p className="text-xs font-bold text-foreground mb-0.5">Top Improvement</p>
-              <p className="text-xs text-muted-foreground">GB Dissection (2.8/5) — plane identification needs work</p>
+              <p className="text-xs font-bold text-foreground mb-1">Top Improvement</p>
+              <p className="text-xs text-muted-foreground leading-relaxed">GB Dissection (2.8/5) — plane identification needs work, excess thermal application noted</p>
             </div>
           </div>
+        </div>
+
+        {/* Recommendation */}
+        <div className="p-4 rounded-lg bg-secondary/5 border border-secondary/20 mb-5">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-secondary mb-2 flex items-center gap-1.5">
+            <Zap size={12} /> Recommendation
+          </p>
+          <p className="text-xs text-foreground leading-relaxed">
+            Supervised practice on 5–10 additional standard cholecystectomy cases. Focus on dissection plane identification and controlled thermal energy usage.
+          </p>
+        </div>
+
+        <div className="gradient-line mb-5" />
+
+        {/* Recommended Next Actions */}
+        <div>
+          <p className="text-[10px] font-bold uppercase tracking-widest text-primary mb-3 flex items-center gap-1.5">
+            <Target size={12} /> Recommended Next Actions
+          </p>
+          <ul className="space-y-2.5">
+            {[
+              'Practice gallbladder dissection plane identification in simulation lab',
+              'Review Critical View of Safety criteria with attending surgeon',
+              'Complete 3 supervised cholecystectomy cases before independent practice',
+            ].map((action, i) => (
+              <li key={i} className="flex items-start gap-2.5 text-xs text-foreground leading-relaxed">
+                <div className="w-5 h-5 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center shrink-0 mt-0.5">
+                  <span className="text-[10px] font-bold text-primary">{i + 1}</span>
+                </div>
+                {action}
+              </li>
+            ))}
+          </ul>
         </div>
       </SiqCard>
 
