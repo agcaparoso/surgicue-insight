@@ -685,7 +685,7 @@ const SubmissionDetail = () => {
                           <span className="text-[11px] font-display font-bold text-foreground shrink-0">{p.duration}</span>
                         </div>
                         <div className="relative h-8 bg-accent/30 rounded-lg overflow-hidden ml-[52px]">
-                          <div className="absolute top-0 bottom-0 bg-success/12 border-l-2 border-r-2 border-success/25 rounded-sm" style={{ left: `${idealMinPct}%`, width: `${idealWidthPct}%` }} />
+                          <div className="absolute top-0 bottom-0 bg-success/30 border-l-2 border-r-2 border-success/50 rounded-sm" style={{ left: `${idealMinPct}%`, width: `${idealWidthPct}%` }} />
                           <div className={`absolute top-1 bottom-1 rounded-md transition-all shadow-sm ${isHovered ? 'opacity-100' : 'opacity-85'} ${p.status === 'Flagged' ? 'bar-gradient-warn' : 'bar-gradient'}`} style={{ width: `${actualPct}%`, left: 0 }} />
                           {actualPct > 15 && <span className="absolute top-1/2 -translate-y-1/2 left-2 text-[9px] font-bold text-white/90 z-10">{p.duration}</span>}
                         </div>
