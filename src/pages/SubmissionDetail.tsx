@@ -859,27 +859,7 @@ const SubmissionDetail = () => {
                 <TabsContent value="feedback">
                   <FeedbackSection />
                 </TabsContent>
-              </Tabs>
-
-              <div className="gradient-line mt-10 mb-8" />
-
-              {/* Action Buttons */}
-              <div className="grid grid-cols-2 gap-5 pb-8">
-                <button
-                  onClick={() => navigate('/new-submission')}
-                  className="py-3.5 border-2 border-secondary/40 text-secondary rounded-xl font-bold text-sm hover:bg-secondary/5 active:scale-[0.98] transition-all"
-                >
-                  Submit Another
-                </button>
-                <button
-                  className="py-3.5 rounded-xl font-bold text-sm text-white active:scale-[0.98] transition-all shadow-soft"
-                  style={{ background: buttonGradient }}
-                  onMouseEnter={(e) => (e.currentTarget.style.background = buttonGradientHover)}
-                  onMouseLeave={(e) => (e.currentTarget.style.background = buttonGradient)}
-                >
-                  Share Report
-                </button>
-              </div>
+            </Tabs>
             </div>
 
             {/* Right Sidebar */}
@@ -890,6 +870,47 @@ const SubmissionDetail = () => {
             </div>
           </div>
         </div>
+
+        {/* Fixed Right-Side Action Panel */}
+        <div className="fixed right-6 top-1/2 -translate-y-1/2 z-40 flex flex-col gap-3 w-[180px]">
+          <button
+            onClick={() => navigate('/new-submission')}
+            className="py-3 px-4 border-2 border-secondary/40 bg-card text-secondary rounded-xl font-bold text-xs hover:bg-secondary/5 active:scale-[0.98] transition-all shadow-card text-center leading-tight"
+          >
+            Submit Another Procedure
+          </button>
+          <button
+            onClick={() => {
+              setShareLoading(true);
+              setTimeout(() => setShareLoading(false), 3000);
+            }}
+            className="py-3 px-4 rounded-xl font-bold text-xs text-white active:scale-[0.98] transition-all shadow-card text-center leading-tight"
+            style={{ background: buttonGradient }}
+            onMouseEnter={(e) => (e.currentTarget.style.background = buttonGradientHover)}
+            onMouseLeave={(e) => (e.currentTarget.style.background = buttonGradient)}
+          >
+            Share Report
+          </button>
+        </div>
+
+        {/* Share Report Loading Splash */}
+        {shareLoading && (
+          <div className="fixed inset-0 z-[100] backdrop-blur-sm flex flex-col items-center justify-center" style={{ background: 'hsla(210, 45%, 90%, 0.95)' }}>
+            <div className="text-center space-y-6">
+              <div className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-primary via-secondary to-warning flex items-center justify-center shadow-lg">
+                <ArrowUpRight size={28} className="text-primary-foreground animate-pulse" />
+              </div>
+              <div className="space-y-3">
+                <Loader2 size={24} className="text-secondary animate-spin mx-auto" />
+                <p className="text-sm font-bold text-foreground font-display">Connecting to IBM Watsonx.ai</p>
+                <p className="text-xs text-muted-foreground">Preparing your report for sharing…</p>
+              </div>
+              <div className="w-48 h-1 rounded-full bg-accent overflow-hidden mx-auto">
+                <div className="h-full bg-gradient-to-r from-primary via-secondary to-warning rounded-full animate-pulse" style={{ width: '60%' }} />
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </TooltipProvider>
   );
