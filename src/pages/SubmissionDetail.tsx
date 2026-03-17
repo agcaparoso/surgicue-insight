@@ -932,7 +932,7 @@ const FeedbackSection = () => {
 
       {/* Strength + Improvement Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div className="rounded-xl border border-success/20 bg-card/70 backdrop-blur-sm shadow-soft overflow-hidden">
+        <div className="rounded-xl border border-success/20 bg-card shadow-soft overflow-hidden">
           <div className="h-[2px] bg-success" />
           <div className="p-4">
             <div className="flex items-center gap-2.5 mb-3">
