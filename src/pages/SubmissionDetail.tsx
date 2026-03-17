@@ -396,13 +396,42 @@ const AIInsightsSidebar = () => {
   );
 };
 
+// Phase icons for visual distinction
+const phaseIcons: Record<string, React.ComponentType<{ size?: number; className?: string }>> = {
+  P1: Target,
+  P2: Focus,
+  P3: Scissors,
+  P4: Hand,
+  P5: Package,
+  P6: Droplets,
+  P7: ArrowDownToLine,
+};
+
+// Score bar component
+const ScoreBar = ({ score, maxScore = 5, label, icon: Icon }: { score: number; maxScore?: number; label: string; icon: React.ComponentType<{ size?: number; className?: string }> }) => {
+  const pct = (score / maxScore) * 100;
+  const color = score >= 4 ? 'bg-success' : score >= 3 ? 'bg-warning' : 'bg-destructive';
+  const textColor = score >= 4 ? 'text-success' : score >= 3 ? 'text-warning' : 'text-destructive';
+  return (
+    <div className="flex items-center gap-3">
+      <div className="w-7 h-7 rounded-lg bg-accent/50 flex items-center justify-center shrink-0">
+        <Icon size={14} className="text-secondary" />
+      </div>
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center justify-between mb-1">
+          <span className="text-[11px] font-medium text-muted-foreground">{label}</span>
+          <span className={`text-xs font-bold font-display ${textColor}`}>{score}/{maxScore}</span>
+        </div>
+        <div className="h-2 bg-accent/40 rounded-full overflow-hidden">
+          <div className={`h-full rounded-full ${color} transition-all`} style={{ width: `${pct}%` }} />
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const SubmissionDetail = () => {
   const navigate = useNavigate();
-  const [expandedPhases, setExpandedPhases] = useState<string[]>([]);
-
-  const togglePhase = (id: string) => {
-    setExpandedPhases(prev => prev.includes(id) ? prev.filter(p => p !== id) : [...prev, id]);
-  };
 
   const overallScore = 3.7;
   const maxTimelineSec = Math.max(...phases.map(p => {
@@ -413,27 +442,33 @@ const SubmissionDetail = () => {
   return (
     <TooltipProvider>
       <div className="min-h-screen relative" style={gradientBg}>
-        {/* Ambient glows matching landing page */}
+        {/* Ambient glows */}
         <div className="absolute top-[-10%] left-[-5%] w-[500px] h-[500px] rounded-full opacity-30 blur-[120px] pointer-events-none" style={{ background: 'hsl(210 55% 72%)' }} />
         <div className="absolute bottom-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full opacity-25 blur-[120px] pointer-events-none" style={{ background: 'hsl(42 65% 72%)' }} />
 
         {/* Top Bar */}
         <header className="sticky top-0 z-50 h-14 bg-card/80 backdrop-blur-xl border-b border-border/50 flex items-center justify-between px-6">
-          <h1
-            className="text-2xl font-black font-display tracking-tight pb-1"
-            style={titleStyle}
-          >
-            SurgicalIQ
-          </h1>
+          <button onClick={() => navigate('/')} className="text-xs font-bold text-secondary hover:text-primary transition-colors">← Back</button>
           <button onClick={() => navigate('/profile')} className="w-8 h-8 bg-accent rounded-full flex items-center justify-center border border-border hover:border-secondary/40 transition-colors">
             <User size={14} className="text-primary" />
           </button>
         </header>
-
-        {/* Gradient accent line below header */}
         <div className="h-[3px] bg-gradient-to-r from-primary via-secondary to-warning" />
 
         <div className="max-w-[1400px] mx-auto px-6 py-8 relative z-10">
+          {/* Centered Title */}
+          <div className="text-center mb-8">
+            <h1
+              className="text-5xl sm:text-6xl md:text-7xl font-black font-display tracking-tight pb-2 leading-[1.1]"
+              style={titleStyle}
+            >
+              SurgicalIQ
+            </h1>
+            <p className="text-[10px] font-semibold tracking-widest uppercase text-secondary mt-2">
+              Powered by IBM Watsonx.ai
+            </p>
+          </div>
+
           {/* Student Info Header Card */}
           <div className="rounded-2xl border border-border/60 bg-card/70 backdrop-blur-md shadow-card overflow-hidden mb-8">
             <div className="h-[3px] bg-gradient-to-r from-primary via-secondary to-warning" />
@@ -472,19 +507,20 @@ const SubmissionDetail = () => {
                   </div>
                   <div className="min-w-0">
                     <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-1">Procedure</p>
-                    <p className="text-sm font-bold text-foreground truncate">Laparoscopic Cholecystectomy</p>
+                    <p className="text-sm font-bold text-foreground">Laparoscopic Cholecystectomy</p>
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
+          <div className="gradient-line mb-8" />
+
           {/* Summary Section Header */}
-          <div className="section-header mb-6 mt-2">
+          <div className="section-header mb-6">
             <span>📊</span>
             Summary
           </div>
-          <div className="gradient-line mb-6" />
 
           {/* Main content + Sidebar */}
           <div className="flex gap-6">
@@ -492,7 +528,6 @@ const SubmissionDetail = () => {
             <div className="flex-1 min-w-0">
               {/* Summary Cards */}
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
-                {/* Overall Score */}
                 <div className="group relative rounded-xl border border-border/50 bg-card/70 backdrop-blur-sm shadow-card overflow-hidden transition-all hover:shadow-lg hover:border-secondary/30 hover:-translate-y-0.5">
                   <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-primary via-secondary to-warning" />
                   <div className="p-5">
@@ -509,8 +544,6 @@ const SubmissionDetail = () => {
                     </div>
                   </div>
                 </div>
-
-                {/* Competency Level */}
                 <div className="group relative rounded-xl border border-border/50 bg-card/70 backdrop-blur-sm shadow-card overflow-hidden transition-all hover:shadow-lg hover:border-secondary/30 hover:-translate-y-0.5">
                   <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-primary via-secondary to-warning" />
                   <div className="p-5">
@@ -520,16 +553,14 @@ const SubmissionDetail = () => {
                       </div>
                       <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Competency</span>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-lg font-bold font-display" style={titleStyle}>Intermediate</span>
+                    <span className="text-lg font-bold font-display" style={titleStyle}>Intermediate</span>
+                    <div className="mt-1.5">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold bg-secondary/10 text-secondary border border-secondary/20">
+                        <Shield size={10} /> Level 3
+                      </span>
                     </div>
-                    <span className="inline-flex items-center gap-1 mt-1.5 px-2 py-0.5 rounded-full text-[9px] font-bold bg-secondary/10 text-secondary border border-secondary/20">
-                      <Shield size={10} /> Level 3
-                    </span>
                   </div>
                 </div>
-
-                {/* Phases Detected */}
                 <div className="group relative rounded-xl border border-border/50 bg-card/70 backdrop-blur-sm shadow-card overflow-hidden transition-all hover:shadow-lg hover:border-secondary/30 hover:-translate-y-0.5">
                   <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-primary via-secondary to-warning" />
                   <div className="p-5">
@@ -542,8 +573,6 @@ const SubmissionDetail = () => {
                     <span className="text-3xl font-black font-display" style={titleStyle}>{phases.length}</span>
                   </div>
                 </div>
-
-                {/* Total Duration */}
                 <div className="group relative rounded-xl border border-border/50 bg-card/70 backdrop-blur-sm shadow-card overflow-hidden transition-all hover:shadow-lg hover:border-secondary/30 hover:-translate-y-0.5">
                   <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-primary via-secondary to-warning" />
                   <div className="p-5">
@@ -558,149 +587,137 @@ const SubmissionDetail = () => {
                 </div>
               </div>
 
-              {/* Recommended Next Step Badge */}
+              {/* Recommended Next Step */}
               <div className="flex items-center gap-2 mb-8 px-4 py-3 rounded-xl bg-secondary/5 border border-secondary/20 backdrop-blur-sm">
                 <Zap size={16} className="text-secondary shrink-0" />
                 <span className="text-sm text-foreground"><strong className="text-secondary">Recommended:</strong> Supervised practice on 5–10 additional standard cases. Focus drills on gallbladder dissection phase.</span>
               </div>
 
-              {/* Gradient section divider */}
               <div className="gradient-line mb-8" />
 
-              {/* Tabs */}
-              <Tabs defaultValue="scorecard" className="w-full">
-                <TabsList className="w-full grid grid-cols-4 mb-8 bg-card/70 backdrop-blur-sm rounded-xl p-1.5 h-auto border border-border/50 shadow-soft">
-                  <TabsTrigger value="scorecard" className="text-xs font-bold py-3 rounded-lg data-[state=active]:bg-primary/5 data-[state=active]:text-primary data-[state=active]:shadow-soft data-[state=active]:gradient-underline gap-1.5 transition-all">
-                    <Layers size={14} /> Scorecard
-                  </TabsTrigger>
+              {/* Scorecard Section Header */}
+              <div className="section-header mb-6">
+                <span>🩺</span>
+                Phase-by-Phase Scorecard
+              </div>
+
+              {/* Fully Expanded Phase Cards */}
+              <div className="space-y-6 mb-10">
+                {phases.map((phase) => {
+                  const statusBorderColor = phase.status === 'Passed' ? 'border-l-success' : phase.status === 'Flagged' ? 'border-l-warning' : 'border-l-destructive';
+                  const statusBg = phase.status === 'Passed' ? 'bg-success/5' : phase.status === 'Flagged' ? 'bg-warning/5' : 'bg-destructive/5';
+                  const PhaseIcon = phaseIcons[phase.id] || Layers;
+
+                  return (
+                    <div key={phase.id} className={`rounded-xl border border-border/50 bg-card/70 backdrop-blur-sm shadow-card overflow-hidden border-l-[4px] ${statusBorderColor}`}>
+                      {/* Phase Header */}
+                      <div className={`px-5 py-4 ${statusBg}`}>
+                        <div className="flex items-center gap-3 flex-wrap">
+                          <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, hsl(211 60% 28% / 0.1), hsl(45 80% 55% / 0.15))' }}>
+                            <PhaseIcon size={18} className="text-secondary" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <span className="font-display font-bold text-secondary text-sm">{phase.id}:</span>
+                              <span className="font-display font-bold text-base text-foreground">{phase.name}</span>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-3">
+                            <span className={`text-2xl font-black font-display ${scoreColor(phase.score)}`}>{phase.score}<span className="text-sm font-medium text-muted-foreground">/{phase.maxScore}</span></span>
+                            <StatusBadge status={phase.status} />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="p-5 space-y-5">
+                        {/* Metrics - Stacked Vertically */}
+                        <div>
+                          <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-3">Performance Metrics</p>
+                          <div className="space-y-3">
+                            <ScoreBar score={phase.score} maxScore={phase.maxScore} label="Overall Phase Score" icon={Sparkles} />
+                            <ScoreBar score={phase.rubrics[0].score} maxScore={phase.rubrics[0].maxScore} label={phase.rubrics[0].label} icon={Hand} />
+                            <ScoreBar score={phase.rubrics[1].score} maxScore={phase.rubrics[1].maxScore} label={phase.rubrics[1].label} icon={Eye} />
+                            <ScoreBar score={phase.rubrics[2].score} maxScore={phase.rubrics[2].maxScore} label={phase.rubrics[2].label} icon={Crosshair} />
+                          </div>
+                        </div>
+
+                        {/* Duration */}
+                        <div className="flex items-center gap-4 px-4 py-3 rounded-lg bg-accent/30 text-xs">
+                          <div className="flex items-center gap-1.5">
+                            <Clock size={13} className="text-secondary" />
+                            <span className="text-muted-foreground">Start:</span>
+                            <span className="font-bold text-foreground font-display">{phase.startTime}</span>
+                          </div>
+                          <div className="w-px h-4 bg-border" />
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-muted-foreground">End:</span>
+                            <span className="font-bold text-foreground font-display">{phase.endTime}</span>
+                          </div>
+                          <div className="w-px h-4 bg-border" />
+                          <div className="flex items-center gap-1.5">
+                            <Timer size={13} className="text-secondary" />
+                            <span className="text-muted-foreground">Total:</span>
+                            <span className="font-bold text-foreground font-display">{phase.duration}</span>
+                          </div>
+                          {phase.idealDuration && (
+                            <>
+                              <div className="w-px h-4 bg-border" />
+                              <div className="flex items-center gap-1.5">
+                                <span className="text-muted-foreground">Ideal:</span>
+                                <span className="font-medium text-foreground">{phase.idealDuration}</span>
+                              </div>
+                            </>
+                          )}
+                        </div>
+
+                        {/* AI Summary & Rubric Notes */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="rounded-lg border border-secondary/20 bg-secondary/5 p-4">
+                            <p className="text-[10px] font-bold text-secondary uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                              <Brain size={12} /> AI Observation
+                            </p>
+                            <p className="text-xs text-foreground leading-relaxed">{phase.observation}</p>
+                          </div>
+                          <div className="rounded-lg border border-primary/20 bg-primary/5 p-4">
+                            <p className="text-[10px] font-bold text-primary uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                              <Crosshair size={12} /> Rubric Assessment
+                            </p>
+                            <p className="text-xs text-muted-foreground leading-relaxed">{phase.rubricAssessment}</p>
+                          </div>
+                        </div>
+
+                        {phase.additionalNotes && (
+                          <div className="rounded-lg border border-warning/20 bg-warning/5 p-4">
+                            <p className="text-[10px] font-bold text-warning uppercase tracking-wider mb-2">Additional Notes</p>
+                            <p className="text-xs text-foreground leading-relaxed">{phase.additionalNotes}</p>
+                          </div>
+                        )}
+
+                        <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
+                          <Eye size={11} className="text-secondary" />
+                          <span>{phase.framesAnalyzed} frames analyzed</span>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="gradient-line mb-8" />
+
+              {/* Additional Tabs (Timeline, Frames, Feedback) */}
+              <Tabs defaultValue="timeline" className="w-full">
+                <TabsList className="w-full grid grid-cols-3 mb-8 bg-card/70 backdrop-blur-sm rounded-xl p-1.5 h-auto border border-border/50 shadow-soft">
                   <TabsTrigger value="timeline" className="text-xs font-bold py-3 rounded-lg data-[state=active]:bg-primary/5 data-[state=active]:text-primary data-[state=active]:shadow-soft data-[state=active]:gradient-underline gap-1.5 transition-all">
                     <Clock size={14} /> Timeline
                   </TabsTrigger>
                   <TabsTrigger value="keyframes" className="text-xs font-bold py-3 rounded-lg data-[state=active]:bg-primary/5 data-[state=active]:text-primary data-[state=active]:shadow-soft data-[state=active]:gradient-underline gap-1.5 transition-all">
-                    <Image size={14} /> Frames
+                    <Image size={14} /> Key Frames
                   </TabsTrigger>
                   <TabsTrigger value="feedback" className="text-xs font-bold py-3 rounded-lg data-[state=active]:bg-primary/5 data-[state=active]:text-primary data-[state=active]:shadow-soft data-[state=active]:gradient-underline gap-1.5 transition-all">
                     <MessageSquare size={14} /> Feedback
                   </TabsTrigger>
                 </TabsList>
-
-                {/* === SCORECARD TAB === */}
-                <TabsContent value="scorecard">
-                  <div className="rounded-xl border border-border/50 bg-card/80 backdrop-blur-sm shadow-card overflow-hidden">
-                    {/* Table header */}
-                    <div className="hidden md:grid grid-cols-[2fr_0.7fr_0.7fr_0.7fr_0.7fr_0.6fr_2.5fr] gap-3 px-5 py-3 bg-accent/50 border-b border-border text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-                      <span>Phase</span>
-                      <span className="text-center">Score</span>
-                      <span className="text-center">Tissue</span>
-                      <span className="text-center">Clarity</span>
-                      <span className="text-center">Control</span>
-                      <span className="text-center">Duration</span>
-                      <span>AI Summary</span>
-                    </div>
-
-                    {phases.map((phase) => {
-                      const isExpanded = expandedPhases.includes(phase.id);
-                      const statusBorderColor = phase.status === 'Passed' ? 'border-l-success' : phase.status === 'Flagged' ? 'border-l-warning' : 'border-l-destructive';
-
-                      return (
-                        <div key={phase.id}>
-                          {/* Phase row */}
-                          <button
-                            onClick={() => togglePhase(phase.id)}
-                            className={`w-full text-left transition-colors hover:bg-accent/30 border-l-[3px] ${statusBorderColor} ${isExpanded ? 'bg-accent/20' : ''}`}
-                          >
-                            {/* Desktop row */}
-                            <div className="hidden md:grid grid-cols-[2fr_0.7fr_0.7fr_0.7fr_0.7fr_0.6fr_2.5fr] gap-3 px-5 py-3.5 items-center border-b border-border/40">
-                              <div className="flex items-center gap-2.5 min-w-0">
-                                <StatusIcon status={phase.status} />
-                                <span className="font-display font-bold text-secondary text-xs shrink-0">{phase.id}</span>
-                                <span className="font-semibold text-sm text-foreground truncate">{phase.name}</span>
-                                <StatusBadge status={phase.status} />
-                              </div>
-
-                              <div className="flex flex-col items-center gap-1">
-                                <span className={`font-display font-black text-base ${scoreColor(phase.score)}`}>{phase.score}</span>
-                              </div>
-
-                              {phase.rubrics.map((r, i) => (
-                                <Tooltip key={i}>
-                                  <TooltipTrigger asChild>
-                                    <div className="flex flex-col items-center gap-1">
-                                      <span className={`text-xs font-bold font-display ${scoreColor(r.score)}`}>{r.score}</span>
-                                      <RubricDots score={r.score} maxScore={r.maxScore} />
-                                    </div>
-                                  </TooltipTrigger>
-                                  <TooltipContent><p>{r.label}: {r.score}/{r.maxScore}</p></TooltipContent>
-                                </Tooltip>
-                              ))}
-
-                              <span className="text-xs font-medium text-muted-foreground font-display text-center">{phase.duration}</span>
-
-                              <span className="text-[11px] text-muted-foreground truncate leading-relaxed">{phase.observation.split('.')[0]}.</span>
-                            </div>
-
-                            {/* Mobile row */}
-                            <div className="md:hidden px-4 py-4 border-b border-border/40">
-                              <div className="flex items-center gap-2.5 mb-3">
-                                <StatusIcon status={phase.status} />
-                                <span className="font-display font-bold text-secondary text-xs shrink-0">{phase.id}</span>
-                                <span className="font-semibold text-sm text-foreground flex-1 truncate">{phase.name}</span>
-                                <span className={`font-display font-black text-lg ${scoreColor(phase.score)}`}>{phase.score}</span>
-                              </div>
-                              <div className="grid grid-cols-3 gap-3 mb-3">
-                                {phase.rubrics.map((r, i) => (
-                                  <div key={i} className="flex flex-col items-center gap-1 p-2 rounded-lg bg-accent/30">
-                                    <span className="text-[9px] text-muted-foreground font-medium">{r.label.split(' ')[0]}</span>
-                                    <span className={`text-sm font-bold font-display ${scoreColor(r.score)}`}>{r.score}</span>
-                                    <RubricDots score={r.score} maxScore={r.maxScore} />
-                                  </div>
-                                ))}
-                              </div>
-                              <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
-                                <Clock size={11} className="shrink-0" />
-                                <span className="shrink-0">{phase.duration}</span>
-                                <span className="mx-1">·</span>
-                                <span className="truncate flex-1">{phase.observation.split('.')[0]}.</span>
-                              </div>
-                            </div>
-                          </button>
-
-                          {/* Expanded detail */}
-                          {isExpanded && (
-                            <div className={`px-5 py-5 bg-accent/10 border-b border-border/40 border-l-[3px] ${statusBorderColor} space-y-4 animate-accordion-down`}>
-                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div className="gradient-border-left pl-4">
-                                  <p className="text-[10px] font-bold text-secondary uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
-                                    <Brain size={12} /> AI Observation
-                                  </p>
-                                  <p className="text-sm text-foreground leading-relaxed">{phase.observation}</p>
-                                </div>
-                                <div className="border-l-2 border-primary/30 pl-4">
-                                  <p className="text-[10px] font-bold text-primary uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
-                                    <Crosshair size={12} /> Rubric Assessment
-                                  </p>
-                                  <p className="text-sm text-muted-foreground leading-relaxed">{phase.rubricAssessment}</p>
-                                </div>
-                              </div>
-                              {phase.additionalNotes && (
-                                <div className="border-l-2 border-warning/40 pl-4">
-                                  <p className="text-[10px] font-bold text-warning uppercase tracking-wider mb-1.5">Additional Notes</p>
-                                  <p className="text-sm text-foreground leading-relaxed">{phase.additionalNotes}</p>
-                                </div>
-                              )}
-                              <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground pt-2 border-t border-border/30">
-                                <span className="flex items-center gap-1.5"><Clock size={12} className="text-secondary" /> <strong className="text-foreground">Start:</strong> {phase.startTime}</span>
-                                <span className="flex items-center gap-1.5"><strong className="text-foreground">End:</strong> {phase.endTime}</span>
-                                <span className="flex items-center gap-1.5"><strong className="text-foreground">Duration:</strong> {phase.duration}</span>
-                                <span className="flex items-center gap-1.5"><Eye size={12} className="text-secondary" /> <strong className="text-foreground">Frames:</strong> {phase.framesAnalyzed}</span>
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                </TabsContent>
 
                 {/* === TIMELINE TAB === */}
                 <TabsContent value="timeline">
@@ -709,8 +726,6 @@ const SubmissionDetail = () => {
                       <TrendingUp size={14} className="text-secondary shrink-0" />
                       This chart compares actual phase duration against the expected optimal range.
                     </p>
-
-                    {/* Legend */}
                     <div className="flex items-center gap-5 mb-5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
                       <div className="flex items-center gap-2">
                         <div className="w-4 h-3 rounded-sm bar-gradient" />
@@ -721,7 +736,6 @@ const SubmissionDetail = () => {
                         Ideal Range
                       </div>
                     </div>
-
                     <div className="space-y-4">
                       {phases.map((p) => {
                         const actualSec = durationToSec(p.duration);
@@ -730,7 +744,6 @@ const SubmissionDetail = () => {
                         const actualPct = (actualSec / barMax) * 100;
                         const idealMinPct = (ideal.min / barMax) * 100;
                         const idealWidthPct = ((ideal.max - ideal.min) / barMax) * 100;
-
                         return (
                           <div key={p.id} className="group">
                             <div className="flex items-center gap-3 mb-1.5">
@@ -740,18 +753,9 @@ const SubmissionDetail = () => {
                               <span className="text-xs font-display font-bold text-foreground shrink-0">{p.duration}</span>
                             </div>
                             <div className="relative h-7 bg-accent/40 rounded-lg overflow-hidden ml-[60px]">
-                              {/* Ideal range background */}
-                              <div
-                                className="absolute top-0 bottom-0 bg-success/10 border-l border-r border-success/20"
-                                style={{ left: `${idealMinPct}%`, width: `${idealWidthPct}%` }}
-                              />
-                              {/* Actual bar */}
-                              <div
-                                className={`absolute top-1 bottom-1 rounded-md transition-all ${p.status === 'Flagged' ? 'bar-gradient-warn' : 'bar-gradient'}`}
-                                style={{ width: `${actualPct}%`, left: 0 }}
-                              />
+                              <div className="absolute top-0 bottom-0 bg-success/10 border-l border-r border-success/20" style={{ left: `${idealMinPct}%`, width: `${idealWidthPct}%` }} />
+                              <div className={`absolute top-1 bottom-1 rounded-md transition-all ${p.status === 'Flagged' ? 'bar-gradient-warn' : 'bar-gradient'}`} style={{ width: `${actualPct}%`, left: 0 }} />
                             </div>
-                            {/* Hover detail */}
                             <div className="ml-[60px] flex items-center gap-3 mt-1 text-[10px] text-muted-foreground opacity-60 group-hover:opacity-100 transition-opacity">
                               <span>{p.startTime} → {p.endTime}</span>
                               <span>·</span>
@@ -773,20 +777,14 @@ const SubmissionDetail = () => {
                       <div key={frame.id} className="rounded-xl overflow-hidden border border-border/50 bg-card/70 backdrop-blur-sm shadow-card hover:shadow-lg hover:border-secondary/30 transition-all group">
                         <div className="aspect-video bg-accent/60 flex items-center justify-center relative">
                           <Eye size={24} className="text-muted-foreground/30 group-hover:text-secondary/50 transition-colors" />
-                          {/* Gradient hover accent */}
                           <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-primary via-secondary to-warning opacity-0 group-hover:opacity-100 transition-opacity" />
                         </div>
                         <div className="p-3.5 space-y-2">
                           <div className="flex items-center justify-between">
                             <span className="text-xs font-semibold text-foreground">{frame.label}</span>
-                            <Tooltip>
-                              <TooltipTrigger asChild>
-                                <span className={`text-xs font-bold font-display px-2 py-0.5 rounded-md ${frame.confidence >= 80 ? 'text-success bg-success/10' : frame.confidence >= 60 ? 'text-warning bg-warning/10' : 'text-destructive bg-destructive/10'}`}>
-                                  {frame.confidence}%
-                                </span>
-                              </TooltipTrigger>
-                              <TooltipContent><p>AI Confidence: {frame.confidence}%</p></TooltipContent>
-                            </Tooltip>
+                            <span className={`text-xs font-bold font-display px-2 py-0.5 rounded-md ${frame.confidence >= 80 ? 'text-success bg-success/10' : frame.confidence >= 60 ? 'text-warning bg-warning/10' : 'text-destructive bg-destructive/10'}`}>
+                              {frame.confidence}%
+                            </span>
                           </div>
                           <p className="text-[11px] text-muted-foreground leading-relaxed">{frame.caption}</p>
                         </div>
@@ -801,7 +799,6 @@ const SubmissionDetail = () => {
                 </TabsContent>
               </Tabs>
 
-              {/* Gradient section divider */}
               <div className="gradient-line mt-10 mb-8" />
 
               {/* Action Buttons */}
@@ -823,7 +820,7 @@ const SubmissionDetail = () => {
               </div>
             </div>
 
-            {/* Right Sidebar — hidden on small screens */}
+            {/* Right Sidebar */}
             <div className="hidden lg:block">
               <div className="sticky top-20">
                 <AIInsightsSidebar />
