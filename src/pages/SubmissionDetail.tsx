@@ -743,64 +743,108 @@ const FeedbackSection = () => {
 
   return (
     <div className="space-y-5">
-      {/* Main feedback card */}
-      <SiqCard className="relative overflow-hidden">
-        <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-primary via-secondary to-warning" />
-        <p className="text-sm text-foreground leading-relaxed mb-5 pt-1">
-          <strong>Overall:</strong> Intermediate — Ready for Supervised Practice (3.7/5.0). Strong performance across 5 of 7 phases with 2 requiring improvement.
-        </p>
-        <div className="gradient-line mb-5" />
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
-          <div className="flex gap-3 items-start p-4 rounded-lg bg-success/5 border border-success/15">
-            <Award size={18} className="text-success shrink-0 mt-0.5" />
+      {/* Overall Assessment Card */}
+      <div className="rounded-xl border border-border bg-card shadow-card overflow-hidden">
+        <div className="h-[3px] bg-gradient-to-r from-primary via-secondary to-warning" />
+        <div className="p-5">
+          <div className="flex items-center gap-2.5 mb-4">
+            <div className="w-10 h-10 rounded-xl bg-secondary/10 flex items-center justify-center">
+              <Activity size={20} className="text-secondary" />
+            </div>
             <div>
-              <p className="text-xs font-bold text-foreground mb-1">Top Strength</p>
-              <p className="text-xs text-muted-foreground leading-relaxed">Clipping & Cutting (4.5/5) — expert-level clip application with precise perpendicular orientation</p>
+              <h3 className="text-xs font-bold text-foreground">Overall Assessment</h3>
+              <p className="text-[10px] text-muted-foreground">AI-evaluated performance summary</p>
+            </div>
+            <div className="ml-auto flex items-baseline gap-1">
+              <span className="text-2xl font-black font-display text-foreground">3.7</span>
+              <span className="text-xs text-muted-foreground">/ 5.0</span>
             </div>
           </div>
-          <div className="flex gap-3 items-start p-4 rounded-lg bg-warning/5 border border-warning/15">
-            <ArrowUpRight size={18} className="text-warning shrink-0 mt-0.5" />
-            <div>
-              <p className="text-xs font-bold text-foreground mb-1">Top Improvement</p>
-              <p className="text-xs text-muted-foreground leading-relaxed">GB Dissection (2.8/5) — plane identification needs work, excess thermal application noted</p>
+          <div className="flex items-center gap-2 mb-3">
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-secondary/10 text-secondary border border-secondary/20">
+              <Shield size={10} /> Intermediate — Level 3
+            </span>
+            <span className="text-[10px] text-muted-foreground">Ready for Supervised Practice</span>
+          </div>
+          <p className="text-xs text-muted-foreground leading-relaxed">
+            Strong performance across 5 of 7 phases. 2 phases flagged for targeted improvement.
+          </p>
+        </div>
+      </div>
+
+      {/* Strength + Improvement Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="rounded-xl border border-success/20 bg-card shadow-soft overflow-hidden">
+          <div className="h-[2px] bg-success" />
+          <div className="p-4">
+            <div className="flex items-center gap-2.5 mb-3">
+              <div className="w-8 h-8 rounded-lg bg-success/10 flex items-center justify-center">
+                <CheckCircle2 size={16} className="text-success" />
+              </div>
+              <h4 className="text-xs font-bold text-foreground">Top Strength</h4>
             </div>
+            <p className="text-xs font-bold text-success mb-1">Clipping & Cutting — 4.5/5</p>
+            <p className="text-xs text-muted-foreground leading-relaxed">Expert-level clip application with precise perpendicular orientation</p>
           </div>
         </div>
-
-        {/* Recommendation */}
-        <div className="p-4 rounded-lg bg-secondary/5 border border-secondary/20 mb-5">
-          <p className="text-[10px] font-bold uppercase tracking-widest text-secondary mb-2 flex items-center gap-1.5">
-            <Zap size={12} /> Recommendation
-          </p>
-          <p className="text-xs text-foreground leading-relaxed">
-            Supervised practice on 5–10 additional standard cholecystectomy cases. Focus on dissection plane identification and controlled thermal energy usage.
-          </p>
+        <div className="rounded-xl border border-warning/20 bg-card shadow-soft overflow-hidden">
+          <div className="h-[2px] bg-warning" />
+          <div className="p-4">
+            <div className="flex items-center gap-2.5 mb-3">
+              <div className="w-8 h-8 rounded-lg bg-warning/10 flex items-center justify-center">
+                <AlertTriangle size={16} className="text-warning" />
+              </div>
+              <h4 className="text-xs font-bold text-foreground">Top Improvement Area</h4>
+            </div>
+            <p className="text-xs font-bold text-warning mb-1">GB Dissection — 2.8/5</p>
+            <p className="text-xs text-muted-foreground leading-relaxed">Plane identification needs work, excess thermal application noted</p>
+          </div>
         </div>
+      </div>
 
-        <div className="gradient-line mb-5" />
+      {/* Recommendation Card */}
+      <div className="rounded-xl border border-secondary/20 bg-card shadow-soft overflow-hidden">
+        <div className="gradient-border-left">
+          <div className="p-4">
+            <div className="flex items-center gap-2.5 mb-3">
+              <div className="w-8 h-8 rounded-lg bg-secondary/10 flex items-center justify-center">
+                <Zap size={16} className="text-secondary" />
+              </div>
+              <h4 className="text-xs font-bold text-foreground">Recommendation</h4>
+            </div>
+            <p className="text-xs text-foreground leading-relaxed">
+              Supervised practice on 5–10 additional standard cholecystectomy cases. Focus on dissection plane identification and controlled thermal energy usage.
+            </p>
+          </div>
+        </div>
+      </div>
 
-        {/* Recommended Next Actions */}
-        <div>
-          <p className="text-[10px] font-bold uppercase tracking-widest text-primary mb-3 flex items-center gap-1.5">
-            <Target size={12} /> Recommended Next Actions
-          </p>
-          <ul className="space-y-2.5">
+      {/* Recommended Next Actions */}
+      <div className="rounded-xl border border-border bg-card shadow-soft overflow-hidden">
+        <div className="h-[2px] bg-gradient-to-r from-primary via-secondary to-warning" />
+        <div className="p-4">
+          <div className="flex items-center gap-2.5 mb-4">
+            <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+              <Target size={16} className="text-primary" />
+            </div>
+            <h4 className="text-xs font-bold text-foreground">Recommended Next Actions</h4>
+          </div>
+          <ul className="space-y-3">
             {[
-              'Practice gallbladder dissection plane identification in simulation lab',
-              'Review Critical View of Safety criteria with attending surgeon',
-              'Complete 3 supervised cholecystectomy cases before independent practice',
+              { icon: Crosshair, text: 'Practice gallbladder dissection plane identification in simulation lab' },
+              { icon: Eye, text: 'Review Critical View of Safety criteria with attending surgeon' },
+              { icon: Activity, text: 'Complete 3 supervised cholecystectomy cases before independent practice' },
             ].map((action, i) => (
-              <li key={i} className="flex items-start gap-2.5 text-xs text-foreground leading-relaxed">
-                <div className="w-5 h-5 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center shrink-0 mt-0.5">
-                  <span className="text-[10px] font-bold text-primary">{i + 1}</span>
+              <li key={i} className="flex items-start gap-3 text-xs text-foreground leading-relaxed">
+                <div className="w-6 h-6 rounded-lg bg-accent flex items-center justify-center shrink-0 mt-0.5">
+                  <action.icon size={12} className="text-primary" />
                 </div>
-                {action}
+                {action.text}
               </li>
             ))}
           </ul>
         </div>
-      </SiqCard>
+      </div>
 
       <button
         onClick={() => setShowFull(!showFull)}
