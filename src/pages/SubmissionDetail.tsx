@@ -450,6 +450,7 @@ const SubmissionDetail = () => {
         {/* Top Bar */}
         <header className="sticky top-0 z-50 h-14 bg-card/80 backdrop-blur-xl border-b border-border/50 flex items-center justify-between px-6">
           <button onClick={() => navigate('/')} className="text-xs font-bold text-secondary hover:text-primary transition-colors">← Back</button>
+          <h1 className="text-2xl font-black font-display tracking-tight leading-none" style={titleStyle}>SurgicalIQ</h1>
           <button onClick={() => navigate('/profile')} className="w-8 h-8 bg-accent rounded-full flex items-center justify-center border border-border hover:border-secondary/40 transition-colors">
             <User size={14} className="text-primary" />
           </button>
@@ -457,18 +458,6 @@ const SubmissionDetail = () => {
         <div className="h-[3px] bg-gradient-to-r from-primary via-secondary to-warning" />
 
         <div className="max-w-[1400px] mx-auto px-6 py-8 relative z-10">
-          {/* Centered Title */}
-          <div className="text-center mb-8">
-            <h1
-              className="text-5xl sm:text-6xl md:text-7xl font-black font-display tracking-tight pb-2 leading-[1.1]"
-              style={titleStyle}
-            >
-              SurgicalIQ
-            </h1>
-            <p className="text-[10px] font-semibold tracking-widest uppercase text-secondary mt-2">
-              Powered by IBM Watsonx.ai
-            </p>
-          </div>
 
           {/* Student Info Header Card */}
           <div className="rounded-2xl border border-border/40 bg-card backdrop-blur-md shadow-card overflow-hidden mb-8">
