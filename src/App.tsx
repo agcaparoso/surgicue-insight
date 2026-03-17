@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { UserProvider } from "@/context/UserContext";
 import Welcome from "./pages/Welcome";
+import EducatorLanding from "./pages/EducatorLanding";
 import OnboardingResident from "./pages/OnboardingResident";
 import OnboardingResidentStep2 from "./pages/OnboardingResidentStep2";
 import OnboardingEducator from "./pages/OnboardingEducator";
@@ -28,8 +29,9 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<SubmissionDetail />} />
+            <Route path="/" element={<EducatorLanding />} />
             <Route path="/welcome" element={<Welcome />} />
+            <Route path="/educator-landing" element={<EducatorLanding />} />
             <Route path="/onboarding-resident" element={<OnboardingResident />} />
             <Route path="/onboarding-resident-step2" element={<OnboardingResidentStep2 />} />
             <Route path="/onboarding-educator" element={<OnboardingEducator />} />
