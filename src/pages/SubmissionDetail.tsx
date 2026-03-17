@@ -397,7 +397,7 @@ const AIInsightsSidebar = () => {
 };
 
 // Phase icons for visual distinction
-const phaseIcons: Record<string, React.ComponentType<{ size?: number; className?: string }>> = {
+const phaseIcons: Record<string, React.ElementType> = {
   P1: Target,
   P2: Focus,
   P3: Scissors,
