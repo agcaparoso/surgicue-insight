@@ -101,6 +101,50 @@
   );
 }
 
+/* Brand gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, hsl(211 53% 23%), hsl(197 58% 42%), hsl(28 80% 52%));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Gradient accent line */
+.gradient-line {
+  height: 2px;
+  background: linear-gradient(90deg, hsl(211 53% 23%), hsl(197 58% 42%), hsl(45 80% 55%));
+  border-radius: 1px;
+}
+
+/* Gradient left border */
+.gradient-border-left {
+  border-left: 3px solid transparent;
+  border-image: linear-gradient(180deg, hsl(211 53% 23%), hsl(197 58% 42%), hsl(45 80% 55%)) 1;
+}
+
+/* Gradient underline for active tabs */
+.gradient-underline {
+  position: relative;
+}
+.gradient-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 10%;
+  right: 10%;
+  height: 2.5px;
+  background: linear-gradient(90deg, hsl(211 53% 23%), hsl(197 58% 42%), hsl(45 80% 55%));
+  border-radius: 2px;
+}
+
+/* Timeline bar gradient */
+.bar-gradient {
+  background: linear-gradient(90deg, hsl(197 58% 42%), hsl(197 58% 52%));
+}
+.bar-gradient-warn {
+  background: linear-gradient(90deg, hsl(28 80% 52%), hsl(45 80% 55%));
+}
+
 /* Section header with horizontal rule */
 .section-header {
   display: flex;
