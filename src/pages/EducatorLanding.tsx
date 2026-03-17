@@ -31,7 +31,7 @@ const EducatorLanding = () => {
         }
         return prev + 1;
       });
-    }, 1800);
+    }, 1000);
     return () => clearInterval(interval);
   }, [loading]);
 
