@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronDown, ChevronRight, Clock, Activity, Layers, Target, Eye, MessageSquare, Image, Search, User, TrendingUp, Shield, Zap } from 'lucide-react';
+import { ChevronDown, ChevronRight, Clock, Activity, Layers, Target, Eye, MessageSquare, Image, Search, User, TrendingUp, Shield, Zap, FileText, Loader2, Brain, ListChecks, StickyNote } from 'lucide-react';
 import { SiqCard, StatusBadge } from '@/components/SiqComponents';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
@@ -147,6 +147,216 @@ const Sparkline = () => (
 
 // --- Component ---
 
+const AIInsightsSidebar = () => (
+  <aside className="w-80 shrink-0 space-y-5">
+    {/* Sidebar Header */}
+    <div className="rounded-xl border border-border bg-card shadow-card overflow-hidden">
+      <div className="h-[3px] bg-gradient-to-r from-primary via-secondary to-warning" />
+      <div className="p-5">
+        <div className="flex items-center gap-2.5 mb-1">
+          <Brain size={18} className="text-secondary" />
+          <h2 className="font-display font-bold text-sm text-foreground">IBM AI Insights</h2>
+        </div>
+        <p className="text-[10px] text-muted-foreground tracking-wide">Powered by IBM Watson</p>
+      </div>
+    </div>
+
+    {/* Case Overview */}
+    <div className="rounded-xl border border-border bg-card shadow-soft overflow-hidden">
+      <div className="gradient-border-left">
+        <div className="px-5 py-4">
+          <div className="flex items-center gap-2 mb-3">
+            <FileText size={14} className="text-secondary" />
+            <h3 className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Case Overview</h3>
+          </div>
+          <p className="text-xs text-foreground leading-relaxed">
+            Standard laparoscopic cholecystectomy performed by Dr. Sarah Chen. AI analysis detected 7 procedural phases over 23 minutes. Overall competency rated at <strong className="text-secondary">Intermediate (Level 3)</strong> with 2 phases flagged for review.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    {/* Milestone Analysis */}
+    <div className="rounded-xl border border-border bg-card shadow-soft overflow-hidden">
+      <div className="gradient-border-left">
+        <div className="px-5 py-4">
+          <div className="flex items-center gap-2 mb-3">
+            <ListChecks size={14} className="text-secondary" />
+            <h3 className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Milestone Analysis</h3>
+          </div>
+          <ul className="space-y-2">
+            {[
+              { text: 'Critical View of Safety achieved — moderate confidence (78%)', color: 'bg-warning' },
+              { text: 'Clip application precise — expert-level execution (96%)', color: 'bg-success' },
+              { text: 'Dissection plane deviated near liver bed in P4', color: 'bg-destructive' },
+              { text: 'Hemostasis confirmed at gallbladder fossa', color: 'bg-success' },
+              { text: 'No instrument collisions or unnecessary movements detected', color: 'bg-success' },
+              { text: 'Procedure completed within expected time range', color: 'bg-success' },
+            ].map((item, i) => (
+              <li key={i} className="flex items-start gap-2.5 text-xs text-foreground leading-relaxed">
+                <div className={`w-1.5 h-1.5 rounded-full ${item.color} mt-1.5 shrink-0`} />
+                {item.text}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    {/* AI Captured Notes */}
+    <div className="rounded-xl border border-border bg-card shadow-soft overflow-hidden">
+      <div className="gradient-border-left">
+        <div className="px-5 py-4">
+          <div className="flex items-center gap-2 mb-3">
+            <StickyNote size={14} className="text-secondary" />
+            <h3 className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">AI Captured Notes</h3>
+          </div>
+          <ul className="space-y-2">
+            {[
+              'Trocar triangulation consistent with 4-port technique',
+              'Calot\'s dissection took 07:15 — within acceptable range',
+              'Hook cautery used for primary dissection',
+              'Periodic coagulation applied for minor bleeders',
+              'Grasper counter-traction adequate throughout',
+              'Retrieval bag insertion clean, no spillage',
+            ].map((note, i) => (
+              <li key={i} className="flex items-start gap-2.5 text-xs text-muted-foreground leading-relaxed">
+                <span className="text-secondary font-bold shrink-0">•</span>
+                {note}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </aside>
+);
+
+const AIReport = () => {
+  const [reportState, setReportState] = useState<'idle' | 'loading' | 'done'>('idle');
+
+  const generateReport = () => {
+    setReportState('loading');
+    setTimeout(() => setReportState('done'), 2500);
+  };
+
+  return (
+    <div className="rounded-xl border border-border bg-card shadow-card overflow-hidden">
+      <div className="h-[3px] bg-gradient-to-r from-primary via-secondary to-warning" />
+      <div className="p-6">
+        <div className="flex items-center justify-between mb-5">
+          <div className="flex items-center gap-2.5">
+            <FileText size={16} className="text-secondary" />
+            <h2 className="font-display font-bold text-sm text-foreground">AI-Assisted Surgical Report</h2>
+          </div>
+          {reportState !== 'loading' && (
+            <button
+              onClick={generateReport}
+              className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-primary text-primary-foreground text-xs font-bold hover:opacity-90 active:scale-[0.98] transition-all shadow-soft"
+            >
+              <Brain size={14} />
+              {reportState === 'done' ? 'Regenerate Report' : 'Generate Report'}
+            </button>
+          )}
+        </div>
+
+        {reportState === 'idle' && (
+          <p className="text-xs text-muted-foreground">Click "Generate Report" to create a structured AI-assisted surgical report powered by IBM Watson.</p>
+        )}
+
+        {reportState === 'loading' && (
+          <div className="flex items-center gap-3 py-8 justify-center">
+            <Loader2 size={18} className="text-secondary animate-spin" />
+            <span className="text-sm text-muted-foreground font-medium">Generating report using IBM Watson…</span>
+          </div>
+        )}
+
+        {reportState === 'done' && (
+          <div className="space-y-5 animate-accordion-down">
+            {/* Procedure Summary */}
+            <div>
+              <h3 className="text-[10px] font-bold uppercase tracking-widest text-secondary mb-2">Procedure Summary</h3>
+              <p className="text-xs text-foreground leading-relaxed">
+                Dr. Sarah Chen performed a standard laparoscopic cholecystectomy on March 15, 2026. The procedure was completed in 23 minutes across 7 identified phases. AI analysis indicates an overall competency score of 3.7/5.0 (Intermediate, Level 3), with strong performance in clipping and cutting phases and areas requiring improvement in gallbladder dissection technique.
+              </p>
+            </div>
+
+            <div className="gradient-line" />
+
+            {/* Key Actions */}
+            <div>
+              <h3 className="text-[10px] font-bold uppercase tracking-widest text-secondary mb-2">Key Actions</h3>
+              <ul className="space-y-1.5">
+                {[
+                  'Systematic trocar placement with appropriate port positioning',
+                  'Critical View of Safety achieved with moderate AI confidence (78%)',
+                  'Precise clip application — perpendicular orientation, 2+ clips patient-side',
+                  'Controlled gallbladder extraction through umbilical port',
+                  'Thorough irrigation and adequate hemostasis at fossa',
+                ].map((action, i) => (
+                  <li key={i} className="flex items-start gap-2 text-xs text-foreground leading-relaxed">
+                    <span className="text-secondary font-bold shrink-0">•</span>
+                    {action}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="gradient-line" />
+
+            {/* Performance Highlights */}
+            <div>
+              <h3 className="text-[10px] font-bold uppercase tracking-widest text-success mb-2">Performance Highlights</h3>
+              <ul className="space-y-1.5">
+                {[
+                  'Clipping & Cutting phase scored 4.5/5 — expert-level execution',
+                  'Preparation phase demonstrated systematic and safe technique (4.2/5)',
+                  'Gallbladder retraction was smooth and controlled (4.1/5)',
+                  '5 of 7 phases scored above competency threshold',
+                ].map((highlight, i) => (
+                  <li key={i} className="flex items-start gap-2 text-xs text-foreground leading-relaxed">
+                    <div className="w-1.5 h-1.5 rounded-full bg-success mt-1.5 shrink-0" />
+                    {highlight}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="gradient-line" />
+
+            {/* Areas for Improvement */}
+            <div>
+              <h3 className="text-[10px] font-bold uppercase tracking-widest text-warning mb-2">Areas for Improvement</h3>
+              <ul className="space-y-1.5">
+                {[
+                  'Gallbladder Dissection (2.8/5) — dissection plane strayed toward liver bed',
+                  'Excess thermal application noted during mid-phase dissection',
+                  'Calot\'s Triangle field clarity was periodically suboptimal (3.2/5)',
+                ].map((area, i) => (
+                  <li key={i} className="flex items-start gap-2 text-xs text-foreground leading-relaxed">
+                    <div className="w-1.5 h-1.5 rounded-full bg-warning mt-1.5 shrink-0" />
+                    {area}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="gradient-line" />
+
+            {/* Recommendation */}
+            <div className="p-4 rounded-lg bg-secondary/5 border border-secondary/20">
+              <h3 className="text-[10px] font-bold uppercase tracking-widest text-secondary mb-2">Recommendation</h3>
+              <p className="text-xs text-foreground leading-relaxed">
+                Supervised practice on 5–10 additional standard cholecystectomy cases is recommended. Specific focus should be placed on gallbladder dissection plane identification and controlled thermal application. Simulation drills targeting the dissection phase would accelerate progression toward competent-level performance.
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
 const SubmissionDetail = () => {
   const navigate = useNavigate();
   const [expandedPhases, setExpandedPhases] = useState<string[]>([]);
@@ -173,7 +383,7 @@ const SubmissionDetail = () => {
         {/* Gradient accent line below header */}
         <div className="gradient-line" />
 
-        <div className="max-w-6xl mx-auto px-6 py-8">
+        <div className="max-w-[1400px] mx-auto px-6 py-8">
           {/* 1. Filter Bar */}
           <div className="flex flex-wrap items-center gap-3 mb-8">
             <div className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-card border border-border text-sm shadow-soft">
@@ -194,279 +404,298 @@ const SubmissionDetail = () => {
             </button>
           </div>
 
-          {/* 2. Summary Cards */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
-            <SiqCard className="py-6 px-5 relative overflow-hidden">
-              <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-primary via-secondary to-warning" />
-              <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Overall Score</div>
-              <div className="flex items-baseline gap-1">
-                <span className="text-3xl font-black font-display text-foreground">{overallScore}</span>
-                <span className="text-sm font-normal text-muted-foreground">/ 5</span>
-                <Sparkline />
+          {/* Main content + Sidebar */}
+          <div className="flex gap-6">
+            {/* Left: Main Dashboard */}
+            <div className="flex-1 min-w-0">
+              {/* 2. Summary Cards */}
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
+                <SiqCard className="py-6 px-5 relative overflow-hidden">
+                  <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-primary via-secondary to-warning" />
+                  <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Overall Score</div>
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-3xl font-black font-display text-foreground">{overallScore}</span>
+                    <span className="text-sm font-normal text-muted-foreground">/ 5</span>
+                    <Sparkline />
+                  </div>
+                </SiqCard>
+                <SiqCard className="py-6 px-5 relative overflow-hidden">
+                  <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-primary via-secondary to-warning" />
+                  <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Competency</div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg font-bold font-display text-foreground">Intermediate</span>
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold bg-secondary/10 text-secondary border border-secondary/20">
+                      <Shield size={10} /> Level 3
+                    </span>
+                  </div>
+                </SiqCard>
+                <SiqCard className="py-6 px-5 relative overflow-hidden">
+                  <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-primary via-secondary to-warning" />
+                  <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Phases Detected</div>
+                  <div className="text-3xl font-black font-display text-foreground">{phases.length}</div>
+                </SiqCard>
+                <SiqCard className="py-6 px-5 relative overflow-hidden">
+                  <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-primary via-secondary to-warning" />
+                  <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Total Duration</div>
+                  <div className="text-3xl font-black font-display text-foreground">23:00</div>
+                </SiqCard>
               </div>
-            </SiqCard>
-            <SiqCard className="py-6 px-5 relative overflow-hidden">
-              <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-primary via-secondary to-warning" />
-              <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Competency</div>
-              <div className="flex items-center gap-2">
-                <span className="text-lg font-bold font-display text-foreground">Intermediate</span>
-                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold bg-secondary/10 text-secondary border border-secondary/20">
-                  <Shield size={10} /> Level 3
-                </span>
+
+              {/* Recommended Next Step Badge */}
+              <div className="flex items-center gap-2 mb-8 px-4 py-3 rounded-xl bg-secondary/5 border border-secondary/20">
+                <Zap size={16} className="text-secondary shrink-0" />
+                <span className="text-sm text-foreground"><strong className="text-secondary">Recommended:</strong> Supervised practice on 5–10 additional standard cases. Focus drills on gallbladder dissection phase.</span>
               </div>
-            </SiqCard>
-            <SiqCard className="py-6 px-5 relative overflow-hidden">
-              <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-primary via-secondary to-warning" />
-              <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Phases Detected</div>
-              <div className="text-3xl font-black font-display text-foreground">{phases.length}</div>
-            </SiqCard>
-            <SiqCard className="py-6 px-5 relative overflow-hidden">
-              <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-primary via-secondary to-warning" />
-              <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Total Duration</div>
-              <div className="text-3xl font-black font-display text-foreground">23:00</div>
-            </SiqCard>
-          </div>
 
-          {/* Recommended Next Step Badge */}
-          <div className="flex items-center gap-2 mb-8 px-4 py-3 rounded-xl bg-secondary/5 border border-secondary/20">
-            <Zap size={16} className="text-secondary shrink-0" />
-            <span className="text-sm text-foreground"><strong className="text-secondary">Recommended:</strong> Supervised practice on 5–10 additional standard cases. Focus drills on gallbladder dissection phase.</span>
-          </div>
+              {/* Gradient section divider */}
+              <div className="gradient-line mb-8" />
 
-          {/* Gradient section divider */}
-          <div className="gradient-line mb-8" />
+              {/* 3. Tabs */}
+              <Tabs defaultValue="scorecard" className="w-full">
+                <TabsList className="w-full grid grid-cols-4 mb-8 bg-card rounded-xl p-1.5 h-auto border border-border shadow-soft">
+                  <TabsTrigger value="scorecard" className="text-xs font-bold py-3 rounded-lg data-[state=active]:bg-primary/5 data-[state=active]:text-primary data-[state=active]:shadow-soft data-[state=active]:gradient-underline gap-1.5 transition-all">
+                    <Layers size={14} /> Scorecard
+                  </TabsTrigger>
+                  <TabsTrigger value="timeline" className="text-xs font-bold py-3 rounded-lg data-[state=active]:bg-primary/5 data-[state=active]:text-primary data-[state=active]:shadow-soft data-[state=active]:gradient-underline gap-1.5 transition-all">
+                    <Clock size={14} /> Timeline
+                  </TabsTrigger>
+                  <TabsTrigger value="keyframes" className="text-xs font-bold py-3 rounded-lg data-[state=active]:bg-primary/5 data-[state=active]:text-primary data-[state=active]:shadow-soft data-[state=active]:gradient-underline gap-1.5 transition-all">
+                    <Image size={14} /> Frames
+                  </TabsTrigger>
+                  <TabsTrigger value="feedback" className="text-xs font-bold py-3 rounded-lg data-[state=active]:bg-primary/5 data-[state=active]:text-primary data-[state=active]:shadow-soft data-[state=active]:gradient-underline gap-1.5 transition-all">
+                    <MessageSquare size={14} /> Feedback
+                  </TabsTrigger>
+                </TabsList>
 
-          {/* 3. Tabs */}
-          <Tabs defaultValue="scorecard" className="w-full">
-            <TabsList className="w-full grid grid-cols-4 mb-8 bg-card rounded-xl p-1.5 h-auto border border-border shadow-soft">
-              <TabsTrigger value="scorecard" className="text-xs font-bold py-3 rounded-lg data-[state=active]:bg-primary/5 data-[state=active]:text-primary data-[state=active]:shadow-soft data-[state=active]:gradient-underline gap-1.5 transition-all">
-                <Layers size={14} /> Scorecard
-              </TabsTrigger>
-              <TabsTrigger value="timeline" className="text-xs font-bold py-3 rounded-lg data-[state=active]:bg-primary/5 data-[state=active]:text-primary data-[state=active]:shadow-soft data-[state=active]:gradient-underline gap-1.5 transition-all">
-                <Clock size={14} /> Timeline
-              </TabsTrigger>
-              <TabsTrigger value="keyframes" className="text-xs font-bold py-3 rounded-lg data-[state=active]:bg-primary/5 data-[state=active]:text-primary data-[state=active]:shadow-soft data-[state=active]:gradient-underline gap-1.5 transition-all">
-                <Image size={14} /> Frames
-              </TabsTrigger>
-              <TabsTrigger value="feedback" className="text-xs font-bold py-3 rounded-lg data-[state=active]:bg-primary/5 data-[state=active]:text-primary data-[state=active]:shadow-soft data-[state=active]:gradient-underline gap-1.5 transition-all">
-                <MessageSquare size={14} /> Feedback
-              </TabsTrigger>
-            </TabsList>
+                {/* === SCORECARD TAB === */}
+                <TabsContent value="scorecard">
+                  {/* Table header */}
+                  <div className="rounded-xl border border-border bg-card shadow-card overflow-hidden">
+                    <div className="hidden md:grid grid-cols-[2.5fr_1fr_1fr_1fr_1fr_0.8fr_2fr] gap-2 px-5 py-3 bg-accent/50 border-b border-border text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                      <span>Phase</span>
+                      <span>Score</span>
+                      <span>Tissue</span>
+                      <span>Clarity</span>
+                      <span>Control</span>
+                      <span>Duration</span>
+                      <span>Key Insight</span>
+                    </div>
 
-            {/* === SCORECARD TAB === */}
-            <TabsContent value="scorecard">
-              {/* Table header */}
-              <div className="rounded-xl border border-border bg-card shadow-card overflow-hidden">
-                <div className="hidden md:grid grid-cols-[2.5fr_1fr_1fr_1fr_1fr_0.8fr_2fr] gap-2 px-5 py-3 bg-accent/50 border-b border-border text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-                  <span>Phase</span>
-                  <span>Score</span>
-                  <span>Tissue</span>
-                  <span>Clarity</span>
-                  <span>Control</span>
-                  <span>Duration</span>
-                  <span>Key Insight</span>
-                </div>
-
-                {phases.map((phase) => {
-                  const isExpanded = expandedPhases.includes(phase.id);
-                  return (
-                    <div key={phase.id}>
-                      {/* Phase row */}
-                      <button
-                        onClick={() => togglePhase(phase.id)}
-                        className={`w-full text-left transition-colors hover:bg-accent/30 ${isExpanded ? 'bg-accent/20' : ''}`}
-                      >
-                        {/* Desktop: table row */}
-                        <div className="hidden md:grid grid-cols-[2.5fr_1fr_1fr_1fr_1fr_0.8fr_2fr] gap-2 px-5 py-3.5 items-center border-b border-border/40">
-                          <div className="flex items-center gap-3">
-                            <div className="gradient-border-left pl-2">
-                              <span className="font-display font-bold text-secondary text-xs">{phase.id}</span>
-                            </div>
-                            <span className="font-semibold text-sm text-foreground truncate">{phase.name}</span>
-                            <StatusBadge status={phase.status} />
-                          </div>
-                          <span className={`font-display font-black text-lg ${scoreColor(phase.score)}`}>{phase.score}</span>
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <span className={`text-xs font-bold font-display ${scoreColor(phase.rubrics[0].score)} ${scoreBg(phase.rubrics[0].score)} px-2 py-1 rounded-md text-center`}>
-                                {phase.rubrics[0].score}
-                              </span>
-                            </TooltipTrigger>
-                            <TooltipContent><p>Tissue Handling: {phase.rubrics[0].score}/{phase.rubrics[0].maxScore}</p></TooltipContent>
-                          </Tooltip>
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <span className={`text-xs font-bold font-display ${scoreColor(phase.rubrics[1].score)} ${scoreBg(phase.rubrics[1].score)} px-2 py-1 rounded-md text-center`}>
-                                {phase.rubrics[1].score}
-                              </span>
-                            </TooltipTrigger>
-                            <TooltipContent><p>Field Clarity: {phase.rubrics[1].score}/{phase.rubrics[1].maxScore}</p></TooltipContent>
-                          </Tooltip>
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <span className={`text-xs font-bold font-display ${scoreColor(phase.rubrics[2].score)} ${scoreBg(phase.rubrics[2].score)} px-2 py-1 rounded-md text-center`}>
-                                {phase.rubrics[2].score}
-                              </span>
-                            </TooltipTrigger>
-                            <TooltipContent><p>Instrument Control: {phase.rubrics[2].score}/{phase.rubrics[2].maxScore}</p></TooltipContent>
-                          </Tooltip>
-                          <span className="text-xs font-medium text-muted-foreground font-display">{phase.duration}</span>
-                          <span className="text-xs text-muted-foreground truncate leading-relaxed">{phase.observation}</span>
-                        </div>
-
-                        {/* Mobile: card-style row */}
-                        <div className="md:hidden px-5 py-4 border-b border-border/40">
-                          <div className="flex items-center gap-3 mb-2">
-                            <span className="font-display font-bold text-secondary text-xs shrink-0">{phase.id}</span>
-                            <span className="font-semibold text-sm text-foreground flex-1 truncate">{phase.name}</span>
-                            <span className={`font-display font-black text-lg ${scoreColor(phase.score)}`}>{phase.score}</span>
-                            <StatusBadge status={phase.status} />
-                          </div>
-                          <div className="grid grid-cols-3 gap-2 mb-2">
-                            {phase.rubrics.map((r, i) => (
-                              <div key={i} className="flex items-center justify-between text-[11px]">
-                                <span className="text-muted-foreground truncate">{r.label.split(' ')[0]}</span>
-                                <span className={`font-bold font-display ${scoreColor(r.score)}`}>{r.score}</span>
+                    {phases.map((phase) => {
+                      const isExpanded = expandedPhases.includes(phase.id);
+                      return (
+                        <div key={phase.id}>
+                          {/* Phase row */}
+                          <button
+                            onClick={() => togglePhase(phase.id)}
+                            className={`w-full text-left transition-colors hover:bg-accent/30 ${isExpanded ? 'bg-accent/20' : ''}`}
+                          >
+                            {/* Desktop: table row */}
+                            <div className="hidden md:grid grid-cols-[2.5fr_1fr_1fr_1fr_1fr_0.8fr_2fr] gap-2 px-5 py-3.5 items-center border-b border-border/40">
+                              <div className="flex items-center gap-3">
+                                <div className="gradient-border-left pl-2">
+                                  <span className="font-display font-bold text-secondary text-xs">{phase.id}</span>
+                                </div>
+                                <span className="font-semibold text-sm text-foreground truncate">{phase.name}</span>
+                                <StatusBadge status={phase.status} />
                               </div>
-                            ))}
-                          </div>
-                          <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
-                            <Clock size={11} />
-                            <span>{phase.duration}</span>
-                            <span className="mx-1">·</span>
-                            <span className="truncate flex-1">{phase.observation}</span>
-                          </div>
-                        </div>
-                      </button>
+                              <span className={`font-display font-black text-lg ${scoreColor(phase.score)}`}>{phase.score}</span>
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <span className={`text-xs font-bold font-display ${scoreColor(phase.rubrics[0].score)} ${scoreBg(phase.rubrics[0].score)} px-2 py-1 rounded-md text-center`}>
+                                    {phase.rubrics[0].score}
+                                  </span>
+                                </TooltipTrigger>
+                                <TooltipContent><p>Tissue Handling: {phase.rubrics[0].score}/{phase.rubrics[0].maxScore}</p></TooltipContent>
+                              </Tooltip>
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <span className={`text-xs font-bold font-display ${scoreColor(phase.rubrics[1].score)} ${scoreBg(phase.rubrics[1].score)} px-2 py-1 rounded-md text-center`}>
+                                    {phase.rubrics[1].score}
+                                  </span>
+                                </TooltipTrigger>
+                                <TooltipContent><p>Field Clarity: {phase.rubrics[1].score}/{phase.rubrics[1].maxScore}</p></TooltipContent>
+                              </Tooltip>
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <span className={`text-xs font-bold font-display ${scoreColor(phase.rubrics[2].score)} ${scoreBg(phase.rubrics[2].score)} px-2 py-1 rounded-md text-center`}>
+                                    {phase.rubrics[2].score}
+                                  </span>
+                                </TooltipTrigger>
+                                <TooltipContent><p>Instrument Control: {phase.rubrics[2].score}/{phase.rubrics[2].maxScore}</p></TooltipContent>
+                              </Tooltip>
+                              <span className="text-xs font-medium text-muted-foreground font-display">{phase.duration}</span>
+                              <span className="text-xs text-muted-foreground truncate leading-relaxed">{phase.observation}</span>
+                            </div>
 
-                      {/* Expanded detail — slides down inline */}
-                      {isExpanded && (
-                        <div className="px-5 py-5 bg-accent/10 border-b border-border/40 space-y-4 animate-accordion-down">
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div className="gradient-border-left pl-4">
-                              <p className="text-[10px] font-bold text-secondary uppercase tracking-wider mb-1.5">AI Observation</p>
-                              <p className="text-sm text-foreground leading-relaxed">{phase.observation}</p>
+                            {/* Mobile: card-style row */}
+                            <div className="md:hidden px-5 py-4 border-b border-border/40">
+                              <div className="flex items-center gap-3 mb-2">
+                                <span className="font-display font-bold text-secondary text-xs shrink-0">{phase.id}</span>
+                                <span className="font-semibold text-sm text-foreground flex-1 truncate">{phase.name}</span>
+                                <span className={`font-display font-black text-lg ${scoreColor(phase.score)}`}>{phase.score}</span>
+                                <StatusBadge status={phase.status} />
+                              </div>
+                              <div className="grid grid-cols-3 gap-2 mb-2">
+                                {phase.rubrics.map((r, i) => (
+                                  <div key={i} className="flex items-center justify-between text-[11px]">
+                                    <span className="text-muted-foreground truncate">{r.label.split(' ')[0]}</span>
+                                    <span className={`font-bold font-display ${scoreColor(r.score)}`}>{r.score}</span>
+                                  </div>
+                                ))}
+                              </div>
+                              <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
+                                <Clock size={11} />
+                                <span>{phase.duration}</span>
+                                <span className="mx-1">·</span>
+                                <span className="truncate flex-1">{phase.observation}</span>
+                              </div>
                             </div>
-                            <div className="border-l-2 border-primary/30 pl-4">
-                              <p className="text-[10px] font-bold text-primary uppercase tracking-wider mb-1.5">Rubric Assessment</p>
-                              <p className="text-sm text-muted-foreground leading-relaxed">{phase.rubricAssessment}</p>
-                            </div>
-                          </div>
-                          {phase.additionalNotes && (
-                            <div className="border-l-2 border-warning/40 pl-4">
-                              <p className="text-[10px] font-bold text-warning uppercase tracking-wider mb-1.5">Additional Notes</p>
-                              <p className="text-sm text-foreground leading-relaxed">{phase.additionalNotes}</p>
+                          </button>
+
+                          {/* Expanded detail — slides down inline */}
+                          {isExpanded && (
+                            <div className="px-5 py-5 bg-accent/10 border-b border-border/40 space-y-4 animate-accordion-down">
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="gradient-border-left pl-4">
+                                  <p className="text-[10px] font-bold text-secondary uppercase tracking-wider mb-1.5">AI Observation</p>
+                                  <p className="text-sm text-foreground leading-relaxed">{phase.observation}</p>
+                                </div>
+                                <div className="border-l-2 border-primary/30 pl-4">
+                                  <p className="text-[10px] font-bold text-primary uppercase tracking-wider mb-1.5">Rubric Assessment</p>
+                                  <p className="text-sm text-muted-foreground leading-relaxed">{phase.rubricAssessment}</p>
+                                </div>
+                              </div>
+                              {phase.additionalNotes && (
+                                <div className="border-l-2 border-warning/40 pl-4">
+                                  <p className="text-[10px] font-bold text-warning uppercase tracking-wider mb-1.5">Additional Notes</p>
+                                  <p className="text-sm text-foreground leading-relaxed">{phase.additionalNotes}</p>
+                                </div>
+                              )}
+                              {/* Timing detail */}
+                              <div className="flex items-center gap-4 text-xs text-muted-foreground pt-1 border-t border-border/30">
+                                <span><strong className="text-foreground">Start:</strong> {phase.startTime}</span>
+                                <span><strong className="text-foreground">End:</strong> {phase.endTime}</span>
+                                <span><strong className="text-foreground">Duration:</strong> {phase.duration}</span>
+                                <span><strong className="text-foreground">Frames Analyzed:</strong> {phase.framesAnalyzed}</span>
+                              </div>
                             </div>
                           )}
-                          {/* Timing detail */}
-                          <div className="flex items-center gap-4 text-xs text-muted-foreground pt-1 border-t border-border/30">
-                            <span><strong className="text-foreground">Start:</strong> {phase.startTime}</span>
-                            <span><strong className="text-foreground">End:</strong> {phase.endTime}</span>
-                            <span><strong className="text-foreground">Duration:</strong> {phase.duration}</span>
-                            <span><strong className="text-foreground">Frames Analyzed:</strong> {phase.framesAnalyzed}</span>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            </TabsContent>
-
-            {/* === TIMELINE TAB === */}
-            <TabsContent value="timeline">
-              <SiqCard className="overflow-x-auto">
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground border-b border-border">
-                      <th className="text-left py-3 pr-3">Phase</th>
-                      <th className="text-left py-3 pr-3">Name</th>
-                      <th className="text-left py-3 pr-3">Duration</th>
-                      <th className="text-left py-3">Status</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {timingData.map((t) => (
-                      <tr key={t.phase} className="border-b border-border/30 last:border-0 hover:bg-accent/20 transition-colors">
-                        <td className="py-3 pr-3 font-bold text-secondary text-xs">{t.phase}</td>
-                        <td className="py-3 pr-3 text-foreground">{t.name}</td>
-                        <td className="py-3 pr-3 font-medium font-display text-foreground">{t.duration}</td>
-                        <td className="py-3 text-success font-medium text-xs">✓ {t.status}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-
-                {/* Gradient bar visualization */}
-                <div className="mt-6 pt-5 border-t border-border/30">
-                  <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-4">Phase Duration</p>
-                  <div className="space-y-2.5">
-                    {phases.map((p) => {
-                      const [min, sec] = p.duration.split(':').map(Number);
-                      const totalSec = min * 60 + sec;
-                      const maxSec = 7 * 60 + 15;
-                      const pct = (totalSec / maxSec) * 100;
-                      return (
-                        <div key={p.id} className="flex items-center gap-3">
-                          <span className="text-[10px] text-muted-foreground w-6 shrink-0 font-bold">{p.id}</span>
-                          <div className="flex-1 h-5 bg-accent/60 rounded-full overflow-hidden">
-                            <div
-                              className={`h-full rounded-full transition-all ${p.status === 'Flagged' ? 'bar-gradient-warn' : 'bar-gradient'}`}
-                              style={{ width: `${pct}%` }}
-                            />
-                          </div>
-                          <span className="text-[10px] text-muted-foreground w-10 text-right font-display font-medium">{p.duration}</span>
                         </div>
                       );
                     })}
                   </div>
-                </div>
-              </SiqCard>
-            </TabsContent>
+                </TabsContent>
 
-            {/* === KEY FRAMES TAB === */}
-            <TabsContent value="keyframes">
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-5">
-                {keyFrames.map((frame) => (
-                  <div key={frame.id} className="rounded-xl overflow-hidden border border-border bg-card shadow-card hover:shadow-lg hover:border-secondary/30 transition-all group">
-                    <div className="aspect-video bg-accent/60 flex items-center justify-center relative">
-                      <Eye size={24} className="text-muted-foreground/30 group-hover:text-secondary/50 transition-colors" />
-                      {/* Gradient hover accent */}
-                      <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-primary via-secondary to-warning opacity-0 group-hover:opacity-100 transition-opacity" />
+                {/* === TIMELINE TAB === */}
+                <TabsContent value="timeline">
+                  <SiqCard className="overflow-x-auto">
+                    <table className="w-full text-sm">
+                      <thead>
+                        <tr className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground border-b border-border">
+                          <th className="text-left py-3 pr-3">Phase</th>
+                          <th className="text-left py-3 pr-3">Name</th>
+                          <th className="text-left py-3 pr-3">Duration</th>
+                          <th className="text-left py-3">Status</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {timingData.map((t) => (
+                          <tr key={t.phase} className="border-b border-border/30 last:border-0 hover:bg-accent/20 transition-colors">
+                            <td className="py-3 pr-3 font-bold text-secondary text-xs">{t.phase}</td>
+                            <td className="py-3 pr-3 text-foreground">{t.name}</td>
+                            <td className="py-3 pr-3 font-medium font-display text-foreground">{t.duration}</td>
+                            <td className="py-3 text-success font-medium text-xs">✓ {t.status}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+
+                    {/* Gradient bar visualization */}
+                    <div className="mt-6 pt-5 border-t border-border/30">
+                      <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-4">Phase Duration</p>
+                      <div className="space-y-2.5">
+                        {phases.map((p) => {
+                          const [min, sec] = p.duration.split(':').map(Number);
+                          const totalSec = min * 60 + sec;
+                          const maxSec = 7 * 60 + 15;
+                          const pct = (totalSec / maxSec) * 100;
+                          return (
+                            <div key={p.id} className="flex items-center gap-3">
+                              <span className="text-[10px] text-muted-foreground w-6 shrink-0 font-bold">{p.id}</span>
+                              <div className="flex-1 h-5 bg-accent/60 rounded-full overflow-hidden">
+                                <div
+                                  className={`h-full rounded-full transition-all ${p.status === 'Flagged' ? 'bar-gradient-warn' : 'bar-gradient'}`}
+                                  style={{ width: `${pct}%` }}
+                                />
+                              </div>
+                              <span className="text-[10px] text-muted-foreground w-10 text-right font-display font-medium">{p.duration}</span>
+                            </div>
+                          );
+                        })}
+                      </div>
                     </div>
-                    <div className="p-3.5 flex items-center justify-between">
-                      <span className="text-xs font-semibold text-foreground">{frame.label}</span>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <span className={`text-xs font-bold font-display px-2 py-0.5 rounded-md ${frame.confidence >= 80 ? 'text-success bg-success/10' : frame.confidence >= 60 ? 'text-warning bg-warning/10' : 'text-destructive bg-destructive/10'}`}>
-                            {frame.confidence}%
-                          </span>
-                        </TooltipTrigger>
-                        <TooltipContent><p>AI Confidence: {frame.confidence}%</p></TooltipContent>
-                      </Tooltip>
-                    </div>
+                  </SiqCard>
+                </TabsContent>
+
+                {/* === KEY FRAMES TAB === */}
+                <TabsContent value="keyframes">
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-5">
+                    {keyFrames.map((frame) => (
+                      <div key={frame.id} className="rounded-xl overflow-hidden border border-border bg-card shadow-card hover:shadow-lg hover:border-secondary/30 transition-all group">
+                        <div className="aspect-video bg-accent/60 flex items-center justify-center relative">
+                          <Eye size={24} className="text-muted-foreground/30 group-hover:text-secondary/50 transition-colors" />
+                          {/* Gradient hover accent */}
+                          <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-primary via-secondary to-warning opacity-0 group-hover:opacity-100 transition-opacity" />
+                        </div>
+                        <div className="p-3.5 flex items-center justify-between">
+                          <span className="text-xs font-semibold text-foreground">{frame.label}</span>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <span className={`text-xs font-bold font-display px-2 py-0.5 rounded-md ${frame.confidence >= 80 ? 'text-success bg-success/10' : frame.confidence >= 60 ? 'text-warning bg-warning/10' : 'text-destructive bg-destructive/10'}`}>
+                                {frame.confidence}%
+                              </span>
+                            </TooltipTrigger>
+                            <TooltipContent><p>AI Confidence: {frame.confidence}%</p></TooltipContent>
+                          </Tooltip>
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                ))}
+                </TabsContent>
+
+                {/* === FEEDBACK TAB === */}
+                <TabsContent value="feedback">
+                  <FeedbackSection />
+                </TabsContent>
+              </Tabs>
+
+              {/* Gradient section divider */}
+              <div className="gradient-line mt-10 mb-8" />
+
+              {/* AI-Assisted Surgical Report */}
+              <AIReport />
+
+              {/* Gradient section divider */}
+              <div className="gradient-line mt-8 mb-8" />
+
+              {/* Action Buttons */}
+              <div className="grid grid-cols-2 gap-5 pb-8">
+                <button onClick={() => navigate('/new-submission')} className="py-3.5 border-2 border-primary text-primary rounded-xl font-bold text-sm hover:bg-primary/5 active:scale-[0.98] transition-all">
+                  Submit Another
+                </button>
+                <button className="py-3.5 bg-primary text-primary-foreground rounded-xl font-bold text-sm hover:opacity-90 active:scale-[0.98] transition-all shadow-soft">
+                  Share Report
+                </button>
               </div>
-            </TabsContent>
+            </div>
 
-            {/* === FEEDBACK TAB === */}
-            <TabsContent value="feedback">
-              <FeedbackSection />
-            </TabsContent>
-          </Tabs>
-
-          {/* Gradient section divider */}
-          <div className="gradient-line mt-10 mb-8" />
-
-          {/* Action Buttons */}
-          <div className="grid grid-cols-2 gap-5 pb-8">
-            <button onClick={() => navigate('/new-submission')} className="py-3.5 border-2 border-primary text-primary rounded-xl font-bold text-sm hover:bg-primary/5 active:scale-[0.98] transition-all">
-              Submit Another
-            </button>
-            <button className="py-3.5 bg-primary text-primary-foreground rounded-xl font-bold text-sm hover:opacity-90 active:scale-[0.98] transition-all shadow-soft">
-              Share Report
-            </button>
+            {/* Right Sidebar — hidden on small screens */}
+            <div className="hidden lg:block">
+              <div className="sticky top-20">
+                <AIInsightsSidebar />
+              </div>
+            </div>
           </div>
         </div>
       </div>
