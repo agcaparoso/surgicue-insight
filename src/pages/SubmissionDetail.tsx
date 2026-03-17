@@ -574,7 +574,7 @@ const SubmissionDetail = () => {
                     <span className="text-3xl font-black font-display" style={titleStyle}>{phases.length}</span>
                   </div>
                 </div>
-                <div className="group relative rounded-xl border border-border/50 bg-card/70 backdrop-blur-sm shadow-card overflow-hidden transition-all hover:shadow-lg hover:border-secondary/30 hover:-translate-y-0.5">
+                <div className="group relative rounded-xl border border-border/40 bg-card shadow-card overflow-hidden transition-all hover:shadow-lg hover:border-secondary/30 hover:-translate-y-0.5">
                   <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-primary via-secondary to-warning" />
                   <div className="p-5">
                     <div className="flex items-center gap-2.5 mb-3">
