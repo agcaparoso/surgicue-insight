@@ -5,6 +5,13 @@ import { SiqCard, StatusBadge } from '@/components/SiqComponents';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { TooltipProvider } from '@/components/ui/tooltip';
 
+import ElenaGood3 from '@/assets/Elena_Good3.png';
+import ElenaGood2 from '@/assets/Elena_Good2.png';
+import ElenaGood1 from '@/assets/Elena_Good1.png';
+import MarcusOkay3 from '@/assets/Marcus_Okay3.png';
+import MarcusGood1 from '@/assets/Marcus_Good1.png';
+import MarcusBad2 from '@/assets/Marcus_Bad2.png';
+
 // --- Data ---
 
 interface Phase {
@@ -154,12 +161,12 @@ const phases: Phase[] = [
 ];
 
 const keyFrames = [
-  { id: 1, label: 'Port Placement', confidence: 94, caption: 'Systematic trocar positioning with standard four-port technique' },
-  { id: 2, label: 'CVS Achieved', confidence: 78, caption: 'Critical View of Safety achieved with moderate confidence' },
-  { id: 3, label: 'Clip Application', confidence: 96, caption: 'Proper clip placement observed — perpendicular orientation confirmed' },
-  { id: 4, label: 'Dissection Plane', confidence: 62, caption: 'Dissection plane slightly off — proximity to liver bed detected' },
-  { id: 5, label: 'Bag Insertion', confidence: 91, caption: 'Clean bag insertion with controlled technique, no spillage' },
-  { id: 6, label: 'Final Hemostasis', confidence: 88, caption: 'Adequate hemostasis confirmed at gallbladder fossa' },
+  { id: 1, label: 'Port Placement', confidence: 94, caption: 'Systematic trocar positioning with standard four-port technique', image: ElenaGood1 },
+  { id: 2, label: 'CVS Achieved', confidence: 78, caption: 'Critical View of Safety achieved with moderate confidence', image: ElenaGood2 },
+  { id: 3, label: 'Clip Application', confidence: 96, caption: 'Proper clip placement observed — perpendicular orientation confirmed', image: ElenaGood3 },
+  { id: 4, label: 'Dissection Plane', confidence: 62, caption: 'Dissection plane slightly off — proximity to liver bed detected', image: MarcusBad2 },
+  { id: 5, label: 'Bag Insertion', confidence: 91, caption: 'Clean bag insertion with controlled technique, no spillage', image: MarcusGood1 },
+  { id: 6, label: 'Final Hemostasis', confidence: 88, caption: 'Adequate hemostasis confirmed at gallbladder fossa', image: MarcusOkay3 },
 ];
 
 // --- Helpers ---
@@ -406,23 +413,12 @@ const SubmissionDetail = () => {
           </div>
 
           {/* Summary Cards */}
-          <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
             {[
               { icon: Trophy, label: 'Overall Score', value: <><span className="text-3xl font-black font-display" style={titleStyle}>{overallScore}</span><span className="text-sm font-medium text-muted-foreground ml-1">/ 5</span></> },
               { icon: Award, label: 'Competency', value: <><span className="text-lg font-bold font-display" style={titleStyle}>Intermediate</span><div className="mt-1"><span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold bg-secondary/10 text-secondary border border-secondary/20"><Shield size={10} /> Level 3</span></div></> },
               { icon: GitBranch, label: 'Phases Detected', value: <span className="text-3xl font-black font-display" style={titleStyle}>{phases.length}</span> },
               { icon: Timer, label: 'Total Duration', value: <span className="text-3xl font-black font-display" style={titleStyle}>23:00</span> },
-              { icon: Brain, label: 'AI Report', value: (
-                <button
-                  onClick={() => setShowReport(true)}
-                  className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold text-white active:scale-[0.98] transition-all shadow-soft"
-                  style={{ background: buttonGradient }}
-                  onMouseEnter={(e) => (e.currentTarget.style.background = buttonGradientHover)}
-                  onMouseLeave={(e) => (e.currentTarget.style.background = buttonGradient)}
-                >
-                  <Brain size={14} /> Generate Report
-                </button>
-              )},
             ].map((card, i) => (
               <div key={i} className="group relative rounded-xl border border-border/40 bg-card shadow-card overflow-hidden transition-all hover:shadow-lg hover:border-secondary/30 hover:-translate-y-0.5">
                 <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-primary via-secondary to-warning" />
@@ -439,6 +435,92 @@ const SubmissionDetail = () => {
             ))}
           </div>
 
+          {/* Full-width Generate Report bar */}
+          <button
+            onClick={() => setShowReport(true)}
+            className="w-full flex items-center justify-center gap-3 px-6 py-4 mb-8 rounded-xl text-sm font-bold text-white active:scale-[0.99] transition-all shadow-card border border-border/20 hover:shadow-lg"
+            style={{ background: buttonGradient }}
+            onMouseEnter={(e) => (e.currentTarget.style.background = buttonGradientHover)}
+            onMouseLeave={(e) => (e.currentTarget.style.background = buttonGradient)}
+          >
+            <Brain size={18} />
+            AI-Assisted Surgical Report — Generate Report
+          </button>
+
+          {/* Feedback Section (outside tabs) */}
+          <div className="space-y-5 mb-8">
+            <div className="rounded-xl border border-border/40 bg-card shadow-card overflow-hidden">
+              <div className="h-[3px] bg-gradient-to-r from-primary via-secondary to-warning" />
+              <div className="p-5">
+                <div className="flex items-center gap-2.5 mb-4">
+                  <div className="w-10 h-10 rounded-xl bg-secondary/10 flex items-center justify-center">
+                    <Activity size={20} className="text-secondary" />
+                  </div>
+                  <div>
+                    <h3 className="text-xs font-bold text-foreground">Overall Assessment</h3>
+                    <p className="text-[10px] text-muted-foreground">AI-evaluated performance summary</p>
+                  </div>
+                  <div className="ml-auto flex items-baseline gap-1">
+                    <span className="text-2xl font-black font-display text-foreground">3.7</span>
+                    <span className="text-xs text-muted-foreground">/ 5.0</span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-secondary/10 text-secondary border border-secondary/20">
+                    <Shield size={10} /> Intermediate — Level 3
+                  </span>
+                  <span className="text-[10px] text-muted-foreground">Ready for Supervised Practice</span>
+                </div>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  Strong performance across 5 of 7 phases. 2 phases flagged for targeted improvement.
+                </p>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="rounded-xl border border-success/20 bg-card shadow-soft overflow-hidden">
+                <div className="h-[2px] bg-success" />
+                <div className="p-4">
+                  <div className="flex items-center gap-2.5 mb-3">
+                    <div className="w-8 h-8 rounded-lg bg-success/10 flex items-center justify-center">
+                      <CheckCircle2 size={16} className="text-success" />
+                    </div>
+                    <h4 className="text-xs font-bold text-foreground">Top Strength</h4>
+                  </div>
+                  <p className="text-xs font-bold text-success mb-1">Clipping & Cutting — 4.5/5</p>
+                  <p className="text-xs text-muted-foreground leading-relaxed">Expert-level clip application with precise perpendicular orientation</p>
+                </div>
+              </div>
+              <div className="rounded-xl border border-warning/20 bg-card shadow-soft overflow-hidden">
+                <div className="h-[2px] bg-warning" />
+                <div className="p-4">
+                  <div className="flex items-center gap-2.5 mb-3">
+                    <div className="w-8 h-8 rounded-lg bg-warning/10 flex items-center justify-center">
+                      <AlertTriangle size={16} className="text-warning" />
+                    </div>
+                    <h4 className="text-xs font-bold text-foreground">Top Improvement Area</h4>
+                  </div>
+                  <p className="text-xs font-bold text-warning mb-1">GB Dissection — 2.8/5</p>
+                  <p className="text-xs text-muted-foreground leading-relaxed">Plane identification needs work, excess thermal application noted</p>
+                </div>
+              </div>
+            </div>
+            <div className="rounded-xl border border-secondary/20 bg-card shadow-soft overflow-hidden">
+              <div className="gradient-border-left">
+                <div className="p-4">
+                  <div className="flex items-center gap-2.5 mb-3">
+                    <div className="w-8 h-8 rounded-lg bg-secondary/10 flex items-center justify-center">
+                      <Zap size={16} className="text-secondary" />
+                    </div>
+                    <h4 className="text-xs font-bold text-foreground">Recommendation</h4>
+                  </div>
+                  <p className="text-xs text-foreground leading-relaxed">
+                    Supervised practice on 5–10 additional standard cholecystectomy cases. Focus on dissection plane identification and controlled thermal energy usage.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* Recommended Next Step */}
           <div className="flex items-center gap-2 mb-8 px-4 py-3 rounded-xl bg-secondary/5 border border-secondary/20 backdrop-blur-sm">
             <Zap size={16} className="text-secondary shrink-0" />
@@ -447,9 +529,9 @@ const SubmissionDetail = () => {
 
           <div className="gradient-line mb-8" />
 
-          {/* Tab Navigation */}
+          {/* Tab Navigation — 3 tabs only */}
           <Tabs defaultValue="scorecard" className="w-full">
-            <TabsList className="w-full grid grid-cols-4 mb-8 bg-card rounded-xl p-1.5 h-auto border border-border/40 shadow-soft">
+            <TabsList className="w-full grid grid-cols-3 mb-8 bg-card rounded-xl p-1.5 h-auto border border-border/40 shadow-soft">
               <TabsTrigger value="scorecard" className="text-xs font-bold py-3 rounded-lg data-[state=active]:bg-primary/5 data-[state=active]:text-primary data-[state=active]:shadow-soft gap-1.5 transition-all">
                 <Layers size={14} /> Scorecard
               </TabsTrigger>
@@ -458,9 +540,6 @@ const SubmissionDetail = () => {
               </TabsTrigger>
               <TabsTrigger value="keyframes" className="text-xs font-bold py-3 rounded-lg data-[state=active]:bg-primary/5 data-[state=active]:text-primary data-[state=active]:shadow-soft gap-1.5 transition-all">
                 <Image size={14} /> Key Frames
-              </TabsTrigger>
-              <TabsTrigger value="feedback" className="text-xs font-bold py-3 rounded-lg data-[state=active]:bg-primary/5 data-[state=active]:text-primary data-[state=active]:shadow-soft gap-1.5 transition-all">
-                <MessageSquare size={14} /> Feedback
               </TabsTrigger>
             </TabsList>
 
@@ -616,8 +695,8 @@ const SubmissionDetail = () => {
               <div className="grid grid-cols-2 md:grid-cols-3 gap-5">
                 {keyFrames.map((frame) => (
                   <div key={frame.id} className="rounded-xl overflow-hidden border border-border/40 bg-card shadow-card hover:shadow-lg hover:border-secondary/30 transition-all group">
-                    <div className="aspect-video bg-accent/60 flex items-center justify-center relative">
-                      <Eye size={24} className="text-muted-foreground/30 group-hover:text-secondary/50 transition-colors" />
+                    <div className="aspect-video bg-accent/60 relative overflow-hidden">
+                      <img src={frame.image} alt={frame.label} className="w-full h-full object-cover" />
                       <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-primary via-secondary to-warning opacity-0 group-hover:opacity-100 transition-opacity" />
                     </div>
                     <div className="p-3.5 space-y-2">
@@ -631,82 +710,6 @@ const SubmissionDetail = () => {
                     </div>
                   </div>
                 ))}
-              </div>
-            </TabsContent>
-
-            {/* === FEEDBACK TAB === */}
-            <TabsContent value="feedback">
-              <div className="space-y-5">
-                <div className="rounded-xl border border-border/40 bg-card shadow-card overflow-hidden">
-                  <div className="h-[3px] bg-gradient-to-r from-primary via-secondary to-warning" />
-                  <div className="p-5">
-                    <div className="flex items-center gap-2.5 mb-4">
-                      <div className="w-10 h-10 rounded-xl bg-secondary/10 flex items-center justify-center">
-                        <Activity size={20} className="text-secondary" />
-                      </div>
-                      <div>
-                        <h3 className="text-xs font-bold text-foreground">Overall Assessment</h3>
-                        <p className="text-[10px] text-muted-foreground">AI-evaluated performance summary</p>
-                      </div>
-                      <div className="ml-auto flex items-baseline gap-1">
-                        <span className="text-2xl font-black font-display text-foreground">3.7</span>
-                        <span className="text-xs text-muted-foreground">/ 5.0</span>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2 mb-3">
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-secondary/10 text-secondary border border-secondary/20">
-                        <Shield size={10} /> Intermediate — Level 3
-                      </span>
-                      <span className="text-[10px] text-muted-foreground">Ready for Supervised Practice</span>
-                    </div>
-                    <p className="text-xs text-muted-foreground leading-relaxed">
-                      Strong performance across 5 of 7 phases. 2 phases flagged for targeted improvement.
-                    </p>
-                  </div>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="rounded-xl border border-success/20 bg-card shadow-soft overflow-hidden">
-                    <div className="h-[2px] bg-success" />
-                    <div className="p-4">
-                      <div className="flex items-center gap-2.5 mb-3">
-                        <div className="w-8 h-8 rounded-lg bg-success/10 flex items-center justify-center">
-                          <CheckCircle2 size={16} className="text-success" />
-                        </div>
-                        <h4 className="text-xs font-bold text-foreground">Top Strength</h4>
-                      </div>
-                      <p className="text-xs font-bold text-success mb-1">Clipping & Cutting — 4.5/5</p>
-                      <p className="text-xs text-muted-foreground leading-relaxed">Expert-level clip application with precise perpendicular orientation</p>
-                    </div>
-                  </div>
-                  <div className="rounded-xl border border-warning/20 bg-card shadow-soft overflow-hidden">
-                    <div className="h-[2px] bg-warning" />
-                    <div className="p-4">
-                      <div className="flex items-center gap-2.5 mb-3">
-                        <div className="w-8 h-8 rounded-lg bg-warning/10 flex items-center justify-center">
-                          <AlertTriangle size={16} className="text-warning" />
-                        </div>
-                        <h4 className="text-xs font-bold text-foreground">Top Improvement Area</h4>
-                      </div>
-                      <p className="text-xs font-bold text-warning mb-1">GB Dissection — 2.8/5</p>
-                      <p className="text-xs text-muted-foreground leading-relaxed">Plane identification needs work, excess thermal application noted</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="rounded-xl border border-secondary/20 bg-card shadow-soft overflow-hidden">
-                  <div className="gradient-border-left">
-                    <div className="p-4">
-                      <div className="flex items-center gap-2.5 mb-3">
-                        <div className="w-8 h-8 rounded-lg bg-secondary/10 flex items-center justify-center">
-                          <Zap size={16} className="text-secondary" />
-                        </div>
-                        <h4 className="text-xs font-bold text-foreground">Recommendation</h4>
-                      </div>
-                      <p className="text-xs text-foreground leading-relaxed">
-                        Supervised practice on 5–10 additional standard cholecystectomy cases. Focus on dissection plane identification and controlled thermal energy usage.
-                      </p>
-                    </div>
-                  </div>
-                </div>
               </div>
             </TabsContent>
           </Tabs>
