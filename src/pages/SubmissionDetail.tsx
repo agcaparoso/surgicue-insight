@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronDown, ChevronRight, Clock, Activity, Layers, Target, Eye, MessageSquare, Image, Search, User, TrendingUp, Shield, Zap, FileText, Loader2, Brain, ListChecks, StickyNote, CheckCircle2, AlertTriangle, XCircle, Award, ArrowUpRight, Crosshair } from 'lucide-react';
+import { ChevronDown, ChevronRight, Clock, Activity, Layers, Target, Eye, MessageSquare, Image, Search, User, TrendingUp, Shield, Zap, FileText, Loader2, Brain, ListChecks, StickyNote, CheckCircle2, AlertTriangle, XCircle, Award, ArrowUpRight, Crosshair, CalendarDays, Stethoscope } from 'lucide-react';
 import { SiqCard, StatusBadge } from '@/components/SiqComponents';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
@@ -174,6 +174,21 @@ const parseIdealRange = (range: string) => {
   return { min: durationToSec(parts[0]), max: durationToSec(parts[1]) };
 };
 
+// Shared styles matching landing page
+const gradientBg = {
+  background: 'linear-gradient(160deg, hsl(210 45% 90%) 0%, hsl(200 35% 93%) 30%, hsl(170 20% 94%) 50%, hsl(50 40% 92%) 75%, hsl(42 55% 88%) 100%)',
+};
+
+const titleStyle = {
+  background: 'linear-gradient(135deg, hsl(211 60% 28%) 0%, hsl(197 65% 45%) 40%, hsl(45 80% 55%) 100%)',
+  WebkitBackgroundClip: 'text',
+  WebkitTextFillColor: 'transparent',
+  backgroundClip: 'text',
+};
+
+const buttonGradient = 'linear-gradient(135deg, hsl(207 50% 52%), hsl(197 55% 48%))';
+const buttonGradientHover = 'linear-gradient(135deg, hsl(207 50% 58%), hsl(197 55% 54%))';
+
 // --- Sidebar with AI Insights + Report ---
 
 const AIInsightsSidebar = () => {
@@ -275,7 +290,7 @@ const AIInsightsSidebar = () => {
       {/* Gradient divider */}
       <div className="gradient-line" />
 
-      {/* AI-Assisted Surgical Report — now in sidebar */}
+      {/* AI-Assisted Surgical Report */}
       <div className="rounded-xl border border-border bg-card shadow-card overflow-hidden">
         <div className="h-[3px] bg-gradient-to-r from-primary via-secondary to-warning" />
         <div className="p-5">
@@ -289,7 +304,10 @@ const AIInsightsSidebar = () => {
               <p className="text-xs text-muted-foreground mb-4">Generate a structured AI-assisted surgical report powered by IBM Watsonx.ai.</p>
               <button
                 onClick={generateReport}
-                className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-primary text-primary-foreground text-xs font-bold hover:opacity-90 active:scale-[0.98] transition-all shadow-soft group"
+                className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-white active:scale-[0.98] transition-all shadow-soft group"
+                style={{ background: buttonGradient }}
+                onMouseEnter={(e) => (e.currentTarget.style.background = buttonGradientHover)}
+                onMouseLeave={(e) => (e.currentTarget.style.background = buttonGradient)}
               >
                 <Brain size={14} className="group-hover:scale-110 transition-transform" />
                 Generate Report
@@ -347,7 +365,7 @@ const AIInsightsSidebar = () => {
               </div>
               <button
                 onClick={generateReport}
-                className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg border border-border text-xs font-bold text-secondary hover:bg-accent/50 transition-colors"
+                className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-xl border border-border text-xs font-bold text-secondary hover:bg-accent/50 transition-colors"
               >
                 <Brain size={12} /> Regenerate Report
               </button>
@@ -358,7 +376,7 @@ const AIInsightsSidebar = () => {
 
       {/* Full-screen loading modal */}
       {showModal && (
-        <div className="fixed inset-0 z-[100] bg-background/95 backdrop-blur-sm flex flex-col items-center justify-center">
+        <div className="fixed inset-0 z-[100] backdrop-blur-sm flex flex-col items-center justify-center" style={{ background: 'hsla(210, 45%, 90%, 0.95)' }}>
           <div className="text-center space-y-6">
             <div className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-primary via-secondary to-warning flex items-center justify-center shadow-lg">
               <Brain size={28} className="text-primary-foreground animate-pulse" />
@@ -381,8 +399,6 @@ const AIInsightsSidebar = () => {
 const SubmissionDetail = () => {
   const navigate = useNavigate();
   const [expandedPhases, setExpandedPhases] = useState<string[]>([]);
-  const [selectedStudent] = useState('Dr. Sarah Chen');
-  const [selectedDate] = useState('March 15, 2026');
 
   const togglePhase = (id: string) => {
     setExpandedPhases(prev => prev.includes(id) ? prev.filter(p => p !== id) : [...prev, id]);
@@ -396,46 +412,80 @@ const SubmissionDetail = () => {
 
   return (
     <TooltipProvider>
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen relative" style={gradientBg}>
+        {/* Ambient glows matching landing page */}
+        <div className="absolute top-[-10%] left-[-5%] w-[500px] h-[500px] rounded-full opacity-30 blur-[120px] pointer-events-none" style={{ background: 'hsl(210 55% 72%)' }} />
+        <div className="absolute bottom-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full opacity-25 blur-[120px] pointer-events-none" style={{ background: 'hsl(42 65% 72%)' }} />
+
         {/* Top Bar */}
-        <header className="sticky top-0 z-50 h-14 bg-card/95 backdrop-blur-xl border-b border-border flex items-center justify-between px-6">
-          <h1 className="text-lg font-black font-display gradient-text tracking-tight">SurgicalIQ</h1>
+        <header className="sticky top-0 z-50 h-14 bg-card/80 backdrop-blur-xl border-b border-border/50 flex items-center justify-between px-6">
+          <h1
+            className="text-2xl font-black font-display tracking-tight pb-1"
+            style={titleStyle}
+          >
+            SurgicalIQ
+          </h1>
           <button onClick={() => navigate('/profile')} className="w-8 h-8 bg-accent rounded-full flex items-center justify-center border border-border hover:border-secondary/40 transition-colors">
             <User size={14} className="text-primary" />
           </button>
         </header>
 
         {/* Gradient accent line below header */}
-        <div className="gradient-line" />
+        <div className="h-[3px] bg-gradient-to-r from-primary via-secondary to-warning" />
 
-        <div className="max-w-[1400px] mx-auto px-6 py-8">
-          {/* 1. Filter Bar */}
-          <div className="flex flex-wrap items-center gap-3 mb-8">
-            <div className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-card border border-border text-sm shadow-soft">
-              <Activity size={14} className="text-secondary" />
-              <span className="font-semibold text-foreground">{selectedStudent}</span>
+        <div className="max-w-[1400px] mx-auto px-6 py-8 relative z-10">
+          {/* Student Info Header Card */}
+          <div className="rounded-2xl border border-border/60 bg-card/70 backdrop-blur-md shadow-card overflow-hidden mb-8">
+            <div className="h-[3px] bg-gradient-to-r from-primary via-secondary to-warning" />
+            <div className="p-6">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
+                <div className="flex items-start gap-3">
+                  <div className="w-9 h-9 rounded-xl bg-secondary/10 flex items-center justify-center shrink-0">
+                    <User size={16} className="text-secondary" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-1">Student Name</p>
+                    <p className="text-sm font-bold text-foreground">John Doe</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="w-9 h-9 rounded-xl bg-secondary/10 flex items-center justify-center shrink-0">
+                    <Stethoscope size={16} className="text-secondary" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-1">Instructor</p>
+                    <p className="text-sm font-bold text-foreground">Dr. Sarah Chen</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="w-9 h-9 rounded-xl bg-secondary/10 flex items-center justify-center shrink-0">
+                    <CalendarDays size={16} className="text-secondary" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-1">Date of Procedure</p>
+                    <p className="text-sm font-bold text-foreground">03/15/2026</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="w-9 h-9 rounded-xl bg-secondary/10 flex items-center justify-center shrink-0">
+                    <Target size={16} className="text-secondary" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-1">Procedure</p>
+                    <p className="text-sm font-bold text-foreground truncate">Laparoscopic Cholecystectomy</p>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-card border border-border text-sm shadow-soft">
-              <Clock size={14} className="text-secondary" />
-              <span className="text-muted-foreground">{selectedDate}</span>
-            </div>
-            <div className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-card border border-border text-sm shadow-soft">
-              <Target size={14} className="text-secondary" />
-              <span className="text-muted-foreground">Laparoscopic Cholecystectomy</span>
-            </div>
-            <button className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-primary text-primary-foreground text-sm font-bold hover:opacity-90 transition-opacity shadow-soft">
-              <Search size={14} />
-              Search Records
-            </button>
           </div>
 
           {/* Main content + Sidebar */}
           <div className="flex gap-6">
             {/* Left: Main Dashboard */}
             <div className="flex-1 min-w-0">
-              {/* 2. Summary Cards */}
+              {/* Summary Cards */}
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
-                <SiqCard className="py-6 px-5 relative overflow-hidden">
+                <SiqCard className="py-6 px-5 relative overflow-hidden bg-card/70 backdrop-blur-sm">
                   <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-primary via-secondary to-warning" />
                   <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Overall Score</div>
                   <div className="flex items-baseline gap-1">
@@ -444,7 +494,7 @@ const SubmissionDetail = () => {
                     <Sparkline />
                   </div>
                 </SiqCard>
-                <SiqCard className="py-6 px-5 relative overflow-hidden">
+                <SiqCard className="py-6 px-5 relative overflow-hidden bg-card/70 backdrop-blur-sm">
                   <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-primary via-secondary to-warning" />
                   <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Competency</div>
                   <div className="flex items-center gap-2">
@@ -454,12 +504,12 @@ const SubmissionDetail = () => {
                     </span>
                   </div>
                 </SiqCard>
-                <SiqCard className="py-6 px-5 relative overflow-hidden">
+                <SiqCard className="py-6 px-5 relative overflow-hidden bg-card/70 backdrop-blur-sm">
                   <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-primary via-secondary to-warning" />
                   <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Phases Detected</div>
                   <div className="text-3xl font-black font-display text-foreground">{phases.length}</div>
                 </SiqCard>
-                <SiqCard className="py-6 px-5 relative overflow-hidden">
+                <SiqCard className="py-6 px-5 relative overflow-hidden bg-card/70 backdrop-blur-sm">
                   <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-primary via-secondary to-warning" />
                   <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Total Duration</div>
                   <div className="text-3xl font-black font-display text-foreground">23:00</div>
@@ -467,7 +517,7 @@ const SubmissionDetail = () => {
               </div>
 
               {/* Recommended Next Step Badge */}
-              <div className="flex items-center gap-2 mb-8 px-4 py-3 rounded-xl bg-secondary/5 border border-secondary/20">
+              <div className="flex items-center gap-2 mb-8 px-4 py-3 rounded-xl bg-secondary/5 border border-secondary/20 backdrop-blur-sm">
                 <Zap size={16} className="text-secondary shrink-0" />
                 <span className="text-sm text-foreground"><strong className="text-secondary">Recommended:</strong> Supervised practice on 5–10 additional standard cases. Focus drills on gallbladder dissection phase.</span>
               </div>
@@ -475,9 +525,9 @@ const SubmissionDetail = () => {
               {/* Gradient section divider */}
               <div className="gradient-line mb-8" />
 
-              {/* 3. Tabs */}
+              {/* Tabs */}
               <Tabs defaultValue="scorecard" className="w-full">
-                <TabsList className="w-full grid grid-cols-4 mb-8 bg-card rounded-xl p-1.5 h-auto border border-border shadow-soft">
+                <TabsList className="w-full grid grid-cols-4 mb-8 bg-card/70 backdrop-blur-sm rounded-xl p-1.5 h-auto border border-border/50 shadow-soft">
                   <TabsTrigger value="scorecard" className="text-xs font-bold py-3 rounded-lg data-[state=active]:bg-primary/5 data-[state=active]:text-primary data-[state=active]:shadow-soft data-[state=active]:gradient-underline gap-1.5 transition-all">
                     <Layers size={14} /> Scorecard
                   </TabsTrigger>
@@ -494,7 +544,7 @@ const SubmissionDetail = () => {
 
                 {/* === SCORECARD TAB === */}
                 <TabsContent value="scorecard">
-                  <div className="rounded-xl border border-border bg-card shadow-card overflow-hidden">
+                  <div className="rounded-xl border border-border/50 bg-card/80 backdrop-blur-sm shadow-card overflow-hidden">
                     {/* Table header */}
                     <div className="hidden md:grid grid-cols-[2fr_0.7fr_0.7fr_0.7fr_0.7fr_0.6fr_2.5fr] gap-3 px-5 py-3 bg-accent/50 border-b border-border text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
                       <span>Phase</span>
@@ -612,7 +662,7 @@ const SubmissionDetail = () => {
 
                 {/* === TIMELINE TAB === */}
                 <TabsContent value="timeline">
-                  <SiqCard>
+                  <SiqCard className="bg-card/70 backdrop-blur-sm">
                     <p className="text-xs text-muted-foreground mb-6 flex items-center gap-2">
                       <TrendingUp size={14} className="text-secondary shrink-0" />
                       This chart compares actual phase duration against the expected optimal range.
@@ -678,7 +728,7 @@ const SubmissionDetail = () => {
                 <TabsContent value="keyframes">
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-5">
                     {keyFrames.map((frame) => (
-                      <div key={frame.id} className="rounded-xl overflow-hidden border border-border bg-card shadow-card hover:shadow-lg hover:border-secondary/30 transition-all group">
+                      <div key={frame.id} className="rounded-xl overflow-hidden border border-border/50 bg-card/70 backdrop-blur-sm shadow-card hover:shadow-lg hover:border-secondary/30 transition-all group">
                         <div className="aspect-video bg-accent/60 flex items-center justify-center relative">
                           <Eye size={24} className="text-muted-foreground/30 group-hover:text-secondary/50 transition-colors" />
                           {/* Gradient hover accent */}
@@ -714,10 +764,18 @@ const SubmissionDetail = () => {
 
               {/* Action Buttons */}
               <div className="grid grid-cols-2 gap-5 pb-8">
-                <button onClick={() => navigate('/new-submission')} className="py-3.5 border-2 border-primary text-primary rounded-xl font-bold text-sm hover:bg-primary/5 active:scale-[0.98] transition-all">
+                <button
+                  onClick={() => navigate('/new-submission')}
+                  className="py-3.5 border-2 border-secondary/40 text-secondary rounded-xl font-bold text-sm hover:bg-secondary/5 active:scale-[0.98] transition-all"
+                >
                   Submit Another
                 </button>
-                <button className="py-3.5 bg-primary text-primary-foreground rounded-xl font-bold text-sm hover:opacity-90 active:scale-[0.98] transition-all shadow-soft">
+                <button
+                  className="py-3.5 rounded-xl font-bold text-sm text-white active:scale-[0.98] transition-all shadow-soft"
+                  style={{ background: buttonGradient }}
+                  onMouseEnter={(e) => (e.currentTarget.style.background = buttonGradientHover)}
+                  onMouseLeave={(e) => (e.currentTarget.style.background = buttonGradient)}
+                >
                   Share Report
                 </button>
               </div>
@@ -744,7 +802,7 @@ const FeedbackSection = () => {
   return (
     <div className="space-y-5">
       {/* Overall Assessment Card */}
-      <div className="rounded-xl border border-border bg-card shadow-card overflow-hidden">
+      <div className="rounded-xl border border-border/50 bg-card/70 backdrop-blur-sm shadow-card overflow-hidden">
         <div className="h-[3px] bg-gradient-to-r from-primary via-secondary to-warning" />
         <div className="p-5">
           <div className="flex items-center gap-2.5 mb-4">
@@ -774,7 +832,7 @@ const FeedbackSection = () => {
 
       {/* Strength + Improvement Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div className="rounded-xl border border-success/20 bg-card shadow-soft overflow-hidden">
+        <div className="rounded-xl border border-success/20 bg-card/70 backdrop-blur-sm shadow-soft overflow-hidden">
           <div className="h-[2px] bg-success" />
           <div className="p-4">
             <div className="flex items-center gap-2.5 mb-3">
@@ -787,7 +845,7 @@ const FeedbackSection = () => {
             <p className="text-xs text-muted-foreground leading-relaxed">Expert-level clip application with precise perpendicular orientation</p>
           </div>
         </div>
-        <div className="rounded-xl border border-warning/20 bg-card shadow-soft overflow-hidden">
+        <div className="rounded-xl border border-warning/20 bg-card/70 backdrop-blur-sm shadow-soft overflow-hidden">
           <div className="h-[2px] bg-warning" />
           <div className="p-4">
             <div className="flex items-center gap-2.5 mb-3">
@@ -803,7 +861,7 @@ const FeedbackSection = () => {
       </div>
 
       {/* Recommendation Card */}
-      <div className="rounded-xl border border-secondary/20 bg-card shadow-soft overflow-hidden">
+      <div className="rounded-xl border border-secondary/20 bg-card/70 backdrop-blur-sm shadow-soft overflow-hidden">
         <div className="gradient-border-left">
           <div className="p-4">
             <div className="flex items-center gap-2.5 mb-3">
@@ -820,7 +878,7 @@ const FeedbackSection = () => {
       </div>
 
       {/* Recommended Next Actions */}
-      <div className="rounded-xl border border-border bg-card shadow-soft overflow-hidden">
+      <div className="rounded-xl border border-border/50 bg-card/70 backdrop-blur-sm shadow-soft overflow-hidden">
         <div className="h-[2px] bg-gradient-to-r from-primary via-secondary to-warning" />
         <div className="p-4">
           <div className="flex items-center gap-2.5 mb-4">
@@ -855,7 +913,7 @@ const FeedbackSection = () => {
       </button>
 
       {showFull && (
-        <SiqCard className="space-y-4 text-sm text-foreground leading-relaxed animate-accordion-down">
+        <SiqCard className="space-y-4 text-sm text-foreground leading-relaxed animate-accordion-down bg-card/70 backdrop-blur-sm">
           <p>
             The strongest performance was observed during <strong>Clipping & Cutting</strong> (4.5/5.0), where technique, instrument control,
             and pacing were consistent with competent practice.
