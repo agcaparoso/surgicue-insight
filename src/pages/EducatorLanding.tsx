@@ -142,12 +142,12 @@ const EducatorLanding = () => {
           Powered by IBM watsonx.ai
         </motion.p>
         <motion.p
-          className="text-sm sm:text-base text-foreground/60 max-w-md mx-auto leading-relaxed"
+          className="text-sm sm:text-[15px] text-foreground/55 max-w-xl mx-auto leading-relaxed font-medium"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5, duration: 0.6 }}
         >
-          An AI-powered platform designed for educators to evaluate surgical performance, identify skill gaps, and deliver structured, data-driven feedback.
+          AI tools for educators to track surgical skill and deliver instant feedback.
         </motion.p>
       </motion.div>
 
