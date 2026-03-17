@@ -1013,7 +1013,7 @@ const FeedbackSection = () => {
       </button>
 
       {showFull && (
-        <SiqCard className="space-y-4 text-sm text-foreground leading-relaxed animate-accordion-down bg-card/70 backdrop-blur-sm">
+        <SiqCard className="space-y-4 text-sm text-foreground leading-relaxed animate-accordion-down">
           <p>
             The strongest performance was observed during <strong>Clipping & Cutting</strong> (4.5/5.0), where technique, instrument control,
             and pacing were consistent with competent practice.
