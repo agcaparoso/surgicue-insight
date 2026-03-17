@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeft, Clock, Activity, Layers, Target, Eye, MessageSquare, Image, User, TrendingUp, Shield, Zap, FileText, Loader2, Brain, ListChecks, StickyNote, CheckCircle2, AlertTriangle, XCircle, Award, Crosshair, CalendarDays, Stethoscope, Trophy, Timer, GitBranch, Scissors, Focus, Hand, Sparkles, Package, Droplets, ArrowDownToLine, ThumbsUp, ThumbsDown, ArrowLeft } from 'lucide-react';
 import { SiqCard, StatusBadge } from '@/components/SiqComponents';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { TooltipProvider } from '@/components/ui/tooltip';
 
 // --- Data ---
@@ -446,276 +447,269 @@ const SubmissionDetail = () => {
 
           <div className="gradient-line mb-8" />
 
-          {/* ===== PHASE-BY-PHASE SCORECARD ===== */}
-          <div className="section-header mb-6">
-            <span>📋</span> Phase-by-Phase Scorecard
-          </div>
+          {/* Tab Navigation */}
+          <Tabs defaultValue="scorecard" className="w-full">
+            <TabsList className="w-full grid grid-cols-4 mb-8 bg-card rounded-xl p-1.5 h-auto border border-border/40 shadow-soft">
+              <TabsTrigger value="scorecard" className="text-xs font-bold py-3 rounded-lg data-[state=active]:bg-primary/5 data-[state=active]:text-primary data-[state=active]:shadow-soft gap-1.5 transition-all">
+                <Layers size={14} /> Scorecard
+              </TabsTrigger>
+              <TabsTrigger value="timeline" className="text-xs font-bold py-3 rounded-lg data-[state=active]:bg-primary/5 data-[state=active]:text-primary data-[state=active]:shadow-soft gap-1.5 transition-all">
+                <Clock size={14} /> Timeline
+              </TabsTrigger>
+              <TabsTrigger value="keyframes" className="text-xs font-bold py-3 rounded-lg data-[state=active]:bg-primary/5 data-[state=active]:text-primary data-[state=active]:shadow-soft gap-1.5 transition-all">
+                <Image size={14} /> Key Frames
+              </TabsTrigger>
+              <TabsTrigger value="feedback" className="text-xs font-bold py-3 rounded-lg data-[state=active]:bg-primary/5 data-[state=active]:text-primary data-[state=active]:shadow-soft gap-1.5 transition-all">
+                <MessageSquare size={14} /> Feedback
+              </TabsTrigger>
+            </TabsList>
 
-          <div className="space-y-8">
-            {phases.map((phase) => {
-              const statusBorderColor = phase.status === 'Passed' ? 'border-l-success' : phase.status === 'Flagged' ? 'border-l-warning' : 'border-l-destructive';
-              const statusBg = phase.status === 'Passed' ? 'bg-success/5' : phase.status === 'Flagged' ? 'bg-warning/5' : 'bg-destructive/5';
-              const PhaseIcon = phaseIcons[phase.id] || Layers;
-              const actualSec = durationToSec(phase.duration);
-              const ideal = phase.idealDuration ? parseIdealRange(phase.idealDuration) : null;
-              const metIdeal = ideal ? actualSec >= ideal.min && actualSec <= ideal.max : true;
+            {/* === SCORECARD TAB === */}
+            <TabsContent value="scorecard">
+              <div className="space-y-8">
+                {phases.map((phase) => {
+                  const statusBorderColor = phase.status === 'Passed' ? 'border-l-success' : phase.status === 'Flagged' ? 'border-l-warning' : 'border-l-destructive';
+                  const statusBg = phase.status === 'Passed' ? 'bg-success/5' : phase.status === 'Flagged' ? 'bg-warning/5' : 'bg-destructive/5';
+                  const PhaseIcon = phaseIcons[phase.id] || Layers;
+                  const actualSec = durationToSec(phase.duration);
+                  const ideal = phase.idealDuration ? parseIdealRange(phase.idealDuration) : null;
+                  const metIdeal = ideal ? actualSec >= ideal.min && actualSec <= ideal.max : true;
 
-              return (
-                <div key={phase.id} className={`rounded-xl border border-border/40 bg-card shadow-card overflow-hidden border-l-[4px] ${statusBorderColor}`}>
-                  {/* Phase Header */}
-                  <div className={`px-6 py-4 ${statusBg}`}>
-                    <div className="flex items-center gap-3 flex-wrap">
-                      <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, hsl(211 60% 28% / 0.1), hsl(45 80% 55% / 0.15))' }}>
-                        <PhaseIcon size={18} className="text-secondary" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2">
-                          <span className="font-display font-bold text-secondary text-sm">{phase.id}:</span>
-                          <span className="font-display font-bold text-base text-foreground">{phase.name}</span>
+                  return (
+                    <div key={phase.id} className={`rounded-xl border border-border/40 bg-card shadow-card overflow-hidden border-l-[4px] ${statusBorderColor}`}>
+                      <div className={`px-6 py-4 ${statusBg}`}>
+                        <div className="flex items-center gap-3 flex-wrap">
+                          <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, hsl(211 60% 28% / 0.1), hsl(45 80% 55% / 0.15))' }}>
+                            <PhaseIcon size={18} className="text-secondary" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2">
+                              <span className="font-display font-bold text-secondary text-sm">{phase.id}:</span>
+                              <span className="font-display font-bold text-base text-foreground">{phase.name}</span>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-3">
+                            <span className={`text-2xl font-black font-display ${scoreColor(phase.score)}`}>{phase.score}<span className="text-sm font-medium text-muted-foreground">/{phase.maxScore}</span></span>
+                            <StatusBadge status={phase.status} />
+                          </div>
                         </div>
                       </div>
-                      <div className="flex items-center gap-3">
-                        <span className={`text-2xl font-black font-display ${scoreColor(phase.score)}`}>{phase.score}<span className="text-sm font-medium text-muted-foreground">/{phase.maxScore}</span></span>
-                        <StatusBadge status={phase.status} />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="px-6 py-5 space-y-5">
-                    {/* Vertical metrics */}
-                    <div>
-                      <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-3">Performance Metrics</p>
-                      <div className="space-y-3">
-                        <ScoreBar score={phase.rubrics[0].score} maxScore={phase.rubrics[0].maxScore} label={phase.rubrics[0].label} icon={Hand} />
-                        <ScoreBar score={phase.rubrics[1].score} maxScore={phase.rubrics[1].maxScore} label={phase.rubrics[1].label} icon={Eye} />
-                        <ScoreBar score={phase.rubrics[2].score} maxScore={phase.rubrics[2].maxScore} label={phase.rubrics[2].label} icon={Crosshair} />
-                      </div>
-                    </div>
-
-                    {/* Duration */}
-                    <div className="flex items-center gap-4 px-4 py-3 rounded-lg bg-accent/30 text-xs flex-wrap">
-                      <div className="flex items-center gap-1.5">
-                        <Timer size={13} className="text-secondary" />
-                        <span className="text-muted-foreground">Duration:</span>
-                        <span className="font-bold text-foreground font-display">{phase.duration}</span>
-                      </div>
-                      {phase.idealDuration && (
-                        <>
-                          <div className="w-px h-4 bg-border" />
+                      <div className="px-6 py-5 space-y-5">
+                        <div>
+                          <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-3">Performance Metrics</p>
+                          <div className="space-y-3">
+                            <ScoreBar score={phase.rubrics[0].score} maxScore={phase.rubrics[0].maxScore} label={phase.rubrics[0].label} icon={Hand} />
+                            <ScoreBar score={phase.rubrics[1].score} maxScore={phase.rubrics[1].maxScore} label={phase.rubrics[1].label} icon={Eye} />
+                            <ScoreBar score={phase.rubrics[2].score} maxScore={phase.rubrics[2].maxScore} label={phase.rubrics[2].label} icon={Crosshair} />
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-4 px-4 py-3 rounded-lg bg-accent/30 text-xs flex-wrap">
                           <div className="flex items-center gap-1.5">
-                            <span className="text-muted-foreground">Ideal:</span>
-                            <span className="font-medium text-foreground">{phase.idealDuration}</span>
+                            <Timer size={13} className="text-secondary" />
+                            <span className="text-muted-foreground">Duration:</span>
+                            <span className="font-bold text-foreground font-display">{phase.duration}</span>
                           </div>
-                          <div className="w-px h-4 bg-border" />
-                          <div className={`flex items-center gap-1.5 px-2 py-0.5 rounded-full border ${metIdeal ? 'bg-success/10 border-success/20 text-success' : 'bg-warning/10 border-warning/20 text-warning'}`}>
-                            {metIdeal ? <CheckCircle2 size={12} /> : <AlertTriangle size={12} />}
-                            <span className="font-bold text-[10px] uppercase tracking-wider">{metIdeal ? 'Met Ideal' : 'Over/Under Ideal'}</span>
+                          {phase.idealDuration && (
+                            <>
+                              <div className="w-px h-4 bg-border" />
+                              <div className="flex items-center gap-1.5">
+                                <span className="text-muted-foreground">Ideal:</span>
+                                <span className="font-medium text-foreground">{phase.idealDuration}</span>
+                              </div>
+                              <div className="w-px h-4 bg-border" />
+                              <div className={`flex items-center gap-1.5 px-2 py-0.5 rounded-full border ${metIdeal ? 'bg-success/10 border-success/20 text-success' : 'bg-warning/10 border-warning/20 text-warning'}`}>
+                                {metIdeal ? <CheckCircle2 size={12} /> : <AlertTriangle size={12} />}
+                                <span className="font-bold text-[10px] uppercase tracking-wider">{metIdeal ? 'Met Ideal' : 'Over/Under Ideal'}</span>
+                              </div>
+                            </>
+                          )}
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="rounded-lg border border-success/25 bg-success/5 p-4">
+                            <p className="text-[10px] font-bold text-success uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                              <ThumbsUp size={12} /> Pros
+                            </p>
+                            <ul className="space-y-2">
+                              {phase.pros.map((pro, i) => (
+                                <li key={i} className="flex items-start gap-2 text-xs text-foreground leading-relaxed">
+                                  <div className="w-1.5 h-1.5 rounded-full bg-success mt-1.5 shrink-0" />{pro}
+                                </li>
+                              ))}
+                            </ul>
                           </div>
-                        </>
-                      )}
-                    </div>
-
-                    {/* Pros and Cons */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="rounded-lg border border-success/25 bg-success/5 p-4">
-                        <p className="text-[10px] font-bold text-success uppercase tracking-wider mb-3 flex items-center gap-1.5">
-                          <ThumbsUp size={12} /> Pros
-                        </p>
-                        <ul className="space-y-2">
-                          {phase.pros.map((pro, i) => (
-                            <li key={i} className="flex items-start gap-2 text-xs text-foreground leading-relaxed">
-                              <div className="w-1.5 h-1.5 rounded-full bg-success mt-1.5 shrink-0" />
-                              {pro}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                      <div className="rounded-lg border border-destructive/25 bg-destructive/5 p-4">
-                        <p className="text-[10px] font-bold text-destructive uppercase tracking-wider mb-3 flex items-center gap-1.5">
-                          <ThumbsDown size={12} /> Cons
-                        </p>
-                        <ul className="space-y-2">
-                          {phase.cons.map((con, i) => (
-                            <li key={i} className="flex items-start gap-2 text-xs text-foreground leading-relaxed">
-                              <div className="w-1.5 h-1.5 rounded-full bg-destructive mt-1.5 shrink-0" />
-                              {con}
-                            </li>
-                          ))}
-                        </ul>
+                          <div className="rounded-lg border border-destructive/25 bg-destructive/5 p-4">
+                            <p className="text-[10px] font-bold text-destructive uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                              <ThumbsDown size={12} /> Cons
+                            </p>
+                            <ul className="space-y-2">
+                              {phase.cons.map((con, i) => (
+                                <li key={i} className="flex items-start gap-2 text-xs text-foreground leading-relaxed">
+                                  <div className="w-1.5 h-1.5 rounded-full bg-destructive mt-1.5 shrink-0" />{con}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </div>
+                        {phase.additionalNotes && (
+                          <div className="rounded-lg border border-warning/20 bg-warning/5 p-4">
+                            <p className="text-[10px] font-bold text-warning uppercase tracking-wider mb-2">Additional Notes</p>
+                            <p className="text-xs text-foreground leading-relaxed">{phase.additionalNotes}</p>
+                          </div>
+                        )}
                       </div>
                     </div>
-
-                    {phase.additionalNotes && (
-                      <div className="rounded-lg border border-warning/20 bg-warning/5 p-4">
-                        <p className="text-[10px] font-bold text-warning uppercase tracking-wider mb-2">Additional Notes</p>
-                        <p className="text-xs text-foreground leading-relaxed">{phase.additionalNotes}</p>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          <div className="gradient-line my-10" />
-
-          {/* ===== TIMELINE ===== */}
-          <div className="section-header mb-6">
-            <span>⏱</span> Timeline
-          </div>
-
-          <div className="rounded-xl border border-border/40 bg-card shadow-card overflow-hidden p-6 mb-10">
-            <div className="flex items-center justify-between mb-5">
-              <p className="text-xs text-muted-foreground flex items-center gap-2">
-                <TrendingUp size={14} className="text-secondary shrink-0" />
-                Actual phase duration vs. expected optimal range
-              </p>
-              <div className="flex items-center gap-5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-                <div className="flex items-center gap-2"><div className="w-4 h-3 rounded-sm bar-gradient" /> Actual</div>
-                <div className="flex items-center gap-2"><div className="w-4 h-3 rounded-sm bg-success/15 border border-success/30" /> Ideal Range</div>
+                  );
+                })}
               </div>
-            </div>
-            <div className="space-y-3">
-              {phases.map((p) => {
-                const actualSec = durationToSec(p.duration);
-                const ideal = p.idealDuration ? parseIdealRange(p.idealDuration) : { min: 0, max: 0 };
-                const barMax = maxTimelineSec * 1.15;
-                const actualPct = (actualSec / barMax) * 100;
-                const idealMinPct = (ideal.min / barMax) * 100;
-                const idealWidthPct = ((ideal.max - ideal.min) / barMax) * 100;
-                const isHovered = hoveredPhase === p.id;
+            </TabsContent>
 
-                return (
-                  <div
-                    key={p.id}
-                    className={`relative rounded-lg px-3 py-2.5 transition-all cursor-pointer ${isHovered ? 'bg-secondary/8 ring-1 ring-secondary/20' : 'hover:bg-accent/20'}`}
-                    onMouseEnter={() => setHoveredPhase(p.id)}
-                    onMouseLeave={() => setHoveredPhase(null)}
-                  >
-                    <div className="flex items-center gap-2.5 mb-2">
-                      <StatusIcon status={p.status} />
-                      <span className="text-[11px] font-bold text-secondary font-display w-7 shrink-0">{p.id}</span>
-                      <span className="text-[11px] font-semibold text-foreground flex-1">{p.name}</span>
-                      <span className="text-[11px] font-display font-bold text-foreground shrink-0">{p.duration}</span>
-                    </div>
-                    <div className="relative h-8 bg-accent/30 rounded-lg overflow-hidden ml-[52px]">
-                      <div className="absolute top-0 bottom-0 bg-success/12 border-l-2 border-r-2 border-success/25 rounded-sm" style={{ left: `${idealMinPct}%`, width: `${idealWidthPct}%` }} />
-                      <div className={`absolute top-1 bottom-1 rounded-md transition-all shadow-sm ${isHovered ? 'opacity-100' : 'opacity-85'} ${p.status === 'Flagged' ? 'bar-gradient-warn' : 'bar-gradient'}`} style={{ width: `${actualPct}%`, left: 0 }} />
-                      {actualPct > 15 && <span className="absolute top-1/2 -translate-y-1/2 left-2 text-[9px] font-bold text-white/90 z-10">{p.duration}</span>}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* ===== KEY FRAMES ===== */}
-          <div className="section-header mb-6">
-            <span>🖼</span> Key Frames
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-5 mb-10">
-            {keyFrames.map((frame) => (
-              <div key={frame.id} className="rounded-xl overflow-hidden border border-border/40 bg-card shadow-card hover:shadow-lg hover:border-secondary/30 transition-all group">
-                <div className="aspect-video bg-accent/60 flex items-center justify-center relative">
-                  <Eye size={24} className="text-muted-foreground/30 group-hover:text-secondary/50 transition-colors" />
-                  <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-primary via-secondary to-warning opacity-0 group-hover:opacity-100 transition-opacity" />
-                </div>
-                <div className="p-3.5 space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-semibold text-foreground">{frame.label}</span>
-                    <span className={`text-xs font-bold font-display px-2 py-0.5 rounded-md ${frame.confidence >= 80 ? 'text-success bg-success/10' : frame.confidence >= 60 ? 'text-warning bg-warning/10' : 'text-destructive bg-destructive/10'}`}>
-                      {frame.confidence}%
-                    </span>
-                  </div>
-                  <p className="text-[11px] text-muted-foreground leading-relaxed">{frame.caption}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* ===== FEEDBACK ===== */}
-          <div className="section-header mb-6">
-            <span>💬</span> Feedback
-          </div>
-
-          <div className="space-y-5 mb-10">
-            {/* Overall Assessment */}
-            <div className="rounded-xl border border-border/40 bg-card shadow-card overflow-hidden">
-              <div className="h-[3px] bg-gradient-to-r from-primary via-secondary to-warning" />
-              <div className="p-5">
-                <div className="flex items-center gap-2.5 mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-secondary/10 flex items-center justify-center">
-                    <Activity size={20} className="text-secondary" />
-                  </div>
-                  <div>
-                    <h3 className="text-xs font-bold text-foreground">Overall Assessment</h3>
-                    <p className="text-[10px] text-muted-foreground">AI-evaluated performance summary</p>
-                  </div>
-                  <div className="ml-auto flex items-baseline gap-1">
-                    <span className="text-2xl font-black font-display text-foreground">3.7</span>
-                    <span className="text-xs text-muted-foreground">/ 5.0</span>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-secondary/10 text-secondary border border-secondary/20">
-                    <Shield size={10} /> Intermediate — Level 3
-                  </span>
-                  <span className="text-[10px] text-muted-foreground">Ready for Supervised Practice</span>
-                </div>
-                <p className="text-xs text-muted-foreground leading-relaxed">
-                  Strong performance across 5 of 7 phases. 2 phases flagged for targeted improvement.
-                </p>
-              </div>
-            </div>
-
-            {/* Strength + Improvement */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="rounded-xl border border-success/20 bg-card shadow-soft overflow-hidden">
-                <div className="h-[2px] bg-success" />
-                <div className="p-4">
-                  <div className="flex items-center gap-2.5 mb-3">
-                    <div className="w-8 h-8 rounded-lg bg-success/10 flex items-center justify-center">
-                      <CheckCircle2 size={16} className="text-success" />
-                    </div>
-                    <h4 className="text-xs font-bold text-foreground">Top Strength</h4>
-                  </div>
-                  <p className="text-xs font-bold text-success mb-1">Clipping & Cutting — 4.5/5</p>
-                  <p className="text-xs text-muted-foreground leading-relaxed">Expert-level clip application with precise perpendicular orientation</p>
-                </div>
-              </div>
-              <div className="rounded-xl border border-warning/20 bg-card shadow-soft overflow-hidden">
-                <div className="h-[2px] bg-warning" />
-                <div className="p-4">
-                  <div className="flex items-center gap-2.5 mb-3">
-                    <div className="w-8 h-8 rounded-lg bg-warning/10 flex items-center justify-center">
-                      <AlertTriangle size={16} className="text-warning" />
-                    </div>
-                    <h4 className="text-xs font-bold text-foreground">Top Improvement Area</h4>
-                  </div>
-                  <p className="text-xs font-bold text-warning mb-1">GB Dissection — 2.8/5</p>
-                  <p className="text-xs text-muted-foreground leading-relaxed">Plane identification needs work, excess thermal application noted</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Recommendation */}
-            <div className="rounded-xl border border-secondary/20 bg-card shadow-soft overflow-hidden">
-              <div className="gradient-border-left">
-                <div className="p-4">
-                  <div className="flex items-center gap-2.5 mb-3">
-                    <div className="w-8 h-8 rounded-lg bg-secondary/10 flex items-center justify-center">
-                      <Zap size={16} className="text-secondary" />
-                    </div>
-                    <h4 className="text-xs font-bold text-foreground">Recommendation</h4>
-                  </div>
-                  <p className="text-xs text-foreground leading-relaxed">
-                    Supervised practice on 5–10 additional standard cholecystectomy cases. Focus on dissection plane identification and controlled thermal energy usage.
+            {/* === TIMELINE TAB === */}
+            <TabsContent value="timeline">
+              <div className="rounded-xl border border-border/40 bg-card shadow-card overflow-hidden p-6">
+                <div className="flex items-center justify-between mb-5">
+                  <p className="text-xs text-muted-foreground flex items-center gap-2">
+                    <TrendingUp size={14} className="text-secondary shrink-0" />
+                    Actual phase duration vs. expected optimal range
                   </p>
+                  <div className="flex items-center gap-5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                    <div className="flex items-center gap-2"><div className="w-4 h-3 rounded-sm bar-gradient" /> Actual</div>
+                    <div className="flex items-center gap-2"><div className="w-4 h-3 rounded-sm bg-success/15 border border-success/30" /> Ideal Range</div>
+                  </div>
+                </div>
+                <div className="space-y-3">
+                  {phases.map((p) => {
+                    const actualSec = durationToSec(p.duration);
+                    const ideal = p.idealDuration ? parseIdealRange(p.idealDuration) : { min: 0, max: 0 };
+                    const barMax = maxTimelineSec * 1.15;
+                    const actualPct = (actualSec / barMax) * 100;
+                    const idealMinPct = (ideal.min / barMax) * 100;
+                    const idealWidthPct = ((ideal.max - ideal.min) / barMax) * 100;
+                    const isHovered = hoveredPhase === p.id;
+
+                    return (
+                      <div
+                        key={p.id}
+                        className={`relative rounded-lg px-3 py-2.5 transition-all cursor-pointer ${isHovered ? 'bg-secondary/8 ring-1 ring-secondary/20' : 'hover:bg-accent/20'}`}
+                        onMouseEnter={() => setHoveredPhase(p.id)}
+                        onMouseLeave={() => setHoveredPhase(null)}
+                      >
+                        <div className="flex items-center gap-2.5 mb-2">
+                          <StatusIcon status={p.status} />
+                          <span className="text-[11px] font-bold text-secondary font-display w-7 shrink-0">{p.id}</span>
+                          <span className="text-[11px] font-semibold text-foreground flex-1">{p.name}</span>
+                          <span className="text-[11px] font-display font-bold text-foreground shrink-0">{p.duration}</span>
+                        </div>
+                        <div className="relative h-8 bg-accent/30 rounded-lg overflow-hidden ml-[52px]">
+                          <div className="absolute top-0 bottom-0 bg-success/12 border-l-2 border-r-2 border-success/25 rounded-sm" style={{ left: `${idealMinPct}%`, width: `${idealWidthPct}%` }} />
+                          <div className={`absolute top-1 bottom-1 rounded-md transition-all shadow-sm ${isHovered ? 'opacity-100' : 'opacity-85'} ${p.status === 'Flagged' ? 'bar-gradient-warn' : 'bar-gradient'}`} style={{ width: `${actualPct}%`, left: 0 }} />
+                          {actualPct > 15 && <span className="absolute top-1/2 -translate-y-1/2 left-2 text-[9px] font-bold text-white/90 z-10">{p.duration}</span>}
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
-            </div>
-          </div>
+            </TabsContent>
+
+            {/* === KEY FRAMES TAB === */}
+            <TabsContent value="keyframes">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-5">
+                {keyFrames.map((frame) => (
+                  <div key={frame.id} className="rounded-xl overflow-hidden border border-border/40 bg-card shadow-card hover:shadow-lg hover:border-secondary/30 transition-all group">
+                    <div className="aspect-video bg-accent/60 flex items-center justify-center relative">
+                      <Eye size={24} className="text-muted-foreground/30 group-hover:text-secondary/50 transition-colors" />
+                      <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-primary via-secondary to-warning opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </div>
+                    <div className="p-3.5 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-semibold text-foreground">{frame.label}</span>
+                        <span className={`text-xs font-bold font-display px-2 py-0.5 rounded-md ${frame.confidence >= 80 ? 'text-success bg-success/10' : frame.confidence >= 60 ? 'text-warning bg-warning/10' : 'text-destructive bg-destructive/10'}`}>
+                          {frame.confidence}%
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-muted-foreground leading-relaxed">{frame.caption}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </TabsContent>
+
+            {/* === FEEDBACK TAB === */}
+            <TabsContent value="feedback">
+              <div className="space-y-5">
+                <div className="rounded-xl border border-border/40 bg-card shadow-card overflow-hidden">
+                  <div className="h-[3px] bg-gradient-to-r from-primary via-secondary to-warning" />
+                  <div className="p-5">
+                    <div className="flex items-center gap-2.5 mb-4">
+                      <div className="w-10 h-10 rounded-xl bg-secondary/10 flex items-center justify-center">
+                        <Activity size={20} className="text-secondary" />
+                      </div>
+                      <div>
+                        <h3 className="text-xs font-bold text-foreground">Overall Assessment</h3>
+                        <p className="text-[10px] text-muted-foreground">AI-evaluated performance summary</p>
+                      </div>
+                      <div className="ml-auto flex items-baseline gap-1">
+                        <span className="text-2xl font-black font-display text-foreground">3.7</span>
+                        <span className="text-xs text-muted-foreground">/ 5.0</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-secondary/10 text-secondary border border-secondary/20">
+                        <Shield size={10} /> Intermediate — Level 3
+                      </span>
+                      <span className="text-[10px] text-muted-foreground">Ready for Supervised Practice</span>
+                    </div>
+                    <p className="text-xs text-muted-foreground leading-relaxed">
+                      Strong performance across 5 of 7 phases. 2 phases flagged for targeted improvement.
+                    </p>
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="rounded-xl border border-success/20 bg-card shadow-soft overflow-hidden">
+                    <div className="h-[2px] bg-success" />
+                    <div className="p-4">
+                      <div className="flex items-center gap-2.5 mb-3">
+                        <div className="w-8 h-8 rounded-lg bg-success/10 flex items-center justify-center">
+                          <CheckCircle2 size={16} className="text-success" />
+                        </div>
+                        <h4 className="text-xs font-bold text-foreground">Top Strength</h4>
+                      </div>
+                      <p className="text-xs font-bold text-success mb-1">Clipping & Cutting — 4.5/5</p>
+                      <p className="text-xs text-muted-foreground leading-relaxed">Expert-level clip application with precise perpendicular orientation</p>
+                    </div>
+                  </div>
+                  <div className="rounded-xl border border-warning/20 bg-card shadow-soft overflow-hidden">
+                    <div className="h-[2px] bg-warning" />
+                    <div className="p-4">
+                      <div className="flex items-center gap-2.5 mb-3">
+                        <div className="w-8 h-8 rounded-lg bg-warning/10 flex items-center justify-center">
+                          <AlertTriangle size={16} className="text-warning" />
+                        </div>
+                        <h4 className="text-xs font-bold text-foreground">Top Improvement Area</h4>
+                      </div>
+                      <p className="text-xs font-bold text-warning mb-1">GB Dissection — 2.8/5</p>
+                      <p className="text-xs text-muted-foreground leading-relaxed">Plane identification needs work, excess thermal application noted</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="rounded-xl border border-secondary/20 bg-card shadow-soft overflow-hidden">
+                  <div className="gradient-border-left">
+                    <div className="p-4">
+                      <div className="flex items-center gap-2.5 mb-3">
+                        <div className="w-8 h-8 rounded-lg bg-secondary/10 flex items-center justify-center">
+                          <Zap size={16} className="text-secondary" />
+                        </div>
+                        <h4 className="text-xs font-bold text-foreground">Recommendation</h4>
+                      </div>
+                      <p className="text-xs text-foreground leading-relaxed">
+                        Supervised practice on 5–10 additional standard cholecystectomy cases. Focus on dissection plane identification and controlled thermal energy usage.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </TabsContent>
+          </Tabs>
 
         </div>
 
