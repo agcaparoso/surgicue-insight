@@ -718,7 +718,7 @@ const SubmissionDetail = () => {
                 <TabsContent value="timeline">
                   <div className="space-y-6">
                     {/* Timeline Graph */}
-                    <div className="rounded-xl border border-border/50 bg-card/70 backdrop-blur-sm shadow-card overflow-hidden p-5">
+                    <div className="rounded-xl border border-border/40 bg-card shadow-card overflow-hidden p-6">
                       <div className="flex items-center justify-between mb-5">
                         <p className="text-xs text-muted-foreground flex items-center gap-2">
                           <TrendingUp size={14} className="text-secondary shrink-0" />
