@@ -431,7 +431,7 @@ const ScoreBar = ({ score, maxScore = 5, label, icon: Icon }: { score: number; m
 };
 
 const SubmissionDetail = () => {
-  const navigate = useNavigate();
+  const [hoveredPhase, setHoveredPhase] = useState<string | null>(null);
 
   const overallScore = 3.7;
   const maxTimelineSec = Math.max(...phases.map(p => {
