@@ -207,14 +207,13 @@ const AIInsightsSidebar = () => {
   return (
     <aside className="w-80 shrink-0 space-y-5">
       {/* Sidebar Header */}
-      <div className="rounded-xl border border-border bg-card shadow-card overflow-hidden">
+       <div className="rounded-xl border border-border bg-card shadow-card overflow-hidden">
         <div className="h-[3px] bg-gradient-to-r from-primary via-secondary to-warning" />
         <div className="p-5">
           <div className="flex items-center gap-2.5 mb-1">
             <Brain size={18} className="text-secondary" />
-            <h2 className="font-display font-bold text-sm text-foreground">IBM AI Insights</h2>
+            <h2 className="font-display font-bold text-sm text-foreground">AI-Assisted Surgical Report</h2>
           </div>
-          <p className="text-[10px] text-muted-foreground tracking-wide">Powered by IBM Watson</p>
         </div>
       </div>
 
