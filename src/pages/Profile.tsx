@@ -9,9 +9,7 @@ const Profile = () => {
   const { user } = useUser();
   const displayName = user.name || 'Dr. Alex Rivera';
   const initials = displayName.split(' ').filter(w => w[0]?.match(/[A-Z]/)).map(w => w[0]).join('').slice(0, 2) || 'AR';
-  const roleLabel = user.role === 'educator'
-    ? `${user.educatorRole || 'Attending'} • ${user.department || 'Surgery'}`
-    : `${user.year || 'PGY2'} • ${user.specialty || 'General Surgery'}`;
+  const roleLabel = `${user.educatorRole || 'Attending'} • ${user.department || 'Surgery'}`;
 
   const menuItems = [
     { icon: <User size={18} />, label: 'Edit Profile' },
@@ -73,7 +71,7 @@ const Profile = () => {
         ))}
 
         <button
-          onClick={() => navigate('/welcome')}
+          onClick={() => navigate('/')}
           className="w-full flex items-center justify-between p-4 bg-card rounded-xl border border-border/50 hover:border-destructive/30 transition-all"
         >
           <div className="flex items-center gap-3">
