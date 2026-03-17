@@ -453,7 +453,10 @@ const SubmissionDetail = () => {
             AI-Assisted Surgical Report — Generate Report
           </button>
 
-          {/* Feedback Section (outside tabs) */}
+          {/* FEEDBACK */}
+          <div className="section-header mb-4">
+            <span>💬</span> Feedback
+          </div>
           <div className="space-y-5 mb-8">
             <div className="rounded-xl border border-border/40 bg-card shadow-card overflow-hidden">
               <div className="h-[3px] bg-gradient-to-r from-primary via-secondary to-warning" />
