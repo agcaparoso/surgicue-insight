@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronDown, ChevronRight, Clock, Activity, Layers, Target, Eye, MessageSquare, Image, Search, User, TrendingUp, Shield, Zap, FileText, Loader2, Brain, ListChecks, StickyNote, CheckCircle2, AlertTriangle, XCircle, Award, ArrowUpRight, Crosshair, CalendarDays, Stethoscope } from 'lucide-react';
+import { ChevronDown, ChevronRight, Clock, Activity, Layers, Target, Eye, MessageSquare, Image, Search, User, TrendingUp, Shield, Zap, FileText, Loader2, Brain, ListChecks, StickyNote, CheckCircle2, AlertTriangle, XCircle, Award, ArrowUpRight, Crosshair, CalendarDays, Stethoscope, Trophy, Timer, GitBranch } from 'lucide-react';
 import { SiqCard, StatusBadge } from '@/components/SiqComponents';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
@@ -479,41 +479,83 @@ const SubmissionDetail = () => {
             </div>
           </div>
 
+          {/* Summary Section Header */}
+          <div className="section-header mb-6 mt-2">
+            <span>📊</span>
+            Summary
+          </div>
+          <div className="gradient-line mb-6" />
+
           {/* Main content + Sidebar */}
           <div className="flex gap-6">
             {/* Left: Main Dashboard */}
             <div className="flex-1 min-w-0">
               {/* Summary Cards */}
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
-                <SiqCard className="py-6 px-5 relative overflow-hidden bg-card/70 backdrop-blur-sm">
+                {/* Overall Score */}
+                <div className="group relative rounded-xl border border-border/50 bg-card/70 backdrop-blur-sm shadow-card overflow-hidden transition-all hover:shadow-lg hover:border-secondary/30 hover:-translate-y-0.5">
                   <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-primary via-secondary to-warning" />
-                  <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Overall Score</div>
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-3xl font-black font-display text-foreground">{overallScore}</span>
-                    <span className="text-sm font-normal text-muted-foreground">/ 5</span>
-                    <Sparkline />
+                  <div className="p-5">
+                    <div className="flex items-center gap-2.5 mb-3">
+                      <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, hsl(211 60% 28% / 0.1), hsl(45 80% 55% / 0.15))' }}>
+                        <Trophy size={17} className="text-secondary" />
+                      </div>
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Overall Score</span>
+                    </div>
+                    <div className="flex items-baseline gap-1.5">
+                      <span className="text-3xl font-black font-display" style={titleStyle}>{overallScore}</span>
+                      <span className="text-sm font-medium text-muted-foreground">/ 5</span>
+                      <Sparkline />
+                    </div>
                   </div>
-                </SiqCard>
-                <SiqCard className="py-6 px-5 relative overflow-hidden bg-card/70 backdrop-blur-sm">
+                </div>
+
+                {/* Competency Level */}
+                <div className="group relative rounded-xl border border-border/50 bg-card/70 backdrop-blur-sm shadow-card overflow-hidden transition-all hover:shadow-lg hover:border-secondary/30 hover:-translate-y-0.5">
                   <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-primary via-secondary to-warning" />
-                  <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Competency</div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-lg font-bold font-display text-foreground">Intermediate</span>
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold bg-secondary/10 text-secondary border border-secondary/20">
+                  <div className="p-5">
+                    <div className="flex items-center gap-2.5 mb-3">
+                      <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, hsl(211 60% 28% / 0.1), hsl(45 80% 55% / 0.15))' }}>
+                        <Award size={17} className="text-secondary" />
+                      </div>
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Competency</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-lg font-bold font-display" style={titleStyle}>Intermediate</span>
+                    </div>
+                    <span className="inline-flex items-center gap-1 mt-1.5 px-2 py-0.5 rounded-full text-[9px] font-bold bg-secondary/10 text-secondary border border-secondary/20">
                       <Shield size={10} /> Level 3
                     </span>
                   </div>
-                </SiqCard>
-                <SiqCard className="py-6 px-5 relative overflow-hidden bg-card/70 backdrop-blur-sm">
+                </div>
+
+                {/* Phases Detected */}
+                <div className="group relative rounded-xl border border-border/50 bg-card/70 backdrop-blur-sm shadow-card overflow-hidden transition-all hover:shadow-lg hover:border-secondary/30 hover:-translate-y-0.5">
                   <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-primary via-secondary to-warning" />
-                  <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Phases Detected</div>
-                  <div className="text-3xl font-black font-display text-foreground">{phases.length}</div>
-                </SiqCard>
-                <SiqCard className="py-6 px-5 relative overflow-hidden bg-card/70 backdrop-blur-sm">
+                  <div className="p-5">
+                    <div className="flex items-center gap-2.5 mb-3">
+                      <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, hsl(211 60% 28% / 0.1), hsl(45 80% 55% / 0.15))' }}>
+                        <GitBranch size={17} className="text-secondary" />
+                      </div>
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Phases Detected</span>
+                    </div>
+                    <span className="text-3xl font-black font-display" style={titleStyle}>{phases.length}</span>
+                  </div>
+                </div>
+
+                {/* Total Duration */}
+                <div className="group relative rounded-xl border border-border/50 bg-card/70 backdrop-blur-sm shadow-card overflow-hidden transition-all hover:shadow-lg hover:border-secondary/30 hover:-translate-y-0.5">
                   <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-primary via-secondary to-warning" />
-                  <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Total Duration</div>
-                  <div className="text-3xl font-black font-display text-foreground">23:00</div>
-                </SiqCard>
+                  <div className="p-5">
+                    <div className="flex items-center gap-2.5 mb-3">
+                      <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, hsl(211 60% 28% / 0.1), hsl(45 80% 55% / 0.15))' }}>
+                        <Timer size={17} className="text-secondary" />
+                      </div>
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Total Duration</span>
+                    </div>
+                    <span className="text-3xl font-black font-display" style={titleStyle}>23:00</span>
+                  </div>
+                </div>
               </div>
 
               {/* Recommended Next Step Badge */}
