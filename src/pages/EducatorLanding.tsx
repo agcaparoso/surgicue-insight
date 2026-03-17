@@ -31,13 +31,13 @@ const EducatorLanding = () => {
         }
         return prev + 1;
       });
-    }, 1800);
+    }, 1000);
     return () => clearInterval(interval);
   }, [loading]);
 
   useEffect(() => {
     if (loading && msgIndex >= LOADING_MESSAGES.length - 1) {
-      const timeout = setTimeout(() => navigate('/submission-detail'), 2000);
+      const timeout = setTimeout(() => navigate('/submission-detail'), 1000);
       return () => clearTimeout(timeout);
     }
   }, [loading, msgIndex, navigate]);

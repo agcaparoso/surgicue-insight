@@ -207,14 +207,13 @@ const AIInsightsSidebar = () => {
   return (
     <aside className="w-80 shrink-0 space-y-5">
       {/* Sidebar Header */}
-      <div className="rounded-xl border border-border bg-card shadow-card overflow-hidden">
+       <div className="rounded-xl border border-border bg-card shadow-card overflow-hidden">
         <div className="h-[3px] bg-gradient-to-r from-primary via-secondary to-warning" />
         <div className="p-5">
           <div className="flex items-center gap-2.5 mb-1">
             <Brain size={18} className="text-secondary" />
-            <h2 className="font-display font-bold text-sm text-foreground">IBM AI Insights</h2>
+            <h2 className="font-display font-bold text-sm text-foreground">AI-Assisted Surgical Report</h2>
           </div>
-          <p className="text-[10px] text-muted-foreground tracking-wide">Powered by IBM Watson</p>
         </div>
       </div>
 
@@ -433,7 +432,7 @@ const ScoreBar = ({ score, maxScore = 5, label, icon: Icon }: { score: number; m
 const SubmissionDetail = () => {
   const navigate = useNavigate();
   const [hoveredPhase, setHoveredPhase] = useState<string | null>(null);
-  const [shareLoading, setShareLoading] = useState(false);
+  
 
   const overallScore = 3.7;
   const maxTimelineSec = Math.max(...phases.map(p => {
@@ -451,6 +450,7 @@ const SubmissionDetail = () => {
         {/* Top Bar */}
         <header className="sticky top-0 z-50 h-14 bg-card/80 backdrop-blur-xl border-b border-border/50 flex items-center justify-between px-6">
           <button onClick={() => navigate('/')} className="text-xs font-bold text-secondary hover:text-primary transition-colors">← Back</button>
+          <h1 className="text-2xl font-black font-display tracking-tight leading-none" style={titleStyle}>SurgicalIQ</h1>
           <button onClick={() => navigate('/profile')} className="w-8 h-8 bg-accent rounded-full flex items-center justify-center border border-border hover:border-secondary/40 transition-colors">
             <User size={14} className="text-primary" />
           </button>
@@ -458,18 +458,6 @@ const SubmissionDetail = () => {
         <div className="h-[3px] bg-gradient-to-r from-primary via-secondary to-warning" />
 
         <div className="max-w-[1400px] mx-auto px-6 py-8 relative z-10">
-          {/* Centered Title */}
-          <div className="text-center mb-8">
-            <h1
-              className="text-5xl sm:text-6xl md:text-7xl font-black font-display tracking-tight pb-2 leading-[1.1]"
-              style={titleStyle}
-            >
-              SurgicalIQ
-            </h1>
-            <p className="text-[10px] font-semibold tracking-widest uppercase text-secondary mt-2">
-              Powered by IBM Watsonx.ai
-            </p>
-          </div>
 
           {/* Student Info Header Card */}
           <div className="rounded-2xl border border-border/40 bg-card backdrop-blur-md shadow-card overflow-hidden mb-8">
@@ -653,39 +641,34 @@ const SubmissionDetail = () => {
                               </div>
                             </div>
 
-                            <div className="flex items-center gap-4 px-4 py-3 rounded-lg bg-accent/30 text-xs flex-wrap">
-                              <div className="flex items-center gap-1.5">
-                                <Clock size={13} className="text-secondary" />
-                                <span className="text-muted-foreground">Start:</span>
-                                <span className="font-bold text-foreground font-display">{phase.startTime}</span>
-                              </div>
-                              <div className="w-px h-4 bg-border" />
-                              <div className="flex items-center gap-1.5">
-                                <span className="text-muted-foreground">End:</span>
-                                <span className="font-bold text-foreground font-display">{phase.endTime}</span>
-                              </div>
-                              <div className="w-px h-4 bg-border" />
-                              <div className="flex items-center gap-1.5">
-                                <Timer size={13} className="text-secondary" />
-                                <span className="text-muted-foreground">Total:</span>
-                                <span className="font-bold text-foreground font-display">{phase.duration}</span>
-                              </div>
-                              {phase.idealDuration && (
-                                <>
-                                  <div className="w-px h-4 bg-border" />
+                            {(() => {
+                              const actualSec = durationToSec(phase.duration);
+                              const ideal = phase.idealDuration ? parseIdealRange(phase.idealDuration) : null;
+                              const metIdeal = ideal ? actualSec >= ideal.min && actualSec <= ideal.max : true;
+                              return (
+                                <div className="flex items-center gap-4 px-4 py-3 rounded-lg bg-accent/30 text-xs flex-wrap">
                                   <div className="flex items-center gap-1.5">
-                                    <span className="text-muted-foreground">Ideal:</span>
-                                    <span className="font-medium text-foreground">{phase.idealDuration}</span>
+                                    <Timer size={13} className="text-secondary" />
+                                    <span className="text-muted-foreground">Total Duration:</span>
+                                    <span className="font-bold text-foreground font-display">{phase.duration}</span>
                                   </div>
-                                </>
-                              )}
-                              <div className="w-px h-4 bg-border" />
-                              <div className="flex items-center gap-1.5">
-                                <Eye size={13} className="text-secondary" />
-                                <span className="text-muted-foreground">Frames:</span>
-                                <span className="font-bold text-foreground">{phase.framesAnalyzed}</span>
-                              </div>
-                            </div>
+                                  {phase.idealDuration && (
+                                    <>
+                                      <div className="w-px h-4 bg-border" />
+                                      <div className="flex items-center gap-1.5">
+                                        <span className="text-muted-foreground">Ideal:</span>
+                                        <span className="font-medium text-foreground">{phase.idealDuration}</span>
+                                      </div>
+                                      <div className="w-px h-4 bg-border" />
+                                      <div className={`flex items-center gap-1.5 px-2 py-0.5 rounded-full border ${metIdeal ? 'bg-success/10 border-success/20 text-success' : 'bg-warning/10 border-warning/20 text-warning'}`}>
+                                        {metIdeal ? <CheckCircle2 size={12} /> : <AlertTriangle size={12} />}
+                                        <span className="font-bold text-[10px] uppercase tracking-wider">{metIdeal ? 'Met Ideal' : 'Over/Under Ideal'}</span>
+                                      </div>
+                                    </>
+                                  )}
+                                </div>
+                              );
+                            })()}
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                               <div className="rounded-lg border border-secondary/20 bg-secondary/5 p-4">
@@ -871,46 +854,6 @@ const SubmissionDetail = () => {
           </div>
         </div>
 
-        {/* Fixed Right-Side Action Panel */}
-        <div className="fixed right-6 top-1/2 -translate-y-1/2 z-40 flex flex-col gap-3 w-[180px]">
-          <button
-            onClick={() => navigate('/new-submission')}
-            className="py-3 px-4 border-2 border-secondary/40 bg-card text-secondary rounded-xl font-bold text-xs hover:bg-secondary/5 active:scale-[0.98] transition-all shadow-card text-center leading-tight"
-          >
-            Submit Another Procedure
-          </button>
-          <button
-            onClick={() => {
-              setShareLoading(true);
-              setTimeout(() => setShareLoading(false), 3000);
-            }}
-            className="py-3 px-4 rounded-xl font-bold text-xs text-white active:scale-[0.98] transition-all shadow-card text-center leading-tight"
-            style={{ background: buttonGradient }}
-            onMouseEnter={(e) => (e.currentTarget.style.background = buttonGradientHover)}
-            onMouseLeave={(e) => (e.currentTarget.style.background = buttonGradient)}
-          >
-            Share Report
-          </button>
-        </div>
-
-        {/* Share Report Loading Splash */}
-        {shareLoading && (
-          <div className="fixed inset-0 z-[100] backdrop-blur-sm flex flex-col items-center justify-center" style={{ background: 'hsla(210, 45%, 90%, 0.95)' }}>
-            <div className="text-center space-y-6">
-              <div className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-primary via-secondary to-warning flex items-center justify-center shadow-lg">
-                <ArrowUpRight size={28} className="text-primary-foreground animate-pulse" />
-              </div>
-              <div className="space-y-3">
-                <Loader2 size={24} className="text-secondary animate-spin mx-auto" />
-                <p className="text-sm font-bold text-foreground font-display">Connecting to IBM Watsonx.ai</p>
-                <p className="text-xs text-muted-foreground">Preparing your report for sharing…</p>
-              </div>
-              <div className="w-48 h-1 rounded-full bg-accent overflow-hidden mx-auto">
-                <div className="h-full bg-gradient-to-r from-primary via-secondary to-warning rounded-full animate-pulse" style={{ width: '60%' }} />
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </TooltipProvider>
   );
