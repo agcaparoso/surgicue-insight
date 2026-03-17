@@ -5,6 +5,13 @@ import { SiqCard, StatusBadge } from '@/components/SiqComponents';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { TooltipProvider } from '@/components/ui/tooltip';
 
+import ElenaGood3 from '@/assets/Elena_Good3.png';
+import ElenaGood2 from '@/assets/Elena_Good2.png';
+import ElenaGood1 from '@/assets/Elena_Good1.png';
+import MarcusOkay3 from '@/assets/Marcus_Okay3.png';
+import MarcusGood1 from '@/assets/Marcus_Good1.png';
+import MarcusBad2 from '@/assets/Marcus_Bad2.png';
+
 // --- Data ---
 
 interface Phase {
