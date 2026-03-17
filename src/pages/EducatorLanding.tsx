@@ -48,7 +48,7 @@ const EducatorLanding = () => {
   };
 
   const gradientBg = {
-    background: 'linear-gradient(160deg, hsl(210 40% 94%) 0%, hsl(200 35% 96%) 25%, hsl(180 25% 96%) 50%, hsl(60 30% 95%) 75%, hsl(45 50% 92%) 100%)',
+    background: 'linear-gradient(160deg, hsl(210 45% 90%) 0%, hsl(200 35% 93%) 30%, hsl(170 20% 94%) 50%, hsl(50 40% 92%) 75%, hsl(42 55% 88%) 100%)',
   };
 
   const titleStyle = {
@@ -62,8 +62,8 @@ const EducatorLanding = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center px-6 relative overflow-hidden" style={gradientBg}>
-        <div className="absolute top-[-10%] left-[-5%] w-[500px] h-[500px] rounded-full opacity-30 blur-[120px] pointer-events-none" style={{ background: 'hsl(210 50% 70%)' }} />
-        <div className="absolute bottom-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full opacity-25 blur-[120px] pointer-events-none" style={{ background: 'hsl(45 70% 70%)' }} />
+        <div className="absolute top-[-10%] left-[-5%] w-[500px] h-[500px] rounded-full opacity-40 blur-[100px] pointer-events-none" style={{ background: 'hsl(210 55% 72%)' }} />
+        <div className="absolute bottom-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full opacity-35 blur-[100px] pointer-events-none" style={{ background: 'hsl(42 65% 72%)' }} />
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-secondary to-warning" />
 
         <motion.div
@@ -116,8 +116,8 @@ const EducatorLanding = () => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-6 py-12 relative overflow-visible" style={gradientBg}>
       {/* Ambient glow */}
-      <div className="absolute top-[-10%] left-[-5%] w-[500px] h-[500px] rounded-full opacity-30 blur-[120px] pointer-events-none" style={{ background: 'hsl(210 50% 70%)' }} />
-      <div className="absolute bottom-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full opacity-25 blur-[120px] pointer-events-none" style={{ background: 'hsl(45 70% 70%)' }} />
+      <div className="absolute top-[-10%] left-[-5%] w-[500px] h-[500px] rounded-full opacity-40 blur-[100px] pointer-events-none" style={{ background: 'hsl(210 55% 72%)' }} />
+      <div className="absolute bottom-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full opacity-35 blur-[100px] pointer-events-none" style={{ background: 'hsl(42 65% 72%)' }} />
       <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-secondary to-warning" />
 
       {/* Hero */}
@@ -142,12 +142,12 @@ const EducatorLanding = () => {
           Powered by IBM watsonx.ai
         </motion.p>
         <motion.p
-          className="text-sm sm:text-base text-foreground/60 max-w-md mx-auto leading-relaxed"
+          className="text-sm sm:text-[15px] text-foreground/55 max-w-xl mx-auto leading-relaxed font-medium"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5, duration: 0.6 }}
         >
-          An AI-powered platform designed for educators to evaluate surgical performance, identify skill gaps, and deliver structured, data-driven feedback.
+          AI tools for educators to track surgical skill and deliver instant feedback.
         </motion.p>
       </motion.div>
 
