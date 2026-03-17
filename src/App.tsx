@@ -28,16 +28,16 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Navigate to="/welcome" replace />} />
+            <Route path="/" element={<SubmissionDetail />} />
             <Route path="/welcome" element={<Welcome />} />
             <Route path="/onboarding-resident" element={<OnboardingResident />} />
             <Route path="/onboarding-resident-step2" element={<OnboardingResidentStep2 />} />
             <Route path="/onboarding-educator" element={<OnboardingEducator />} />
-            <Route path="/dashboard-resident" element={<DashboardResident />} />
-            <Route path="/dashboard-educator" element={<DashboardEducator />} />
+            <Route path="/dashboard-resident" element={<SubmissionDetail />} />
+            <Route path="/dashboard-educator" element={<SubmissionDetail />} />
             <Route path="/new-submission" element={<NewSubmission />} />
             <Route path="/submission-detail" element={<SubmissionDetail />} />
-            <Route path="/submissions" element={<Submissions />} />
+            <Route path="/submissions" element={<SubmissionDetail />} />
             <Route path="/trainee-profile" element={<TraineeProfile />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/compliance" element={<Compliance />} />
