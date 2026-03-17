@@ -387,7 +387,10 @@ const SubmissionDetail = () => {
 
         <div className="max-w-5xl mx-auto px-6 py-8 relative z-10">
 
-          {/* Student Info Header */}
+          {/* STUDENT INFO */}
+          <div className="section-header mb-4">
+            <span>🎓</span> Student Info
+          </div>
           <div className="rounded-2xl border border-border/40 bg-card backdrop-blur-md shadow-card overflow-hidden mb-8">
             <div className="h-[3px] bg-gradient-to-r from-primary via-secondary to-warning" />
             <div className="p-6">
@@ -412,7 +415,10 @@ const SubmissionDetail = () => {
             </div>
           </div>
 
-          {/* Summary Cards */}
+          {/* SUMMARY */}
+          <div className="section-header mb-4">
+            <span>📊</span> Summary
+          </div>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
             {[
               { icon: Trophy, label: 'Overall Score', value: <><span className="text-3xl font-black font-display" style={titleStyle}>{overallScore}</span><span className="text-sm font-medium text-muted-foreground ml-1">/ 5</span></> },
