@@ -799,7 +799,7 @@ const SubmissionDetail = () => {
                     </div>
 
                     {/* Phase Timing Summary */}
-                    <div className="rounded-xl border border-border/50 bg-card/70 backdrop-blur-sm shadow-card overflow-hidden">
+                    <div className="rounded-xl border border-border/40 bg-card shadow-card overflow-hidden">
                       <div className="px-5 py-3 bg-accent/30 border-b border-border/50">
                         <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Phase Timing Summary</p>
                       </div>
