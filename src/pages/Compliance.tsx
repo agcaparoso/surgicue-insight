@@ -1,6 +1,5 @@
-import { ShieldCheck } from 'lucide-react';
 import PageLayout from '@/components/PageLayout';
-import { SiqCard } from '@/components/SiqComponents';
+import { SiqCard, SectionHeader } from '@/components/SiqComponents';
 
 const sections = [
   {
@@ -28,10 +27,11 @@ const sections = [
 const Compliance = () => {
   return (
     <PageLayout title="Privacy & Compliance" activeTab="profile">
-      <div className="space-y-6">
+      <SectionHeader icon="🛡️">Compliance Information</SectionHeader>
+      <div className="space-y-4">
         {sections.map((s, i) => (
           <SiqCard key={i}>
-            <h3 className="font-bold text-primary flex items-center gap-2 mb-2">
+            <h3 className="font-bold text-primary flex items-center gap-2 mb-2 font-display text-sm">
               <span>{s.icon}</span>
               {s.title}
             </h3>
@@ -39,8 +39,8 @@ const Compliance = () => {
           </SiqCard>
         ))}
 
-        <SiqCard className="border-primary/10 italic">
-          <p className="text-sm text-muted-foreground">
+        <SiqCard className="border-secondary/20 bg-secondary/5">
+          <p className="text-sm text-muted-foreground italic leading-relaxed">
             "Our mission is to provide world-class surgical feedback while maintaining the highest standards of data integrity and privacy."
           </p>
         </SiqCard>
