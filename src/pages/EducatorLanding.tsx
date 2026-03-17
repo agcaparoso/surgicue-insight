@@ -134,20 +134,20 @@ const EducatorLanding = () => {
           SurgicalIQ
         </h1>
         <motion.p
-          className="text-[11px] text-muted-foreground tracking-wide font-medium mb-5"
+          className="text-xs font-semibold tracking-widest uppercase text-secondary mb-6"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3, duration: 0.6 }}
         >
-          Powered by IBM watsonx.ai
+          Powered by IBM Watsonx.ai
         </motion.p>
         <motion.p
-          className="text-sm sm:text-[15px] text-foreground/55 max-w-xl mx-auto leading-relaxed font-medium"
+          className="text-sm sm:text-[15px] text-foreground/50 max-w-2xl mx-auto leading-relaxed font-medium"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5, duration: 0.6 }}
         >
-          AI tools for educators to track surgical skill and deliver instant feedback.
+          An AI platform for educators to evaluate surgical performance and deliver actionable feedback.
         </motion.p>
       </motion.div>
 
