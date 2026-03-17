@@ -978,7 +978,7 @@ const FeedbackSection = () => {
       </div>
 
       {/* Recommended Next Actions */}
-      <div className="rounded-xl border border-border/50 bg-card/70 backdrop-blur-sm shadow-soft overflow-hidden">
+      <div className="rounded-xl border border-border/40 bg-card shadow-soft overflow-hidden">
         <div className="h-[2px] bg-gradient-to-r from-primary via-secondary to-warning" />
         <div className="p-4">
           <div className="flex items-center gap-2.5 mb-4">
