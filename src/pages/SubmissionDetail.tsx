@@ -598,7 +598,7 @@ const SubmissionDetail = () => {
 
               {/* Unified Tabs: Scorecard, Timeline, Key Frames, Feedback */}
               <Tabs defaultValue="scorecard" className="w-full">
-                <TabsList className="w-full grid grid-cols-4 mb-8 bg-card/70 backdrop-blur-sm rounded-xl p-1.5 h-auto border border-border/50 shadow-soft">
+                <TabsList className="w-full grid grid-cols-4 mb-8 bg-card rounded-xl p-1.5 h-auto border border-border/40 shadow-soft">
                   <TabsTrigger value="scorecard" className="text-xs font-bold py-3 rounded-lg data-[state=active]:bg-primary/5 data-[state=active]:text-primary data-[state=active]:shadow-soft data-[state=active]:gradient-underline gap-1.5 transition-all">
                     <Layers size={14} /> Scorecard
                   </TabsTrigger>
