@@ -622,7 +622,7 @@ const SubmissionDetail = () => {
                       const PhaseIcon = phaseIcons[phase.id] || Layers;
 
                       return (
-                        <div key={phase.id} className={`rounded-xl border border-border/50 bg-card/70 backdrop-blur-sm shadow-card overflow-hidden border-l-[4px] ${statusBorderColor}`}>
+                        <div key={phase.id} className={`rounded-xl border border-border/40 bg-card shadow-card overflow-hidden border-l-[4px] ${statusBorderColor}`}>
                           <div className={`px-5 py-4 ${statusBg}`}>
                             <div className="flex items-center gap-3 flex-wrap">
                               <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, hsl(211 60% 28% / 0.1), hsl(45 80% 55% / 0.15))' }}>
